@@ -22,7 +22,7 @@ export interface WorkItem {
   aspect?: string;
 }
 
-export const WORK_ITEMS: WorkItem[] = siteData.exploreGrid;
+export const WORK_ITEMS: WorkItem[] = siteData.recentWorks;
 
 // Native Framer Motion spring physics for ultra-smooth 60fps GPU-accelerated shared layout scaling
 const SHARED_TRANSITION = {

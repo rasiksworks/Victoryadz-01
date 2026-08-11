@@ -7,21 +7,24 @@ import Link from "next/link";
 import DraggableGrid from "@/components/originkit/ui/draggable-grid";
 import LiquidHover from "@/components/originkit/ui/liquid-distortion";
 import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
-import { WORK_ITEMS, type WorkItem } from "@/components/originkit/ui/we-most-proud-of";
+import { type WorkItem } from "@/components/originkit/ui/we-most-proud-of";
+import siteData from "@/data/site-images.json";
+
+const EXPLORE_ITEMS: WorkItem[] = siteData.exploreGallery;
 
 export default function WorksPage() {
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
   const [isClosing, setIsClosing] = useState(false);
 
-  // Map WORK_ITEMS to DraggableGrid format
-  const gridItems = WORK_ITEMS.map((item) => ({
+  // Map EXPLORE_ITEMS to DraggableGrid format
+  const gridItems = EXPLORE_ITEMS.map((item) => ({
     image: { src: item.image },
     alt: `${item.firstName} ${item.lastName}`,
     workItem: item,
   }));
 
   const handleItemClick = (gridItem: any, index: number) => {
-    const item = WORK_ITEMS[index % WORK_ITEMS.length];
+    const item = EXPLORE_ITEMS[index % EXPLORE_ITEMS.length];
     setSelectedItem(item);
     setIsClosing(false);
   };
@@ -127,7 +130,7 @@ export default function WorksPage() {
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="hidden lg:flex relative flex-col w-14 lg:w-16 bg-[#1c1c1c] p-0 gap-0 overflow-y-auto no-scrollbar shrink-0 h-full z-20 transform-gpu will-change-transform"
             >
-              {WORK_ITEMS.map((item) => (
+              {EXPLORE_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => setSelectedItem(item)}
