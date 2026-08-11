@@ -59,6 +59,37 @@ export default function ImageManager() {
     });
   };
 
+  const handleFileUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await res.json();
+      
+      if (result.url) {
+        handleImageChange(index, result.url);
+        setMessage('Image uploaded successfully! Remember to save changes.');
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        setMessage('Upload failed: ' + (result.error || 'Unknown error'));
+        setTimeout(() => setMessage(''), 3000);
+      }
+    } catch (error) {
+      setMessage('Upload failed.');
+      setTimeout(() => setMessage(''), 3000);
+    }
+    
+    // reset input
+    e.target.value = '';
+  };
+
   if (!data) return <div className="p-8 text-white">Loading data...</div>;
 
   // Determine items based on activeTab
@@ -124,13 +155,26 @@ export default function ImageManager() {
               </div>
               <div>
                 <label className="block text-xs uppercase tracking-wider text-white/50 mb-1">{item.label}</label>
-                <input
-                  type="text"
-                  value={item.url}
-                  onChange={(e) => handleImageChange(index, e.target.value)}
-                  className="w-full bg-[#2C2C2C] border border-white/20 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white/50"
-                  placeholder="Paste image URL here..."
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={item.url}
+                    onChange={(e) => handleImageChange(index, e.target.value)}
+                    className="flex-1 min-w-0 bg-[#2C2C2C] border border-white/20 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white/50"
+                    placeholder="Paste URL..."
+                  />
+                  <div className="relative shrink-0">
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(index, e)}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <button className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded text-sm transition-colors cursor-pointer pointer-events-none">
+                      Upload
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
