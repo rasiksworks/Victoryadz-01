@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-full overflow-hidden">
+      <main className="flex-1 h-full overflow-hidden flex flex-col">
         {children}
       </main>
     </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-type SectionKey = 'heroTunnel' | 'brandVision' | 'recentWorks' | 'exploreGallery';
+type SectionKey = 'heroTunnel' | 'brandVision' | 'exploreGallery';
 
 export default function ImageManager() {
   const [data, setData] = useState<any>(null);
@@ -79,7 +79,7 @@ export default function ImageManager() {
     <div className="flex flex-col h-full bg-[#1c1c1c] text-white">
       {/* Tabs */}
       <div className="flex gap-4 border-b border-white/10 p-6">
-        {(['heroTunnel', 'brandVision', 'recentWorks', 'exploreGallery'] as SectionKey[]).map(tab => (
+        {(['heroTunnel', 'brandVision', 'exploreGallery'] as SectionKey[]).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const data = await request.json();
     
     // Validate data structure loosely
-    if (!data.heroTunnel || !data.brandVision || !data.recentWorks || !data.exploreGallery) {
+    if (!data.heroTunnel || !data.brandVision || !data.exploreGallery) {
       return NextResponse.json({ error: 'Invalid data structure' }, { status: 400 });
     }
 
