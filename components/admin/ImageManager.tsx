@@ -93,7 +93,7 @@ export default function ImageManager() {
       </div>
 
       {/* Editor Area */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6" data-lenis-prevent="true">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-bold uppercase tracking-wide">
