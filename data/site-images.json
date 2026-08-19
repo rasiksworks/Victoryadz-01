@@ -1,9 +1,6 @@
 {
-  "hero": {
-    "background": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2000&auto=format&fit=crop"
-  },
   "brandVision": {
-    "image1": "https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=1200&q=80",
+    "image1": "/uploads/1787132398409-3x4.webp",
     "image2": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80",
     "image3": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80",
     "image4": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=700&q=80",
@@ -13,12 +10,12 @@
   "heroTunnel": [
     {
       "id": "1",
-      "src": "/originkit/hero-03/portraits-portrait-01.png",
+      "src": "/uploads/1786444474619-997977201-your_order_plaing.png",
       "alt": "Editorial portrait 1"
     },
     {
       "id": "2",
-      "src": "/originkit/hero-03/portraits-portrait-03.png",
+      "src": "/uploads/1786444475262-774394654-ChatGPT_Image_Aug_10__2026__03_47_55_PM.png",
       "alt": "Studio portrait 2"
     },
     {
@@ -112,143 +109,6 @@
       "alt": "Lifestyle portrait 20"
     }
   ],
-  "recentWorks": [
-    {
-      "id": "1",
-      "number": "[ 18 ]",
-      "firstName": "Scarlett",
-      "lastName": "JOHANSSON",
-      "date": "November 2019",
-      "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
-    },
-    {
-      "id": "2",
-      "number": "[ 02 ]",
-      "firstName": "Rosalía",
-      "lastName": "VILA TOBÓN",
-      "date": "September 2025",
-      "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
-    },
-    {
-      "id": "3",
-      "number": "[ 07 ]",
-      "firstName": "Zendaya",
-      "lastName": "COLEMAN",
-      "date": "March 2024",
-      "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
-    },
-    {
-      "id": "4",
-      "number": "[ 12 ]",
-      "firstName": "Timothée",
-      "lastName": "CHALAMET",
-      "date": "October 2025",
-      "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
-    },
-    {
-      "id": "5",
-      "number": "[ 05 ]",
-      "firstName": "Florence",
-      "lastName": "PUGH",
-      "date": "August 2025",
-      "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
-    },
-    {
-      "id": "6",
-      "number": "[ 09 ]",
-      "firstName": "Anya",
-      "lastName": "TAYLOR-JOY",
-      "date": "January 2026",
-      "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
-    },
-    {
-      "id": "7",
-      "number": "[ 14 ]",
-      "firstName": "Margot",
-      "lastName": "ROBBIE",
-      "date": "April 2025",
-      "credits": "PHOTOGRAPH BY CRAIG MCDEAN",
-      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80"
-    },
-    {
-      "id": "8",
-      "number": "[ 21 ]",
-      "firstName": "Dev",
-      "lastName": "PATEL",
-      "date": "June 2026",
-      "credits": "PHOTOGRAPH BY MARIO SORRENTI",
-      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80"
-    },
-    {
-      "id": "9",
-      "number": "[ 03 ]",
-      "firstName": "Lupita",
-      "lastName": "NYONG'O",
-      "date": "February 2025",
-      "credits": "PHOTOGRAPH BY MIKAEL JANSSON",
-      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80"
-    },
-    {
-      "id": "10",
-      "number": "[ 18 ]",
-      "firstName": "Scarlett",
-      "lastName": "JOHANSSON",
-      "date": "November 2019",
-      "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
-    },
-    {
-      "id": "11",
-      "number": "[ 02 ]",
-      "firstName": "Rosalía",
-      "lastName": "VILA TOBÓN",
-      "date": "September 2025",
-      "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
-    },
-    {
-      "id": "12",
-      "number": "[ 07 ]",
-      "firstName": "Zendaya",
-      "lastName": "COLEMAN",
-      "date": "March 2024",
-      "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
-    },
-    {
-      "id": "13",
-      "number": "[ 12 ]",
-      "firstName": "Timothée",
-      "lastName": "CHALAMET",
-      "date": "October 2025",
-      "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
-    },
-    {
-      "id": "14",
-      "number": "[ 05 ]",
-      "firstName": "Florence",
-      "lastName": "PUGH",
-      "date": "August 2025",
-      "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
-    },
-    {
-      "id": "15",
-      "number": "[ 09 ]",
-      "firstName": "Anya",
-      "lastName": "TAYLOR-JOY",
-      "date": "January 2026",
-      "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
-    }
-  ],
   "exploreGallery": [
     {
       "id": "1",
@@ -257,7 +117,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "/uploads/1787130279615-n5fiytfo58i.png",
+      "isFavorite": true,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "2",
@@ -266,16 +129,22 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "/uploads/1787130458754-6octeyqahpe.png",
+      "isFavorite": true,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "3",
-      "number": "[ 07 ]",
-      "firstName": "Zendaya",
-      "lastName": "COLEMAN",
+      "number": "[ 03 ]",
+      "firstName": "Engagement",
+      "lastName": "Bride & Groom",
       "date": "March 2024",
-      "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "credits": "",
+      "image": "/uploads/1787130567211-r6xyfm1w9tb.png",
+      "isFavorite": true,
+      "label": "Engagement",
+      "title": "Bride & Groom"
     },
     {
       "id": "4",
@@ -284,7 +153,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "/uploads/1787130599663-sv7og81q05.png",
+      "isFavorite": true,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "5",
@@ -293,7 +165,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": true,
+      "label": "Florence",
+      "title": "PUGH"
     },
     {
       "id": "6",
@@ -302,7 +177,10 @@
       "lastName": "TAYLOR-JOY",
       "date": "January 2026",
       "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
+      "isFavorite": true,
+      "label": "Anya",
+      "title": "TAYLOR-JOY"
     },
     {
       "id": "7",
@@ -311,7 +189,10 @@
       "lastName": "ROBBIE",
       "date": "April 2025",
       "credits": "PHOTOGRAPH BY CRAIG MCDEAN",
-      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80",
+      "isFavorite": true,
+      "label": "Margot",
+      "title": "ROBBIE"
     },
     {
       "id": "8",
@@ -320,7 +201,10 @@
       "lastName": "PATEL",
       "date": "June 2026",
       "credits": "PHOTOGRAPH BY MARIO SORRENTI",
-      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
+      "isFavorite": true,
+      "label": "Dev",
+      "title": "PATEL"
     },
     {
       "id": "9",
@@ -329,7 +213,10 @@
       "lastName": "NYONG'O",
       "date": "February 2025",
       "credits": "PHOTOGRAPH BY MIKAEL JANSSON",
-      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80",
+      "isFavorite": true,
+      "label": "Lupita",
+      "title": "NYONG'O"
     },
     {
       "id": "10",
@@ -338,7 +225,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+      "isFavorite": true,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "11",
@@ -347,7 +237,10 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "isFavorite": true,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "12",
@@ -356,7 +249,10 @@
       "lastName": "COLEMAN",
       "date": "March 2024",
       "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "isFavorite": true,
+      "label": "Zendaya",
+      "title": "COLEMAN"
     },
     {
       "id": "13",
@@ -365,7 +261,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+      "isFavorite": true,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "14",
@@ -374,7 +273,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": true,
+      "label": "Florence",
+      "title": "PUGH"
     },
     {
       "id": "15",
@@ -383,7 +285,10 @@
       "lastName": "TAYLOR-JOY",
       "date": "January 2026",
       "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
+      "isFavorite": true,
+      "label": "Anya",
+      "title": "TAYLOR-JOY"
     },
     {
       "id": "16",
@@ -392,7 +297,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+      "isFavorite": false,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "17",
@@ -401,7 +309,10 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "isFavorite": false,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "18",
@@ -410,7 +321,10 @@
       "lastName": "COLEMAN",
       "date": "March 2024",
       "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "isFavorite": false,
+      "label": "Zendaya",
+      "title": "COLEMAN"
     },
     {
       "id": "19",
@@ -419,7 +333,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "20",
@@ -428,7 +345,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Florence",
+      "title": "PUGH"
     },
     {
       "id": "21",
@@ -437,7 +357,10 @@
       "lastName": "TAYLOR-JOY",
       "date": "January 2026",
       "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
+      "isFavorite": false,
+      "label": "Anya",
+      "title": "TAYLOR-JOY"
     },
     {
       "id": "22",
@@ -446,7 +369,10 @@
       "lastName": "ROBBIE",
       "date": "April 2025",
       "credits": "PHOTOGRAPH BY CRAIG MCDEAN",
-      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80",
+      "isFavorite": false,
+      "label": "Margot",
+      "title": "ROBBIE"
     },
     {
       "id": "23",
@@ -455,7 +381,10 @@
       "lastName": "PATEL",
       "date": "June 2026",
       "credits": "PHOTOGRAPH BY MARIO SORRENTI",
-      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Dev",
+      "title": "PATEL"
     },
     {
       "id": "24",
@@ -464,7 +393,10 @@
       "lastName": "NYONG'O",
       "date": "February 2025",
       "credits": "PHOTOGRAPH BY MIKAEL JANSSON",
-      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Lupita",
+      "title": "NYONG'O"
     },
     {
       "id": "25",
@@ -473,7 +405,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+      "isFavorite": false,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "26",
@@ -482,7 +417,10 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "isFavorite": false,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "27",
@@ -491,7 +429,10 @@
       "lastName": "COLEMAN",
       "date": "March 2024",
       "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "isFavorite": false,
+      "label": "Zendaya",
+      "title": "COLEMAN"
     },
     {
       "id": "28",
@@ -500,7 +441,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "29",
@@ -509,7 +453,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Florence",
+      "title": "PUGH"
     },
     {
       "id": "30",
@@ -518,7 +465,10 @@
       "lastName": "TAYLOR-JOY",
       "date": "January 2026",
       "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
+      "isFavorite": false,
+      "label": "Anya",
+      "title": "TAYLOR-JOY"
     },
     {
       "id": "31",
@@ -527,7 +477,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+      "isFavorite": false,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "32",
@@ -536,7 +489,10 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "isFavorite": false,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "33",
@@ -545,7 +501,10 @@
       "lastName": "COLEMAN",
       "date": "March 2024",
       "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "isFavorite": false,
+      "label": "Zendaya",
+      "title": "COLEMAN"
     },
     {
       "id": "34",
@@ -554,7 +513,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "35",
@@ -563,7 +525,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Florence",
+      "title": "PUGH"
     },
     {
       "id": "36",
@@ -572,7 +537,10 @@
       "lastName": "TAYLOR-JOY",
       "date": "January 2026",
       "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
+      "isFavorite": false,
+      "label": "Anya",
+      "title": "TAYLOR-JOY"
     },
     {
       "id": "37",
@@ -581,7 +549,10 @@
       "lastName": "ROBBIE",
       "date": "April 2025",
       "credits": "PHOTOGRAPH BY CRAIG MCDEAN",
-      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80",
+      "isFavorite": false,
+      "label": "Margot",
+      "title": "ROBBIE"
     },
     {
       "id": "38",
@@ -590,7 +561,10 @@
       "lastName": "PATEL",
       "date": "June 2026",
       "credits": "PHOTOGRAPH BY MARIO SORRENTI",
-      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Dev",
+      "title": "PATEL"
     },
     {
       "id": "39",
@@ -599,7 +573,10 @@
       "lastName": "NYONG'O",
       "date": "February 2025",
       "credits": "PHOTOGRAPH BY MIKAEL JANSSON",
-      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Lupita",
+      "title": "NYONG'O"
     },
     {
       "id": "40",
@@ -608,7 +585,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+      "isFavorite": false,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "41",
@@ -617,7 +597,10 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "isFavorite": false,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "42",
@@ -626,7 +609,10 @@
       "lastName": "COLEMAN",
       "date": "March 2024",
       "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "isFavorite": false,
+      "label": "Zendaya",
+      "title": "COLEMAN"
     },
     {
       "id": "43",
@@ -635,7 +621,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "44",
@@ -644,7 +633,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Florence",
+      "title": "PUGH"
     },
     {
       "id": "45",
@@ -653,7 +645,10 @@
       "lastName": "TAYLOR-JOY",
       "date": "January 2026",
       "credits": "PHOTOGRAPH BY MARIO TESTINO",
-      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
+      "isFavorite": false,
+      "label": "Anya",
+      "title": "TAYLOR-JOY"
     },
     {
       "id": "46",
@@ -662,7 +657,10 @@
       "lastName": "JOHANSSON",
       "date": "November 2019",
       "credits": "PHOTOGRAPH BY ZOEY GROSSMAN",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+      "isFavorite": false,
+      "label": "Scarlett",
+      "title": "JOHANSSON"
     },
     {
       "id": "47",
@@ -671,7 +669,10 @@
       "lastName": "VILA TOBÓN",
       "date": "September 2025",
       "credits": "PHOTOGRAPH BY INEZ & VINOODH",
-      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+      "isFavorite": false,
+      "label": "Rosalía",
+      "title": "VILA TOBÓN"
     },
     {
       "id": "48",
@@ -680,7 +681,10 @@
       "lastName": "COLEMAN",
       "date": "March 2024",
       "credits": "PHOTOGRAPH BY STEVEN MEISEL",
-      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+      "isFavorite": false,
+      "label": "Zendaya",
+      "title": "COLEMAN"
     },
     {
       "id": "49",
@@ -689,7 +693,10 @@
       "lastName": "CHALAMET",
       "date": "October 2025",
       "credits": "PHOTOGRAPH BY ANNIE LEIBOVITZ",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+      "isFavorite": false,
+      "label": "Timothée",
+      "title": "CHALAMET"
     },
     {
       "id": "50",
@@ -698,7 +705,10 @@
       "lastName": "PUGH",
       "date": "August 2025",
       "credits": "PHOTOGRAPH BY TYLER MITCHELL",
-      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+      "isFavorite": false,
+      "label": "Florence",
+      "title": "PUGH"
     }
   ]
 }

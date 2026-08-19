@@ -49,14 +49,14 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
               direction="center-horizontal"
               className="w-full max-w-[378px] text-center font-instrument-serif text-[46px] leading-[54px] tracking-[-1.38px] text-white text-balance ipad:max-w-[490px] ipad:text-[62px] ipad:leading-[75px] ipad:tracking-[-1.86px] desktop-sm:max-w-[502px] desktop-sm:text-[68px] desktop-sm:leading-[70px] desktop-sm:tracking-[-2.04px]"
             >
-              Elevating Portraits Through Perspective
+              Your Photos, Framed to Last a Lifetime
             </MaskTextReveal>
           </motion.div>
 
           <motion.div {...reveal(0.22)}>
             <ScrollHighlight className="w-full max-w-[338px] text-center font-tight text-[14px] leading-normal tracking-[-0.28px] text-pretty ipad:max-w-[438px] ipad:text-[18px] ipad:tracking-[-0.36px] desktop-sm:max-w-[321px] desktop-sm:text-[17px] desktop-sm:leading-[25.5px] desktop-sm:tracking-[-0.34px] block">
-              Thoughtfully crafted portraits with refined lighting, style, and
-              timeless storytelling.
+              Premium custom framing and lamination, trusted by families across
+              Tamil Nadu for 8+ years, even if you're miles away.
             </ScrollHighlight>
           </motion.div>
         </div>
@@ -65,11 +65,11 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
           {...reveal(0.32)}
           className="pointer-events-auto flex flex-nowrap items-center justify-center gap-[17px] ipad:gap-[22px] desktop-sm:gap-4"
         >
-          <Button variant="primary" aria-label="Explore Gallery" onClick={onExplore}>
-            Explore Gallery
+          <Button variant="primary" aria-label="See Our Work" onClick={onExplore}>
+            See Our Work
           </Button>
-          <Button variant="secondary" aria-label="Book a Shoot" onClick={onBook}>
-            Book a Shoot
+          <Button variant="secondary" aria-label="Order on WhatsApp" onClick={onBook}>
+            Order on WhatsApp
           </Button>
         </motion.div>
       </div>

@@ -15,9 +15,9 @@ interface MorphicNavbarProps {
 
 const DEFAULT_NAV_ITEMS = [
   { label: "Home", href: "/" },
-  { label: "Works", href: "/works" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
+  { label: "Explore", href: "/works" },
+  { label: "About", href: "/#about" },
+  { label: "Why Us", href: "/#why-victory-adz" },
 ];
 
 export function MorphicNavbar({ className }: MorphicNavbarProps) {
@@ -38,4 +38,3 @@ export function MorphicNavbar({ className }: MorphicNavbarProps) {
 }
 
 export default MorphicNavbar;
-

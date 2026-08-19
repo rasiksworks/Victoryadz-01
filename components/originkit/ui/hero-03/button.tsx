@@ -13,15 +13,15 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   primary:
-    "relative h-[42px] overflow-clip rounded-lg border border-solid border-white/40 bg-white px-5 text-[14px] font-semibold tracking-[-0.28px] text-[#2C2C2C] shadow-[0px_2px_10px_0px_rgba(0,0,0,0.35)] transition-[background-color,transform] duration-200 ease ipad:h-[55px] ipad:rounded-[11px] ipad:px-[27px] ipad:text-[18px] ipad:tracking-[-0.36px] desktop-sm:h-10 desktop-sm:rounded-lg desktop-sm:px-5 desktop-sm:text-[14px] desktop-sm:tracking-[-0.28px] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-gray-100",
+    "relative h-[44px] overflow-clip rounded-lg border border-solid border-white/40 bg-white px-5 text-[14px] font-semibold tracking-[-0.28px] text-[#2C2C2C] shadow-[0px_2px_10px_0px_rgba(0,0,0,0.35)] transition-[background-color,transform] duration-200 ease ipad:h-[55px] ipad:rounded-[11px] ipad:px-[27px] ipad:text-[18px] ipad:tracking-[-0.36px] desktop-sm:h-[42px] desktop-sm:rounded-lg desktop-sm:px-5 desktop-sm:text-[14px] desktop-sm:tracking-[-0.28px] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-gray-100",
   secondary:
-    "h-[42px] rounded-lg border border-solid border-[#555555] bg-[#363636]/70 px-4 py-3 text-[14px] font-medium tracking-[-0.28px] text-white transition-[border-color,background-color,transform] duration-200 ease ipad:h-[55px] ipad:rounded-[11px] ipad:px-[22px] ipad:py-0 ipad:text-[18px] ipad:tracking-[-0.36px] desktop-sm:h-10 desktop-sm:rounded-lg desktop-sm:px-4 desktop-sm:py-3 desktop-sm:text-[14px] desktop-sm:tracking-[-0.28px] [@media(hover:hover)_and_(pointer:fine)]:hover:border-white [@media(hover:hover)_and_(pointer:fine)]:hover:bg-[#444444]",
+    "h-[44px] rounded-lg border border-solid border-[#555555] bg-[#363636]/70 px-4 text-[14px] font-medium tracking-[-0.28px] text-white transition-[border-color,background-color,transform] duration-200 ease ipad:h-[55px] ipad:rounded-[11px] ipad:px-[22px] ipad:text-[18px] ipad:tracking-[-0.36px] desktop-sm:h-[42px] desktop-sm:rounded-lg desktop-sm:px-4 desktop-sm:text-[14px] desktop-sm:tracking-[-0.28px] [@media(hover:hover)_and_(pointer:fine)]:hover:border-white [@media(hover:hover)_and_(pointer:fine)]:hover:bg-[#444444]",
   nav: "h-9 overflow-clip rounded-lg border border-solid border-white/20 bg-white px-5 text-[14px] font-semibold tracking-[-0.28px] text-[#2C2C2C] shadow-[0px_2px_6px_0px_rgba(0,0,0,0.25)] transition-[background-color,opacity,transform] duration-200 ease [@media(hover:hover)_and_(pointer:fine)]:hover:bg-gray-100 [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-100",
 };
 
 const VARIANT_HOVER_COLOR: Record<ButtonVariant, string> = {
   primary: "#000000",
-  secondary: "#000000",
+  secondary: "#ffffff",
   nav: "#000000",
 };
 
@@ -54,7 +54,7 @@ export const Button = ({
             fontSize: 14,
             fontWeight: 600,
             letterSpacing: "-0.28px",
-            lineHeight: "1em",
+            lineHeight: "1.2em",
           }}
           gap={4}
           textColor={VARIANT_TEXT_COLOR[variant]}

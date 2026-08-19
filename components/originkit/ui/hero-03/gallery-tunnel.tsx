@@ -152,6 +152,12 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
         let lastY = 0;
         let moveSpeed = 0;
         let alive = true;
+        let isVisible = true;
+
+        const io = new IntersectionObserver(([entry]) => {
+            isVisible = entry.isIntersecting;
+        });
+        io.observe(frame);
 
         const hw = TUNNEL_WIDTH / 2;
         const hh = TUNNEL_HEIGHT / 2;
@@ -449,6 +455,7 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
             if (moveTimeout) clearTimeout(moveTimeout);
             cancelAnimationFrame(raf);
             ro.disconnect();
+            io.disconnect();
             frame.removeEventListener("pointermove", onMove);
             frame.removeEventListener("pointerenter", onEnter);
             frame.removeEventListener("pointerleave", onLeave);

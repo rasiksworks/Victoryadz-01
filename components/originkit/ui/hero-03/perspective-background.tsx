@@ -20,7 +20,7 @@ export const PerspectiveBackground = () => {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 overflow-hidden"
+      className="absolute inset-0 overflow-hidden bg-[#2C2C2C]" style={{ backgroundColor: "#2C2C2C" }}
     >
       <GalleryTunnel
         background="#2C2C2C"

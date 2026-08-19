@@ -58,7 +58,7 @@ export const GalleryOverlay = ({ open, onClose }: GalleryOverlayProps) => {
       initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.28, ease: EASE_OUT }}
-      className="fixed inset-0 z-50 flex flex-col bg-[#2C2C2C]"
+      className="fixed inset-0 z-[60] flex flex-col bg-[#2C2C2C]"
     >
       <h2 id={titleId} className="sr-only">
         Interactive portrait gallery tunnel

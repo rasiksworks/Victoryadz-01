@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import PixelatedCursor from "@/components/originkit/ui/inkbleed-cursor";
+import { Preloader } from "@/components/preloader";
+import { Navbar } from "@/components/originkit/ui/hero-03/navbar";
 
 export const metadata: Metadata = {
-  title: "VictoryAdz - Originkit Hero 03",
-  description: "Hero 03 Component Showcase",
+  title: "VictoryAdz - Premium Framing Studio",
+  description: "Preserving memories with handcrafted frames and precision lamination.",
 };
 
 export default function RootLayout({
@@ -15,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className="relative">
+      <body suppressHydrationWarning className="relative bg-[#2C2C2C] text-white" style={{ backgroundColor: "#2C2C2C" }}>
+        <Preloader />
+        <Navbar />
         <PixelatedCursor
           label={false}
           pixelCount={24}

@@ -78,7 +78,7 @@ export function HeroSection() {
         className="absolute inset-0 w-full h-[120%] -top-[10%] will-change-transform"
       >
         <Image
-          src={siteData.hero.background}
+          src={(siteData as any).hero?.background || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2000&auto=format&fit=crop"}
           alt="Premium Product Showcase"
           fill
           priority

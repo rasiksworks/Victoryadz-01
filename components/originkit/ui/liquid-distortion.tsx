@@ -51,6 +51,12 @@ export default function LiquidHover({
       moved: false,
     };
     const res = { w: 0, h: 0 };
+    let isVisible = true;
+
+    const io = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    });
+    io.observe(container);
     let outputColor: any;
     let velocity: any;
     let divergence: any;
@@ -483,6 +489,7 @@ void main () {
         canvas!.removeEventListener("touchmove", onTouchMove);
         window.removeEventListener("resize", onResize);
         resizeObserver.disconnect();
+        io.disconnect();
       };
     }
     function resizeCanvas() {

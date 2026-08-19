@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import "./GooeyNav.css";
 
 export interface GooeyNavItem {
@@ -29,11 +30,42 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
   colors = [1, 2, 3, 1, 2, 3, 1, 4],
   initialActiveIndex = 0,
 }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const containerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLUListElement>(null);
   const filterRef = useRef<HTMLSpanElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
+
+  // Sync activeIndex with current pathname and hash
+  useEffect(() => {
+    const syncActive = () => {
+      const hash = typeof window !== "undefined" ? window.location.hash : "";
+      
+      let matchedIndex = -1;
+      if (pathname === "/works") {
+        matchedIndex = items.findIndex((item) => item.href === "/works");
+      } else if (pathname === "/") {
+        if (hash) {
+          matchedIndex = items.findIndex(
+            (item) => item.href === `/${hash}` || item.href === hash
+          );
+        }
+        if (matchedIndex === -1) {
+          matchedIndex = items.findIndex((item) => item.href === "/");
+        }
+      }
+
+      if (matchedIndex !== -1 && matchedIndex !== activeIndex) {
+        setActiveIndex(matchedIndex);
+      }
+    };
+
+    syncActive();
+    window.addEventListener("hashchange", syncActive);
+    return () => window.removeEventListener("hashchange", syncActive);
+  }, [pathname, items, activeIndex]);
 
   const noise = (n = 1) => n / 2 - Math.random() * n;
 
@@ -117,10 +149,41 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
   ) => {
     const target = e.currentTarget as HTMLElement;
     const liEl = target.tagName === "LI" ? target : target.parentElement;
-    if (!liEl || activeIndex === index) return;
+    if (!liEl) return;
 
     setActiveIndex(index);
     updateEffectPosition(liEl);
+
+    const item = items[index];
+    if (item && item.href) {
+      if (item.href.startsWith("/#")) {
+        const targetId = item.href.replace("/#", "");
+        if (pathname === "/") {
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            if (typeof window !== "undefined" && (window as any).lenis) {
+              (window as any).lenis.scrollTo(targetEl, { duration: 1.2 });
+            } else {
+              targetEl.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        } else {
+          router.push(item.href);
+        }
+      } else if (item.href === "/") {
+        if (pathname === "/") {
+          if (typeof window !== "undefined" && (window as any).lenis) {
+            (window as any).lenis.scrollTo(0, { duration: 1.2 });
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        } else {
+          router.push("/");
+        }
+      } else {
+        router.push(item.href);
+      }
+    }
 
     if (filterRef.current) {
       const particles = filterRef.current.querySelectorAll(".particle");

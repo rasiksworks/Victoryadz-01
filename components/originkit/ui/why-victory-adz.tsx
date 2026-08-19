@@ -1,141 +1,351 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ShieldCheck,
-  Layers,
-  Award,
-  Tag,
-  MessageSquare,
-} from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
-import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
 
-interface ReasonCard {
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+export interface WhyReasonCard {
   id: string;
   number: string;
-  icon: React.ComponentType<{ className?: string }>;
+  label: string;
   title: string;
   description: string;
 }
 
-const REASONS: ReasonCard[] = [
+export const WHY_CHOOSE_US_CARDS: WhyReasonCard[] = [
   {
-    id: "materials",
-    number: "[ 01 ]",
-    icon: ShieldCheck,
+    id: "card-1",
+    number: "01",
+    label: "Reason number",
     title: "Premium Quality Materials",
     description:
-      "We never compromise on frame material — every piece is built to last, not just look good on day one.",
+      "We never compromise on frame material. Every piece is built to last, not just look good on day one.",
   },
   {
-    id: "finishes",
-    number: "[ 02 ]",
-    icon: Layers,
+    id: "card-2",
+    number: "02",
+    label: "Reason number",
     title: "Multiple Lamination Finishes",
     description:
-      "From matte to glossy to textured — choose the finish that protects and elevates your photo the way you want.",
+      "From matte to glossy to textured, choose the finish that protects and elevates your photo the way you want.",
   },
   {
-    id: "experience",
-    number: "[ 03 ]",
-    icon: Award,
+    id: "card-3",
+    number: "03",
+    label: "Reason number",
     title: "8+ Years of Experience",
     description:
-      "We've been perfecting this craft since day one — every frame reflects years of precision and care.",
+      "We have been perfecting this craft since day one. Every frame reflects years of precision and care.",
   },
   {
-    id: "pricing",
-    number: "[ 04 ]",
-    icon: Tag,
+    id: "card-4",
+    number: "04",
+    label: "Reason number",
     title: "Reasonable, Honest Pricing",
     description:
-      "High quality shouldn't mean high prices. We keep it fair, without cutting corners.",
+      "High quality should not mean high prices. We keep it fair, without cutting corners.",
   },
   {
-    id: "guided",
-    number: "[ 05 ]",
-    icon: MessageSquare,
+    id: "card-5",
+    number: "05",
+    label: "Reason number",
     title: "Personally Guided Orders",
     description:
-      "No confusing checkout — you talk to us directly on WhatsApp, and we help you pick exactly what's right.",
+      "No confusing checkout. You talk to us directly on WhatsApp, and we help you pick exactly what is right.",
+  },
+  {
+    id: "card-6",
+    number: "06",
+    label: "Reason number",
+    title: "Delivered Safely, Anywhere",
+    description:
+      "From Kanyakumari to your doorstep, every frame is carefully packed and shipped, with WhatsApp updates the whole way.",
   },
 ];
 
 export const WhyVictoryAdz: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const handleWhatsAppOrder = () => {
+    window.open(
+      "https://wa.me/919361312684?text=" +
+        encodeURIComponent("Hi VictoryAdz! I would like to order a custom frame."),
+      "_blank"
+    );
+  };
+
+  // Desktop Pinned Scroll: Strictly locks viewport for horizontal cards scrub
+  useEffect(() => {
+    if (isMobile || !sectionRef.current || !trackRef.current || !cardsContainerRef.current) return;
+
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    const cardsContainer = cardsContainerRef.current;
+
+    const ctx = gsap.context(() => {
+      const scrollDistance = Math.max(0, track.scrollWidth - cardsContainer.clientWidth + 120);
+      const totalScroll = Math.max(2600, scrollDistance * 1.8);
+
+      // Initial card states
+      cardRefs.current.forEach((card) => {
+        if (!card) return;
+        gsap.set(card, { opacity: 0, y: 60, scale: 0.94 });
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          pin: true,
+          pinSpacing: true, // Forces layout spacer so FAQ waits strictly below
+          start: "top top",
+          end: "+=" + totalScroll,
+          scrub: 0.8,
+          anticipatePin: 1,
+          fastScrollEnd: true,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // 1. Initial stagger spring entrance for visible cards (0.0 to 1.0)
+      cardRefs.current.forEach((card, idx) => {
+        if (!card) return;
+        const startPos = idx * 0.12;
+        tl.fromTo(
+          card,
+          { opacity: 0, y: 60, scale: 0.94 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power2.out" },
+          startPos
+        );
+      });
+
+      // 2. Horizontal scrub across all 6 cards
+      if (scrollDistance > 0) {
+        tl.to(
+          track,
+          {
+            x: -scrollDistance,
+            ease: "none",
+            duration: 3.5,
+          },
+          0.8
+        );
+      }
+
+      // 3. Resting hold so user can read card 06 before unpinning
+      tl.to({}, { duration: 0.8 });
+    }, section);
+
+    let lastWidth = window.innerWidth;
+    let resizeTimer;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          ScrollTrigger.refresh();
+        }
+      }, 250);
+    };
+    window.addEventListener("resize", onResize);
+
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 300);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      clearTimeout(timer);
+      ctx.revert();
+    };
+  }, [isMobile]);
+
+  // ── MOBILE LAYOUT (< 1024px) ───────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <section
+        id="why-victory-adz"
+        className="relative z-20 w-full bg-[#3D3D3D] text-white select-none py-10 sm:py-14 md:py-20 px-6"
+        style={{ fontFamily: "'Inter Display', 'Inter', system-ui, sans-serif" }}
+      >
+        <div className="w-full max-w-xl mx-auto flex flex-col gap-10">
+          {/* Header */}
+          <div className="flex flex-col items-start gap-2">
+            <span className="text-sm text-white/70 font-normal tracking-tight">
+              Why Choose VictoryAdz
+            </span>
+            <MaskTextReveal
+              tag="h2"
+              direction="center-horizontal"
+              className="text-3xl sm:text-4xl font-bold tracking-[-0.03em] text-white"
+              style={{ lineHeight: "110%" }}
+            >
+              8 years of craftsmanship, built on quality and trust, not shortcuts.
+            </MaskTextReveal>
+          </div>
+
+          {/* Cards Frame */}
+          <div className="flex flex-col gap-6">
+            {WHY_CHOOSE_US_CARDS.map((card, index) => (
+              <motion.div
+                key={card.id}
+                initial={{ opacity: 0, y: 50, scale: 0.92 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+                transition={{
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 14,
+                  delay: index * 0.08,
+                }}
+                className="w-full flex flex-col shadow-2xl"
+              >
+                <div className="flex items-center h-10 w-full">
+                  <div className="flex-1 bg-[#292929] text-white/90 text-xs font-semibold px-4 h-full flex items-center tracking-tight">
+                    {card.label}
+                  </div>
+                  <div className="bg-[#1C1C1C] text-white text-xs font-bold px-3.5 h-full flex items-center justify-center border-l border-white/10 shrink-0">
+                    {card.number}
+                  </div>
+                </div>
+                <div className="bg-white text-black p-6 flex flex-col justify-end min-h-[220px]">
+                  <h3 className="text-xl font-bold tracking-tight text-neutral-900 leading-snug mb-2">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-600 font-normal leading-relaxed">
+                    {card.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Bottom Order Card */}
+          <div className="bg-white text-black p-5 rounded-none shadow-2xl">
+            <p className="text-xs font-medium text-neutral-800 leading-snug">
+              Message us to discuss sizing, frames, and delivery details.
+            </p>
+            <button
+              onClick={handleWhatsAppOrder}
+              className="mt-4 w-full bg-[#1C1C1C] hover:bg-black text-white text-[11px] font-bold tracking-widest py-2.5 px-3 uppercase transition-colors duration-200 cursor-pointer text-center"
+            >
+              ORDER NOW
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // ── DESKTOP PINNED SCROLL (>= 1024px): SINGLE VIEWPORT LOCK ──────────────
   return (
     <section
       id="why-victory-adz"
-      className="relative w-full bg-[#2C2C2C] text-white font-inter-display select-none py-16 md:py-24"
+      ref={sectionRef}
+      className="relative z-20 w-full h-screen min-h-[640px] bg-[#3D3D3D] text-white select-none overflow-hidden"
+      style={{ fontFamily: "'Inter Display', 'Inter', system-ui, sans-serif" }}
     >
-      <div className="w-full px-6 md:px-[60px] lg:px-[60px] flex flex-col gap-12 md:gap-16">
+      <div className="w-full h-full flex flex-row">
         
-        {/* Header Section */}
-        <div className="flex flex-col items-start gap-3 max-w-2xl">
-          <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block mb-1">
-            [ WHY US ]
-          </span>
-          
-          <MaskTextReveal
-            tag="h2"
-            direction="center-horizontal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.1]"
-          >
-            Why Choose VictoryAdz
-          </MaskTextReveal>
+        {/* LEFT SIDEBAR: Fixed in place during horizontal scrub */}
+        <div className="w-[260px] xl:w-[300px] h-full bg-[#2A2A2A] p-8 lg:p-10 flex flex-col justify-between shrink-0 border-r border-white/5 z-20">
+          <div className="flex flex-col gap-1">
+            <span className="text-[12px] uppercase tracking-[0.25em] text-white/40 font-medium">
+              [ VICTORYADZ ]
+            </span>
+          </div>
 
-          <ScrollHighlight className="text-sm md:text-base text-white/70 font-light leading-relaxed mt-2 block">
-            8 years of craftsmanship, built on quality and trust — not shortcuts.
-          </ScrollHighlight>
+          <div className="bg-white text-black p-6 rounded-none shadow-2xl max-w-[240px]">
+            <p className="text-[13px] font-medium text-neutral-800 leading-snug">
+              Message us to discuss sizing, frames, and delivery details.
+            </p>
+
+            <button
+              onClick={handleWhatsAppOrder}
+              className="mt-4 w-full bg-[#1C1C1C] hover:bg-black text-white text-[11px] font-bold tracking-widest py-2.5 px-3 uppercase transition-colors duration-200 cursor-pointer text-center"
+            >
+              ORDER NOW
+            </button>
+          </div>
         </div>
 
-        {/* 5 Reason Cards Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {REASONS.map((reason, index) => {
-            const Icon = reason.icon;
-            const isLast = index === REASONS.length - 1;
+        {/* RIGHT MAIN CANVAS: Top Header + Horizontal Scrub Track */}
+        <div className="flex-1 h-full p-8 lg:p-12 xl:p-14 flex flex-col justify-between overflow-hidden relative bg-[#3D3D3D]">
+          
+          {/* Main Top Header */}
+          <div className="flex flex-col items-start gap-2 max-w-4xl mb-6 z-10">
+            <span className="text-base sm:text-lg md:text-xl lg:text-[22px] text-white/70 font-normal tracking-[-0.01em] block">
+              Why Choose VictoryAdz
+            </span>
 
-            return (
-              <motion.div
-                key={reason.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "0px 0px -50px 0px" }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className={`group relative flex flex-col justify-between p-6 md:p-8 bg-[#363636]/60 border border-white/10 rounded-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-white/25 hover:bg-[#363636]/90 hover:shadow-2xl hover:shadow-black/40 ${
-                  isLast ? "sm:col-span-2 lg:col-span-1" : ""
-                }`}
-              >
-                {/* Top Row: Icon + Number Badge */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="w-11 h-11 bg-white/5 border border-white/10 rounded-sm flex items-center justify-center text-white/90 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-300 shadow-inner">
-                    <Icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+            <MaskTextReveal
+              tag="h2"
+              direction="center-horizontal"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] xl:text-[58px] font-bold tracking-[-0.03em] text-white"
+              style={{ lineHeight: "105%" }}
+            >
+              8 years of craftsmanship, built on quality and trust, not shortcuts.
+            </MaskTextReveal>
+          </div>
+
+          {/* Cards Track Container */}
+          <div
+            ref={cardsContainerRef}
+            className="w-full overflow-hidden pb-2 pt-2 select-none"
+          >
+            <div
+              ref={trackRef}
+              className="flex gap-6 w-max will-change-transform"
+            >
+              {WHY_CHOOSE_US_CARDS.map((card, index) => {
+                return (
+                  <div
+                    key={card.id}
+                    ref={(el) => { cardRefs.current[index] = el; }}
+                    className="w-[280px] sm:w-[310px] md:w-[340px] shrink-0 flex flex-col shadow-2xl transform-gpu will-change-transform transition-colors duration-300 hover:shadow-black/60"
+                  >
+                    {/* Card Dark Header Bar */}
+                    <div className="flex items-center h-10 w-full">
+                      <div className="flex-1 bg-[#292929] text-white/90 text-xs sm:text-[13px] font-semibold px-4 h-full flex items-center tracking-tight">
+                        {card.label}
+                      </div>
+                      <div className="bg-[#1C1C1C] text-white text-xs sm:text-[13px] font-bold px-3.5 h-full flex items-center justify-center border-l border-white/10 shrink-0">
+                        {card.number}
+                      </div>
+                    </div>
+
+                    {/* Card White Body */}
+                    <div className="bg-white text-black p-6 sm:p-7 md:p-8 flex flex-col justify-end min-h-[290px] sm:min-h-[320px] md:min-h-[340px]">
+                      <h3 className="text-xl sm:text-2xl md:text-[25px] font-bold tracking-[-0.02em] text-neutral-900 leading-tight mb-3">
+                        {card.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm md:text-[14px] text-neutral-600 font-normal leading-relaxed">
+                        {card.description}
+                      </p>
+                    </div>
                   </div>
-                  <span className="font-mono text-[11px] text-white/40 tracking-wider group-hover:text-white/70 transition-colors">
-                    {reason.number}
-                  </span>
-                </div>
+                );
+              })}
+            </div>
+          </div>
 
-                {/* Content: Title + Description */}
-                <div className="flex flex-col gap-2.5">
-                  <h3 className="text-lg md:text-xl font-bold tracking-tight text-white group-hover:text-white transition-colors">
-                    {reason.title}
-                  </h3>
-                  <p className="text-xs md:text-sm text-white/70 font-light leading-relaxed">
-                    {reason.description}
-                  </p>
-                </div>
-
-                {/* Bottom Decorative Line Accent on Hover */}
-                <div className="w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full mt-6 opacity-60" />
-              </motion.div>
-            );
-          })}
         </div>
 
       </div>

@@ -1,183 +1,198 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useLayoutEffect, useCallback, memo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef, useEffect, memo } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
+import { motion, AnimatePresence } from "framer-motion";
 import { ImageReveal } from "@/components/image-reveal";
-import LiquidHover from "@/components/originkit/ui/liquid-distortion";
-import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
-import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
 import { Button } from "@/components/originkit/ui/hero-03/button";
+import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
+import SocialButton from "@/components/originkit/ui/social-button";
+import TiltedCard from "@/components/TiltedCard";
 import siteData from "@/data/site-images.json";
 
 export interface WorkItem {
   id: string;
+  image: string;
   number: string;
   firstName: string;
   lastName: string;
+  label?: string;
+  title?: string;
   date: string;
   credits: string;
-  image: string;
-  aspect?: string;
-}
-
-export const WORK_ITEMS: WorkItem[] = siteData.exploreGallery.slice(0, 15);
-
-// Native Framer Motion spring physics for ultra-smooth 60fps GPU-accelerated shared layout scaling
-const SHARED_TRANSITION = {
-  type: "spring" as const,
-  stiffness: 350,
-  damping: 35,
-  mass: 0.8,
-};
-
-// Lerp helper function for smooth gliding momentum
-function lerp(start: number, end: number, ease: number) {
-  return start + (end - start) * ease;
 }
 
 export const WeMostProudOf: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [items, setItems] = useState<WorkItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
-  const [isClosing, setIsClosing] = useState(false);
-
-  // FlyingPosters Lerp Scroll Engine State
-  const scrollRef = useRef({
-    ease: 0.08, // Smooth gliding ease momentum
-    current: 0,
-    target: 0,
-  });
-
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [tiltState, setTiltState] = useState<{ [key: string]: { rotateX: number; rotateY: number } }>({});
   const [smoothScrollProgress, setSmoothScrollProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // 1. Continuous requestAnimationFrame loop interpolating scroll.current toward scroll.target
+  const containerRef = useRef<HTMLDivElement>(null);
+  const targetScrollProgressRef = useRef(0);
+  const currentScrollProgressRef = useRef(0);
+
+  // Fetch dynamic items from /api/site-data
   useEffect(() => {
-    let animFrameId: number;
-
-    const updateScroll = () => {
-      // PERFORMANCE FIX: Pause React state re-renders when modal is open
-      if (!selectedItem) {
-        const next = lerp(
-          scrollRef.current.current,
-          scrollRef.current.target,
-          scrollRef.current.ease
-        );
-
-        if (Math.abs(next - scrollRef.current.current) > 0.0001) {
-          scrollRef.current.current = next;
-          setSmoothScrollProgress(next);
+    fetch("/api/site-data")
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoading(false);
+        if (data?.exploreGallery && Array.isArray(data.exploreGallery)) {
+          const mapped: WorkItem[] = data.exploreGallery.map((item: any) => ({
+            id: item.id || String(Math.random()),
+            image: item.image || item.src,
+            number: item.number || "[ 00 ]",
+            firstName: item.label || item.firstName || "",
+            lastName: item.title || item.lastName || "",
+            label: item.label || item.firstName || "",
+            title: item.title || item.lastName || "",
+            date: item.date || "November 2019",
+            credits: item.credits || "PHOTOGRAPH BY VICTORYADZ",
+          }));
+          setItems(mapped);
         }
-      }
-      animFrameId = requestAnimationFrame(updateScroll);
-    };
+      })
+      .catch(() => {
+        setIsLoading(false);
+        const fallback: WorkItem[] = (siteData.exploreGallery || []).map((item: any) => ({
+          id: item.id,
+          image: item.image,
+          number: item.number,
+          firstName: item.label || item.firstName || "",
+          lastName: item.title || item.lastName || "",
+          label: item.label || item.firstName || "",
+          title: item.title || item.lastName || "",
+          date: item.date,
+          credits: item.credits,
+        }));
+        setItems(fallback);
+      });
+  }, []);
 
-    animFrameId = requestAnimationFrame(updateScroll);
-    return () => cancelAnimationFrame(animFrameId);
+  const WORK_ITEMS = items.length > 0 ? items : (siteData.exploreGallery || []).map((item: any) => ({
+    id: item.id,
+    image: item.image,
+    number: item.number,
+    firstName: item.label || item.firstName || "",
+    lastName: item.title || item.lastName || "",
+    label: item.label || item.firstName || "",
+    title: item.title || item.lastName || "",
+    date: item.date,
+    credits: item.credits,
+  }));
+
+  const displayedItems = WORK_ITEMS.slice(0, 15);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("detail-modal", { detail: { open: !!selectedItem } }));
+    }
   }, [selectedItem]);
 
-  // 2. Scroll event listener ONLY updates scroll.target (destination), NEVER scroll.current directly!
+  const handleItemClick = (item: WorkItem) => {
+    setSelectedItem(item);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedItem(null);
+  };
+
+  // FlyingPosters momentum lerp scroll progress loop
   useEffect(() => {
+    let animId: number;
+
     const handleScroll = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const total = window.innerHeight + rect.height;
-        const rawProgress = (window.innerHeight - rect.top) / total;
-        
-        scrollRef.current.target = Math.max(0, Math.min(1, rawProgress));
-      }
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const total = rect.height + windowHeight;
+      const current = windowHeight - rect.top;
+      const rawProgress = Math.max(0, Math.min(1, current / total));
+      targetScrollProgressRef.current = rawProgress;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleItemClick = useCallback((item: WorkItem) => {
-    setSelectedItem(item);
-    setIsClosing(false);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    if (isClosing) return;
-    setIsClosing(true);
-    setSelectedItem(null);
-
-    setTimeout(() => {
-      setIsClosing(false);
-    }, 600); // Debounce clicking
-  }, [isClosing]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" || e.key === "Esc") {
-        handleCloseModal();
-      }
+    const loop = () => {
+      currentScrollProgressRef.current +=
+        (targetScrollProgressRef.current - currentScrollProgressRef.current) * 0.08;
+      setSmoothScrollProgress(currentScrollProgressRef.current);
+      animId = requestAnimationFrame(loop);
     };
 
-    if (selectedItem) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "";
-    }
+    animId = requestAnimationFrame(loop);
 
     return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(animId);
     };
-  }, [selectedItem, handleCloseModal]);
+  }, []);
 
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [tiltState, setTiltState] = useState<{ [key: string]: { rotateX: number; rotateY: number } }>({});
+  // Global mouse position tracking for floating VIEW cursor badge
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+    return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
+  }, []);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>, id: string) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
+  // Card 3D tilt calculation on hover
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+    const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -8;
-    const rotateY = ((x - centerX) / centerX) * 8;
-    setTiltState((prev) => ({ ...prev, [id]: { rotateX, rotateY } }));
-  }, []);
 
-  const handleMouseLeave = useCallback((id: string) => {
+    const rotateX = ((y - centerY) / centerY) * -12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+
+    setTiltState((prev) => ({
+      ...prev,
+      [id]: { rotateX, rotateY },
+    }));
+  };
+
+  const handleMouseLeave = (id: string) => {
+    setTiltState((prev) => ({
+      ...prev,
+      [id]: { rotateX: 0, rotateY: 0 },
+    }));
     setHoveredId(null);
-    setTiltState((prev) => ({ ...prev, [id]: { rotateX: 0, rotateY: 0 } }));
-  }, []);
-
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-
-  const handleGlobalMouseMove = useCallback((e: React.MouseEvent) => {
-    setCursorPos({ x: e.clientX, y: e.clientY });
-  }, []);
+  };
 
   return (
     <section
       id="recent-works"
-      onMouseMove={handleGlobalMouseMove}
-      className="relative w-full bg-[#2C2C2C] text-white font-inter-display select-none overflow-hidden"
+      className="relative w-full bg-[#2C2C2C] text-white font-inter-display select-none py-6 sm:py-10 md:py-16 overflow-hidden"
     >
-      {/* Floating VIEW Cursor Badge */}
+      <span id="works" className="sr-only" aria-hidden="true" />
+      {/* Floating Cursor Badge: [ ↗ ] [ VIEW ] */}
       <AnimatePresence>
-        {hoveredId && (
+        {hoveredId !== null && !selectedItem && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.85 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              left: cursorPos.x,
-              top: cursorPos.y,
+              position: "fixed",
+              left: mousePos.x,
+              top: mousePos.y,
               transform: "translate(-50%, -50%)",
+              pointerEvents: "none",
+              zIndex: 9999,
             }}
-            className="fixed pointer-events-none z-50 flex items-center gap-1 shadow-2xl mix-blend-difference"
+            className="flex items-center shadow-2xl drop-shadow-2xl"
           >
-            {/* Square Arrow Box */}
-            <div className="w-7 h-7 bg-white text-black flex items-center justify-center text-xs font-mono font-bold">
+            {/* Arrow Square Box */}
+            <div className="w-7 h-7 bg-black text-white flex items-center justify-center text-xs font-mono font-bold">
               ↗
             </div>
             {/* VIEW Text Box */}
@@ -190,7 +205,7 @@ export const WeMostProudOf: React.FC = () => {
 
       <div className="w-full px-6 md:px-[60px] lg:px-[60px]">
         {/* Top Header Row */}
-        <div className="flex items-center justify-between pt-10 pb-10 md:pt-14 md:pb-14">
+        <div className="flex items-center justify-between pt-4 pb-4 sm:pt-8 sm:pb-8 md:pt-14 md:pb-14">
           <div className="flex items-center gap-3">
             <span className="inline-block h-2.5 w-2.5 bg-white rounded-none" />
             <ScrollHighlight
@@ -202,7 +217,7 @@ export const WeMostProudOf: React.FC = () => {
               dimColor="rgba(255, 255, 255, 0.2)"
               highlightColor="#FFFFFF"
             >
-              RECENT WORK'S
+              RECENT WORK&apos;S
             </ScrollHighlight>
           </div>
 
@@ -215,11 +230,11 @@ export const WeMostProudOf: React.FC = () => {
 
         <div
           ref={containerRef}
-          className="pb-14 md:pb-20"
+          className="pb-6 sm:pb-10 md:pb-20"
           style={{ perspective: "1200px" }}
         >
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 w-full gap-6 md:gap-8 lg:gap-6 lg:gap-y-12">
-            {WORK_ITEMS.map((item, idx) => {
+            {displayedItems.map((item, idx) => {
               const tilt = tiltState[item.id] || { rotateX: 0, rotateY: 0 };
               const isHovered = hoveredId === item.id;
               const someoneHovered = hoveredId !== null;
@@ -258,8 +273,8 @@ export const WeMostProudOf: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 flex flex-row p-0 m-0 w-screen h-screen overflow-hidden bg-transparent pointer-events-auto"
-            style={{ perspective: "1500px" }}
+            className="fixed inset-0 z-50 flex flex-row p-0 m-0 w-screen h-screen overflow-hidden bg-[#2C2C2C] pointer-events-auto"
+            style={{ backgroundColor: "#2C2C2C", perspective: "1500px" }}
           >
             {/* Dark Backdrop overlay for click outside */}
             <motion.div
@@ -268,49 +283,60 @@ export const WeMostProudOf: React.FC = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
               onClick={handleCloseModal}
-              className="absolute inset-0 z-0 bg-[#141414]/90 backdrop-blur-xl"
+              className="absolute inset-0 z-0 bg-[#2C2C2C]" style={{ backgroundColor: "#2C2C2C" }}
             />
 
-            {/* --- DESKTOP LEFT PANEL (64px width flex child) --- */}
+            {/* --- DESKTOP LEFT PANEL (Clean 3:4 Options, No Background, No Border) --- */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="hidden lg:flex relative flex-col w-14 lg:w-16 bg-[#1c1c1c] p-0 gap-0 overflow-y-auto no-scrollbar shrink-0 h-full z-20 transform-gpu will-change-transform"
+              data-lenis-prevent="true"
+              style={{
+                overscrollBehavior: "contain",
+                touchAction: "pan-y",
+              }}
+              className="hidden lg:flex relative flex-col w-20 lg:w-24 p-0 gap-0 overflow-y-auto no-scrollbar shrink-0 h-full z-20 transform-gpu will-change-transform pointer-events-auto bg-transparent border-0"
             >
               {WORK_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleItemClick(item)}
-                  className={`relative aspect-[3/4] w-full overflow-hidden transition-all duration-300 cursor-pointer rounded-none border-0 ${
+                  aria-label={`Select ${item.label || item.firstName} ${item.title || item.lastName}`}
+                  className={`relative aspect-[3/4] w-full shrink-0 overflow-hidden transition-all duration-200 cursor-pointer rounded-none border-0 bg-transparent ${
                     selectedItem.id === item.id
-                      ? "brightness-100 opacity-100"
-                      : "brightness-[0.45] opacity-50 hover:brightness-90 hover:opacity-90"
+                      ? "brightness-100 opacity-100 shadow-md"
+                      : "brightness-[0.4] opacity-40 hover:brightness-95 hover:opacity-90"
                   }`}
                 >
-                  <Image src={item.image} alt={item.lastName} fill unoptimized className="object-cover object-center" />
+                  <Image
+                    src={item.image}
+                    alt={item.lastName || "Work item"}
+                    fill
+                    sizes="96px"
+                    className="object-cover object-center"
+                  />
                 </button>
               ))}
             </motion.div>
 
-            {/* --- DESKTOP / MOBILE CENTER CONTAINER --- */}
-            <div className="relative flex-1 h-full overflow-hidden flex items-center justify-center p-4 md:p-8 z-10 pointer-events-none">
-              {/* Scale + fade enter/exit — no layoutId to avoid size flash on close */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-auto h-[60vh] md:h-[80vh] lg:h-[92vh] aspect-[3/4] overflow-hidden pointer-events-auto shadow-2xl bg-[#363636] transform-gpu will-change-transform"
-              >
-                <LiquidHover
-                  imageSrc={selectedItem.image}
-                  resolution={10}
-                  cursorSize={50}
-                  intensity={50}
-                />
-              </motion.div>
+            {/* --- DESKTOP / MOBILE CENTER CONTAINER (TiltedCard) --- */}
+            <div className="relative flex-1 h-full overflow-hidden flex items-center justify-center p-0 lg:p-2 z-10 pointer-events-auto bg-transparent">
+              <TiltedCard
+                imageSrc={selectedItem.image}
+                altText={selectedItem.title || selectedItem.lastName || "Work detail image"}
+                captionText={selectedItem.credits || (selectedItem.label ? `${selectedItem.label} · ${selectedItem.title}` : selectedItem.lastName)}
+                containerHeight="100%"
+                containerWidth="100%"
+                imageHeight="92vh"
+                imageWidth="min(calc(92vh * 0.75), 680px)"
+                rotateAmplitude={10}
+                scaleOnHover={1.03}
+                showMobileWarning={false}
+                showTooltip={true}
+                displayOverlayContent={false}
+              />
             </div>
 
             {/* --- DESKTOP RIGHT PANEL (420px width flex child) --- */}
@@ -375,7 +401,7 @@ export const WeMostProudOf: React.FC = () => {
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.40 }}
                     className="font-serif text-xl md:text-2xl lg:text-3xl text-neutral-800 font-normal"
                   >
-                    {selectedItem.firstName}
+                    {selectedItem.label || selectedItem.firstName}
                   </motion.p>
                   <motion.h2 
                     initial={{ opacity: 0, y: 30 }}
@@ -384,8 +410,11 @@ export const WeMostProudOf: React.FC = () => {
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.46 }}
                     className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold tracking-tight text-black uppercase leading-none break-words"
                   >
-                    {selectedItem.lastName}
+                    {selectedItem.title || selectedItem.lastName}
                   </motion.h2>
+                  <div className="pt-6">
+                    <SocialButton />
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -405,16 +434,18 @@ export const WeMostProudOf: React.FC = () => {
                 </div>
                 <button onClick={handleCloseModal} aria-label="Close" className="w-8 h-8 bg-white/15 text-white flex items-center justify-center text-xs font-mono hover:bg-white/30 transition-colors cursor-pointer rounded-none">✕</button>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-white uppercase mt-2 leading-none">{selectedItem.lastName}</h2>
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-white uppercase mt-2 leading-none">{selectedItem.title || selectedItem.lastName}</h2>
             </motion.div>
 
-            {/* --- MOBILE BOTTOM THUMBNAILS --- */}
+            {/* --- MOBILE BOTTOM THUMBNAILS (No Background, No Border) --- */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="flex lg:hidden absolute bottom-0 left-0 right-0 items-center gap-1.5 overflow-x-auto no-scrollbar p-2 bg-black border-t border-white/10 shrink-0 z-20"
+              data-lenis-prevent="true"
+              style={{ overscrollBehaviorX: "contain", touchAction: "pan-x" }}
+              className="flex lg:hidden absolute bottom-0 left-0 right-0 items-center gap-0 overflow-x-auto no-scrollbar p-0 bg-transparent border-0 shrink-0 z-20 pointer-events-auto"
             >
               {WORK_ITEMS.map((item) => (
                 <button
@@ -424,7 +455,7 @@ export const WeMostProudOf: React.FC = () => {
                     selectedItem.id === item.id ? "brightness-100 opacity-100" : "brightness-[0.4] opacity-40 hover:opacity-80"
                   }`}
                 >
-                  <Image src={item.image} alt={item.lastName} fill unoptimized className="object-cover object-center" />
+                  <Image src={item.image} alt={item.lastName} fill sizes="56px" className="object-cover object-center" />
                 </button>
               ))}
             </motion.div>
@@ -485,7 +516,7 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
         delay: (idx % 5) * 0.08,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="w-full"
+      className={idx >= 8 ? "hidden lg:block w-full" : "w-full"}
     >
       <motion.div
         onMouseEnter={() => setHoveredId(item.id)}
@@ -542,7 +573,7 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
 
           <div className="flex flex-col text-left w-full">
             <span className="text-[10px] sm:text-xs font-semibold text-white/90 tracking-wider uppercase truncate">
-              {item.firstName} {item.lastName}
+              {item.label || item.firstName} {item.title || item.lastName}
             </span>
             <span className="text-[9px] sm:text-[10px] text-white/50 tracking-widest font-mono">
               {item.number}

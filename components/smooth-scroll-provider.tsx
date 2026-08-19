@@ -25,6 +25,9 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       infinite: false,
     });
     lenisRef.current = lenis;
+    if (typeof window !== "undefined") {
+      (window as any).lenis = lenis;
+    }
 
     // Sync Lenis scroll with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);

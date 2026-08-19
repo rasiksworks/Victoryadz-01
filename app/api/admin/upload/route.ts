@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 
 export async function POST(request: Request) {
   try {
@@ -12,28 +13,27 @@ export async function POST(request: Request) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const filename = `${uniqueSuffix}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+    const rawName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+    const cleanBaseName = rawName.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 30);
+    const filename = `${Date.now()}-${cleanBaseName}.webp`;
 
-    // Define local path for public/uploads
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
     
-    // Ensure directory exists (though we created it, safe check)
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     const filePath = path.join(uploadDir, filename);
 
-    // Save to local filesystem
-    fs.writeFileSync(filePath, buffer);
+    // Convert to high quality WebP
+    await sharp(buffer)
+      .webp({ quality: 85, effort: 4 })
+      .toFile(filePath);
 
-    // Return the public URL
     const fileUrl = `/uploads/${filename}`;
-
-    return NextResponse.json({ success: true, url: fileUrl });
-  } catch (error) {
+    return NextResponse.json({ success: true, url: fileUrl, format: 'webp' });
+  } catch (error: any) {
     console.error('File upload failed:', error);
-    return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to upload file' }, { status: 500 });
   }
 }
