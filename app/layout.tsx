@@ -20,20 +20,22 @@ export default function RootLayout({
       <body suppressHydrationWarning className="relative bg-[#2C2C2C] text-white" style={{ backgroundColor: "#2C2C2C" }}>
         <Preloader />
         <Navbar />
-        <PixelatedCursor
-          label={false}
-          pixelCount={24}
-          pixelSize={12}
-          pixelShape="circle"
-          trailColor="#FFFFFF"
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 9999,
-            pointerEvents: "none",
-            mixBlendMode: "difference",
-          }}
-        />
+        <div className="hidden lg:block">
+          <PixelatedCursor
+            label={false}
+            pixelCount={24}
+            pixelSize={12}
+            pixelShape="circle"
+            trailColor="#FFFFFF"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 9999,
+              pointerEvents: "none",
+              mixBlendMode: "difference",
+            }}
+          />
+        </div>
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>

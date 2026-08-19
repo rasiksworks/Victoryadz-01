@@ -189,7 +189,7 @@ export const WeMostProudOf: React.FC = () => {
               pointerEvents: "none",
               zIndex: 9999,
             }}
-            className="flex items-center shadow-2xl drop-shadow-2xl"
+            className="hidden lg:flex items-center shadow-2xl drop-shadow-2xl"
           >
             {/* Arrow Square Box */}
             <div className="w-7 h-7 bg-black text-white flex items-center justify-center text-xs font-mono font-bold">
@@ -538,7 +538,7 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
           transformStyle: "preserve-3d",
           y: isDesktop ? parallaxY : 0,
         }}
-        className="relative cursor-none w-full flex justify-center"
+        className="relative lg:cursor-none w-full flex justify-center"
       >
         <div className="flex flex-col items-start gap-2.5 w-full lg:w-[166px]">
           <ImageReveal

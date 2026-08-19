@@ -480,13 +480,13 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
     return (
         <div
             ref={frameRef}
+            className={label ? "cursor-default lg:cursor-none" : "cursor-default"}
             style={{
                 ...style,
                 position: "relative",
                 width: "100%",
                 height: "100%",
                 overflow: "hidden",
-                cursor: label ? "none" : "default",
             }}
         >
             <canvas
@@ -496,6 +496,7 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
             {label && (
                 <div
                     ref={cursorRef}
+                    className="hidden lg:block"
                     style={{
                         position: "absolute",
                         top: 0,

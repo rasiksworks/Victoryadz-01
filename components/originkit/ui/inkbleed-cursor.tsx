@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type LabelFont = {
     fontFamily?: string;
@@ -136,6 +136,20 @@ type Pixel = {
 };
 
 export default function PixelatedCursor(props: Props) {
+    const [isDesktop, setIsDesktop] = useState(false);
+
+    useEffect(() => {
+        const checkDesktop = () => {
+            const mq = window.matchMedia(
+                "(min-width: 1024px) and (hover: hover) and (pointer: fine)"
+            );
+            setIsDesktop(mq.matches);
+        };
+        checkDesktop();
+        window.addEventListener("resize", checkDesktop);
+        return () => window.removeEventListener("resize", checkDesktop);
+    }, []);
+
     const {
         pixelCount = DEFAULTS.pixelCount,
         pixelSize = DEFAULTS.pixelSize,
@@ -172,6 +186,7 @@ export default function PixelatedCursor(props: Props) {
     const labelFont = { ...DEFAULT_LABEL_FONT, ...props.labelFont };
 
     useEffect(() => {
+        if (!isDesktop) return;
         const host = hostRef.current;
         if (!host) return;
         const pool = poolRef.current;
@@ -204,9 +219,10 @@ export default function PixelatedCursor(props: Props) {
             for (const p of pool) p.node.remove();
             poolRef.current = [];
         };
-    }, [pixelCount]);
+    }, [pixelCount, isDesktop]);
 
     useEffect(() => {
+        if (!isDesktop) return;
         for (const p of poolRef.current) {
             const s = p.node.style;
             s.width = `${pixelSize}px`;
@@ -215,9 +231,10 @@ export default function PixelatedCursor(props: Props) {
             s.backgroundColor = trailColor;
             p.color = trailColor;
         }
-    }, [pixelCount, pixelSize, pixelShape, trailColor]);
+    }, [pixelCount, pixelSize, pixelShape, trailColor, isDesktop]);
 
     useEffect(() => {
+        if (!isDesktop) return;
         const frameEl = frameRef.current;
         if (!frameEl) return;
 
@@ -378,7 +395,9 @@ export default function PixelatedCursor(props: Props) {
                 onWindowLeave
             );
         };
-    }, []);
+    }, [isDesktop]);
+
+    if (!isDesktop) return null;
 
     const labelNode = label ? (
         <div
