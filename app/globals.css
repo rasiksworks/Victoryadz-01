@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Display:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Display:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @source "../components/originkit";
 @import "./originkit-section-theme.css";
@@ -11,7 +11,7 @@ html, body {
   background-color: #2C2C2C !important;
   background: #2C2C2C !important;
   color: #ffffff;
-  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-family: 'Inter Display', sans-serif !important;
   overflow-x: clip;
 }
 
@@ -31,8 +31,12 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-.font-inter-display {
-  font-family: 'Inter Display', 'Inter', system-ui, -apple-system, sans-serif;
+.font-inter-display,
+.font-sans,
+.font-mono,
+.font-serif,
+.font-tight {
+  font-family: 'Inter Display', sans-serif !important;
 }
 
 /* Hide scrollbar for clean horizontal carousel */

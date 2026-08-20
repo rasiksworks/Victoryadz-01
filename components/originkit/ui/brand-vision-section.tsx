@@ -108,7 +108,7 @@ export const BrandVisionSection: React.FC = () => {
                 href="/works"
                 className="bg-white text-black px-7 py-3 min-h-[44px] text-xs tracking-[0.2em] uppercase font-semibold hover:bg-neutral-200 active:scale-95 transition-all shadow-xl flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation"
               >
-                DISCOVER <span className="font-serif italic lowercase font-normal text-sm">our</span> CRAFT
+                DISCOVER <span className="italic lowercase font-normal text-sm">our</span> CRAFT
               </Link>
             </div>
 

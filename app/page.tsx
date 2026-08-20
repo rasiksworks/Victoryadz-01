@@ -1,13 +1,36 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Hero03 from "@/components/originkit/hero-03";
-import { HowItWorks } from "@/components/originkit/ui/how-it-works";
-import { BrandVisionSection } from "@/components/originkit/ui/brand-vision-section";
-import { WeMostProudOf } from "@/components/originkit/ui/we-most-proud-of";
-import { Testimonials } from "@/components/originkit/ui/testimonials";
-import { WhyVictoryAdz } from "@/components/originkit/ui/why-victory-adz";
-import { FAQ } from "@/components/originkit/ui/faq";
-import { Footer } from "@/components/originkit/ui/footer";
+
+const HowItWorks = dynamic(
+  () => import("@/components/originkit/ui/how-it-works").then((mod) => mod.HowItWorks),
+  { ssr: true }
+);
+const BrandVisionSection = dynamic(
+  () => import("@/components/originkit/ui/brand-vision-section").then((mod) => mod.BrandVisionSection),
+  { ssr: true }
+);
+const WeMostProudOf = dynamic(
+  () => import("@/components/originkit/ui/we-most-proud-of").then((mod) => mod.WeMostProudOf),
+  { ssr: true }
+);
+const Testimonials = dynamic(
+  () => import("@/components/originkit/ui/testimonials").then((mod) => mod.Testimonials),
+  { ssr: true }
+);
+const WhyVictoryAdz = dynamic(
+  () => import("@/components/originkit/ui/why-victory-adz").then((mod) => mod.WhyVictoryAdz),
+  { ssr: true }
+);
+const FAQ = dynamic(
+  () => import("@/components/originkit/ui/faq").then((mod) => mod.FAQ),
+  { ssr: true }
+);
+const Footer = dynamic(
+  () => import("@/components/originkit/ui/footer").then((mod) => mod.Footer),
+  { ssr: true }
+);
 
 export default function Home() {
   return (

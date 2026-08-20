@@ -7,30 +7,30 @@
  */
 
 @theme {
-  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-tight: "Inter Tight", Inter, sans-serif;
-  --font-switzer: "Switzer", Inter, ui-sans-serif, sans-serif;
-  --font-rethink: "Rethink Sans", Inter, sans-serif;
-  --font-geist: "Geist", Inter, ui-sans-serif, sans-serif;
-  --font-tillana: Tillana, cursive;
-  --font-instrument: "Instrument Sans", Inter, sans-serif;
-  --font-instrument-serif: "Instrument Serif", Georgia, serif;
-  --font-instrument-tight: "Instrument Sans", Inter, sans-serif;
-  --font-clash: Inter, ui-sans-serif, sans-serif;
-  /* Canela Deck is self-hosted per section (canela-deck-bold.ttf). No Instrument Serif fallback — that masked missing @font-face. */
-  --font-canela-deck: "Canela Deck", Georgia, "Times New Roman", serif;
-  --font-helvetica-neue: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-monda: Monda, Inter, ui-sans-serif, sans-serif;
-  --font-geist-mono: "Geist Mono", ui-monospace, monospace;
-  --font-dm-mono: "DM Mono", ui-monospace, monospace;
-  --font-lato: Lato, ui-sans-serif, system-ui, sans-serif;
-  --font-urbanist: "Urbanist", Inter, ui-sans-serif, sans-serif;
-  --font-manrope: "Manrope", Inter, ui-sans-serif, sans-serif;
-  --font-playfair: "Playfair Display", Georgia, serif;
-  --font-outfit: "Outfit", Inter, ui-sans-serif, sans-serif;
-  --font-audiowide: "Audiowide", Inter, ui-sans-serif, sans-serif;
-  --font-hedvig: "Hedvig Letters Serif", Georgia, ui-serif, serif;
-  --font-redhat: "Red Hat Display", Inter, ui-sans-serif, sans-serif;
+  --font-sans: "Inter Display", sans-serif;
+  --font-tight: "Inter Display", sans-serif;
+  --font-switzer: "Inter Display", sans-serif;
+  --font-rethink: "Inter Display", sans-serif;
+  --font-geist: "Inter Display", sans-serif;
+  --font-tillana: "Inter Display", sans-serif;
+  --font-instrument: "Inter Display", sans-serif;
+  --font-instrument-serif: "Inter Display", sans-serif;
+  --font-instrument-tight: "Inter Display", sans-serif;
+  --font-clash: "Inter Display", sans-serif;
+  --font-canela-deck: "Inter Display", sans-serif;
+  --font-helvetica-neue: "Inter Display", sans-serif;
+  --font-monda: "Inter Display", sans-serif;
+  --font-geist-mono: "Inter Display", sans-serif;
+  --font-dm-mono: "Inter Display", sans-serif;
+  --font-lato: "Inter Display", sans-serif;
+  --font-urbanist: "Inter Display", sans-serif;
+  --font-manrope: "Inter Display", sans-serif;
+  --font-playfair: "Inter Display", sans-serif;
+  --font-outfit: "Inter Display", sans-serif;
+  --font-audiowide: "Inter Display", sans-serif;
+  --font-hedvig: "Inter Display", sans-serif;
+  --font-redhat: "Inter Display", sans-serif;
+  --font-inter-display: "Inter Display", sans-serif;
 
   --animate-hero-reveal: hero-reveal 300ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
   --animate-section-rise: section-rise 500ms cubic-bezier(0.23, 1, 0.32, 1) both;

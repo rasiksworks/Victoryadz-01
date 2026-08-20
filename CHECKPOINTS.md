@@ -10,6 +10,38 @@ This log records only **Major Milestones and Substantial Architecture Changes** 
 
 ---
 
+### `CP-05` · Font family optimize
+- **Timestamp**: August 20, 2026 at 11:40 IST
+- **Category**: Typography & Design System Optimization
+- **Summary**:
+  - Unified the entire website under a single, cohesive font family: **`Inter Display`** (`wght@100..900`).
+  - Streamlined `@font-face` and Google Font payloads down to only `Inter Display`.
+  - Standardized all theme variables (`--font-sans`, `--font-tight`, `--font-serif`, `--font-mono`, `--font-instrument`) and component typography across all sections.
+- **Core Files**:
+  - `app/globals.css`
+  - `app/originkit-section-theme.css`
+  - `app/originkit-section-themes.css`
+  - `components/originkit/hero-03.css`
+  - `components/originkit/ui/brand-vision-section.tsx`
+  - `components/originkit/ui/hero-03/gallery-tunnel.tsx`
+  - `components/originkit/ui/inkbleed-cursor.tsx`
+
+---
+
+### `CP-05` · Performance & TBT Optimization (Preloader, Code Splitting, WebGL Pause)
+- **Timestamp**: August 20, 2026 at 11:45 IST
+- **Category**: Lighthouse & Core Web Vitals Optimization
+- **Summary**:
+  - Preloader: Replaced 60fps React state re-renders with direct DOM ref updates and reduced duration to 450ms, eliminating the artificial main-thread freeze.
+  - Page Code Splitting: Split all below-the-fold sections into independent dynamic chunks (`next/dynamic`), reducing initial main-thread script evaluation.
+  - WebGL Background: Paused 3D Three.js scene computations and rendering when scrolled out of view.
+- **Core Files**:
+  - `components/preloader.tsx`
+  - `app/page.tsx`
+  - `components/originkit/ui/hero-03/gallery-tunnel.tsx`
+
+---
+
 ### `CP-04` · Scroll & Performance Optimization Complete
 - **Timestamp**: August 20, 2026 at 10:41 IST
 - **Category**: Performance & Scroll Synchronization Milestone

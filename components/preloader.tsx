@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 export const Preloader: React.FC = () => {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const numberRef = useRef<HTMLSpanElement>(null);
 
   // If we are not on the homepage, invert the colors (black bg, white text)
   const isInverted = pathname !== "/";
 
-    useEffect(() => {
+  useEffect(() => {
     // Disable scrolling while preloader is active
     document.body.style.overflow = "hidden";
     if (typeof window !== "undefined" && (window as any).lenis) {
@@ -27,8 +27,8 @@ export const Preloader: React.FC = () => {
       window.addEventListener("load", handleLoad, { once: true });
     }
 
-    // Smooth progress counter
-    const minDuration = 1000;
+    // Fast, crisp progress counter (450ms)
+    const minDuration = 450;
     const startTime = performance.now();
 
     const animateProgress = (currentTime: number) => {
@@ -36,7 +36,7 @@ export const Preloader: React.FC = () => {
       let t = Math.min(elapsed / minDuration, 1);
 
       // If document is still not ready, hold briefly at 95%
-      if (!isAssetReady && t > 0.95 && elapsed < 2500) {
+      if (!isAssetReady && t > 0.95 && elapsed < 800) {
         t = 0.95;
       }
 
@@ -44,7 +44,9 @@ export const Preloader: React.FC = () => {
       const ease = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
       const currentProgress = Math.min(100, Math.floor(ease * 100));
       
-      setProgress(currentProgress);
+      if (numberRef.current) {
+        numberRef.current.innerText = String(currentProgress).padStart(3, '0') + "%";
+      }
 
       if (t < 1) {
         requestAnimationFrame(animateProgress);
@@ -58,7 +60,7 @@ export const Preloader: React.FC = () => {
             }
             window.dispatchEvent(new CustomEvent("preloader-complete"));
           }
-        }, 250);
+        }, 150);
       }
     };
 
@@ -75,8 +77,6 @@ export const Preloader: React.FC = () => {
     };
   }, []);
 
-  const formattedProgress = String(progress).padStart(3, '0') + "%";
-
   return (
     <AnimatePresence>
       {isLoading && (
@@ -85,7 +85,7 @@ export const Preloader: React.FC = () => {
           <motion.div
             key="preloader-layer-1"
             initial={{ y: 0 }}
-            exit={{ y: "-100%", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.18 } }}
+            exit={{ y: "-100%", transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.14 } }}
             className="fixed inset-0 z-[100000] bg-[#09090b] transform-gpu will-change-transform"
           />
           
@@ -93,7 +93,7 @@ export const Preloader: React.FC = () => {
           <motion.div
             key="preloader-layer-2"
             initial={{ y: 0 }}
-            exit={{ y: "-100%", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.12 } }}
+            exit={{ y: "-100%", transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.09 } }}
             className="fixed inset-0 z-[100001] bg-[#3f3f46] transform-gpu will-change-transform"
           />
 
@@ -101,7 +101,7 @@ export const Preloader: React.FC = () => {
           <motion.div
             key="preloader-layer-3"
             initial={{ y: 0 }}
-            exit={{ y: "-100%", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.06 } }}
+            exit={{ y: "-100%", transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.04 } }}
             className="fixed inset-0 z-[100002] bg-[#a1a1aa] transform-gpu will-change-transform"
           />
 
@@ -109,7 +109,7 @@ export const Preloader: React.FC = () => {
           <motion.div
             key="preloader-main"
             initial={{ y: 0 }}
-            exit={{ y: "-100%", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0 } }}
+            exit={{ y: "-100%", transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0 } }}
             className={`fixed inset-0 z-[100003] ${isInverted ? 'bg-[#111111] text-white' : 'bg-white text-black'} overflow-hidden transform-gpu will-change-transform`}
           >
             {/* Left Side Content */}
@@ -129,10 +129,11 @@ export const Preloader: React.FC = () => {
             {/* Right Side Huge Percentage */}
             <div className="absolute right-4 md:right-8 bottom-0 md:bottom-[-2%] flex items-end">
               <span 
+                ref={numberRef}
                 className={`font-sans font-bold tracking-tighter ${isInverted ? 'text-white' : 'text-[#1c1c1c]'} select-none scale-y-[1.4] origin-bottom inline-block`}
                 style={{ fontSize: "clamp(8rem, 25vw, 22rem)", lineHeight: "0.8" }}
               >
-                {formattedProgress}
+                000%
               </span>
             </div>
           </motion.div>

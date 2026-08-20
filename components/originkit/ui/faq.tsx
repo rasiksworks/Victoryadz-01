@@ -121,7 +121,6 @@ export const FAQ: React.FC = () => {
                     {/* Stepped Bold Number */}
                     <span
                       className="text-xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight shrink-0 w-6 sm:w-12 leading-none pt-0.5 md:pt-1 transition-colors duration-500 ease-out"
-                      style={{ fontFamily: "'Instrument Serif', serif" }}
                     >
                       {faq.number}
                     </span>
@@ -129,8 +128,7 @@ export const FAQ: React.FC = () => {
                     {/* High-Contrast Editorial Title & Revealable Subtext */}
                     <div className="flex flex-col flex-1">
                       <h3
-                        className="text-xl sm:text-2xl md:text-3xl lg:text-[42px] leading-[1.2] sm:leading-[1.15] text-white font-normal tracking-tight transition-colors duration-500 ease-out"
-                        style={{ fontFamily: "'Instrument Serif', serif" }}
+                        className="text-xl sm:text-2xl md:text-3xl lg:text-[42px] leading-[1.2] sm:leading-[1.15] text-white font-semibold tracking-tight transition-colors duration-500 ease-out"
                       >
                         {faq.question}
                       </h3>

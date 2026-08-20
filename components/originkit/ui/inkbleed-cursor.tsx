@@ -39,7 +39,7 @@ const IDLE_FADE: Transition = {
 };
 
 const DEFAULT_LABEL_FONT: LabelFont = {
-    fontFamily: "Inter",
+    fontFamily: "'Inter Display', sans-serif",
     fontWeight: 400,
     fontSize: "48px",
     lineHeight: "1.5em",

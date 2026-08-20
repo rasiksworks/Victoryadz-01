@@ -24,7 +24,7 @@ const DEFAULTS = {
     labelText: "Press to Start",
     labelFill: "#FFFFFF",
     labelColor: "#000000",
-    labelFont: { fontFamily: "Inter", fontSize: 14, fontWeight: 500 } as CSSProperties,
+    labelFont: { fontFamily: "'Inter Display', sans-serif", fontSize: 14, fontWeight: 500 } as CSSProperties,
 };
 
 const TUNNEL_WIDTH = 2;
@@ -357,6 +357,7 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
         const animate = (now: number) => {
             if (!alive) return;
             raf = requestAnimationFrame(animate);
+            if (!isVisible) return;
             const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
             last = now;
 
