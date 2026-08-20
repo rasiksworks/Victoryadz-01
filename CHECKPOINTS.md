@@ -10,6 +10,19 @@ This log records only **Major Milestones and Substantial Architecture Changes** 
 
 ---
 
+### `CP-10` · Next.js Shop Pixel Dissolve CTA Button Integration
+- **Timestamp**: August 20, 2026 at 14:55 IST
+- **Category**: Interactive UI & Micro-interactions
+- **Summary**:
+  - Added pixel-dissolve button component (`components/ui/nextjsshop-button.tsx`) with flexible text, href, and onClick handlers.
+  - Applied the pixel-dissolve animation across all website CTA buttons.
+- **Core Files**:
+  - `components/ui/nextjsshop-button.tsx`
+  - `components/ui/nextjsshop-button.css`
+  - All CTA components
+
+---
+
 ### `CP-09` · Before How It Works (v2) Artifact Test Section
 - **Timestamp**: August 20, 2026 at 13:35 IST
 - **Category**: State Checkpoint Before Process Section v2 Test
