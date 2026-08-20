@@ -203,7 +203,7 @@ export const WeMostProudOf: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <div className="w-full px-6 md:px-[60px] lg:px-[60px]">
+      <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px]">
         {/* Top Header Row */}
         <div className="flex items-center justify-between pt-4 pb-4 sm:pt-8 sm:pb-8 md:pt-14 md:pb-14">
           <div className="flex items-center gap-3">
@@ -222,7 +222,7 @@ export const WeMostProudOf: React.FC = () => {
           </div>
 
           <a href="/works" className="block">
-            <Button variant="secondary" className="px-6 uppercase tracking-widest text-xs">
+            <Button variant="secondary" className="px-5 sm:px-6 uppercase tracking-widest text-xs touch-manipulation">
               EXPLORE ALL
             </Button>
           </a>
@@ -233,7 +233,7 @@ export const WeMostProudOf: React.FC = () => {
           className="pb-6 sm:pb-10 md:pb-20"
           style={{ perspective: "1200px" }}
         >
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 w-full gap-6 md:gap-8 lg:gap-6 lg:gap-y-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 w-full gap-3 sm:gap-6 md:gap-8 lg:gap-6 lg:gap-y-12">
             {displayedItems.map((item, idx) => {
               const tilt = tiltState[item.id] || { rotateX: 0, rotateY: 0 };
               const isHovered = hoveredId === item.id;
@@ -425,16 +425,22 @@ export const WeMostProudOf: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="flex lg:hidden absolute top-0 left-0 right-0 flex-col gap-1.5 p-5 bg-black shrink-0 z-20"
+              className="flex lg:hidden absolute top-0 left-0 right-0 flex-col gap-1.5 p-4 sm:p-5 bg-black/90 backdrop-blur-md shrink-0 z-20"
             >
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-0.5 font-sans">
                   <span className="text-xs text-white/80 tracking-wide font-normal">{selectedItem.date}</span>
                   <span className="text-[11px] text-white/60 font-normal uppercase tracking-wider">{selectedItem.credits}</span>
                 </div>
-                <button onClick={handleCloseModal} aria-label="Close" className="w-8 h-8 bg-white/15 text-white flex items-center justify-center text-xs font-mono hover:bg-white/30 transition-colors cursor-pointer rounded-none">✕</button>
+                <button
+                  onClick={handleCloseModal}
+                  aria-label="Close"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] bg-white/15 active:bg-white/30 text-white flex items-center justify-center text-sm font-mono transition-colors cursor-pointer rounded-none touch-manipulation"
+                >
+                  ✕
+                </button>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-white uppercase mt-2 leading-none">{selectedItem.title || selectedItem.lastName}</h2>
+              <h2 className="font-serif text-2xl sm:text-4xl font-bold tracking-tight text-white uppercase mt-2 leading-none">{selectedItem.title || selectedItem.lastName}</h2>
             </motion.div>
 
             {/* --- MOBILE BOTTOM THUMBNAILS (No Background, No Border) --- */}

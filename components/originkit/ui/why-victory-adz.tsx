@@ -182,7 +182,7 @@ export const WhyVictoryAdz: React.FC = () => {
     return (
       <section
         id="why-victory-adz"
-        className="relative z-20 w-full bg-[#3D3D3D] text-white select-none py-10 sm:py-14 md:py-20 px-6"
+        className="relative z-20 w-full bg-[#3D3D3D] text-white select-none py-10 sm:py-14 md:py-20 px-4 sm:px-6"
         style={{ fontFamily: "'Inter Display', 'Inter', system-ui, sans-serif" }}
       >
         <div className="w-full max-w-xl mx-auto flex flex-col gap-10">
@@ -194,7 +194,7 @@ export const WhyVictoryAdz: React.FC = () => {
             <MaskTextReveal
               tag="h2"
               direction="center-horizontal"
-              className="text-3xl sm:text-4xl font-bold tracking-[-0.03em] text-white"
+              className="text-2xl sm:text-4xl font-bold tracking-[-0.03em] text-white"
               style={{ lineHeight: "110%" }}
             >
               8 years of craftsmanship, built on quality and trust, not shortcuts.
@@ -225,8 +225,8 @@ export const WhyVictoryAdz: React.FC = () => {
                     {card.number}
                   </div>
                 </div>
-                <div className="bg-white text-black p-6 flex flex-col justify-end min-h-[220px]">
-                  <h3 className="text-xl font-bold tracking-tight text-neutral-900 leading-snug mb-2">
+                <div className="bg-white text-black p-5 sm:p-6 flex flex-col justify-end min-h-[200px] sm:min-h-[220px]">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-neutral-900 leading-snug mb-2">
                     {card.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-neutral-600 font-normal leading-relaxed">
@@ -244,7 +244,7 @@ export const WhyVictoryAdz: React.FC = () => {
             </p>
             <button
               onClick={handleWhatsAppOrder}
-              className="mt-4 w-full bg-[#1C1C1C] hover:bg-black text-white text-[11px] font-bold tracking-widest py-2.5 px-3 uppercase transition-colors duration-200 cursor-pointer text-center"
+              className="mt-4 w-full bg-[#1C1C1C] hover:bg-black active:scale-[0.98] text-white text-xs font-bold tracking-widest py-3 min-h-[44px] px-3 uppercase transition-all duration-200 cursor-pointer text-center touch-manipulation"
             >
               ORDER NOW
             </button>

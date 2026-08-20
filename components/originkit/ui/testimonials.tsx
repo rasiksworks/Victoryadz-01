@@ -82,7 +82,7 @@ export const Testimonials: React.FC = () => {
       <div className="w-full flex flex-col gap-6 sm:gap-8 md:gap-14">
 
         {/* Header */}
-        <div className="w-full px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-2 sm:gap-3 max-w-2xl">
+        <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-2 sm:gap-3 max-w-2xl">
           <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block">
             [ WHAT CLIENTS SAY ]
           </span>

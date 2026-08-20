@@ -487,11 +487,12 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
                 width: "100%",
                 height: "100%",
                 overflow: "hidden",
+                touchAction: "pan-y",
             }}
         >
             <canvas
                 ref={canvasRef}
-                style={{ display: "block", width: "100%", height: "100%" }}
+                style={{ display: "block", width: "100%", height: "100%", touchAction: "pan-y" }}
             />
             {label && (
                 <div

@@ -1,52 +1,65 @@
 "use client";
 
-import { useId } from "react";
-import Link from "next/link";
-import { useReducedMotion } from "framer-motion";
-import GalleryTunnel from "@/components/originkit/ui/hero-03/gallery-tunnel";
-import { useTunnelConfig } from "@/components/originkit/ui/hero-03/use-tunnel-size";
-import { TUNNEL_IMAGES } from "@/components/originkit/ui/hero-03/tunnel-images";
-
-/** Public asset URLs */
-function asset(file: string) {
-  return `/originkit/hero-03/${file}`;
-}
+import React, { useState, useEffect } from "react";
+import InfiniteGallery from "@/components/originkit/ui/infinitegallery-base";
+import siteData from "@/data/site-images.json";
 
 export default function WorksPage() {
-  const titleId = useId();
-  const reduceMotion = useReducedMotion();
-  const { tunnelSize, fade, boost } = useTunnelConfig();
+  const [galleryImages, setGalleryImages] = useState<{ src: string; alt?: string }[]>([]);
+
+  // Fetch dynamic items from /api/site-data with fallback to all 50 items
+  useEffect(() => {
+    fetch("/api/site-data")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.exploreGallery && Array.isArray(data.exploreGallery) && data.exploreGallery.length > 0) {
+          const mapped = data.exploreGallery.map((item: any) => ({
+            src: item.image || item.src,
+            alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
+          }));
+          setGalleryImages(mapped);
+        } else {
+          setGalleryImages(
+            (siteData.exploreGallery || []).map((item: any) => ({
+              src: item.image,
+              alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
+            }))
+          );
+        }
+      })
+      .catch(() => {
+        setGalleryImages(
+          (siteData.exploreGallery || []).map((item: any) => ({
+            src: item.image,
+            alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
+          }))
+        );
+      });
+  }, []);
+
+  const fallbackImages = (siteData.exploreGallery || []).map((item: any) => ({
+    src: item.image,
+    alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
+  }));
+
+  const activeImages = galleryImages.length > 0 ? galleryImages : fallbackImages;
 
   return (
-    <main className="relative w-screen h-screen bg-[#2C2C2C] flex flex-col overflow-hidden">
-      <h2 id={titleId} className="sr-only">
-        Interactive portrait gallery tunnel
-      </h2>
-
-      
-      {/* Floating Interaction Hint (bottom) */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center justify-center">
-        <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 backdrop-blur-md">
-          <span className="text-xs font-medium text-white/80 font-tight">
-            Move cursor or hold to speed up
-          </span>
-        </div>
-      </div>
-
-
-      {/* 3D Gallery Tunnel with #2C2C2C background */}
-      <div className="relative w-full h-full min-h-0 flex-1">
-        <GalleryTunnel
-          background="#2C2C2C"
-          lineColor="#555555"
-          lineOpacity={60}
-          grid={4}
-          tunnelSize={tunnelSize}
-          speed={reduceMotion ? 0 : 9}
-          boost={reduceMotion ? 0 : boost}
-          fade={fade}
-          label={false}
-          images={TUNNEL_IMAGES}
+    <main className="relative w-screen h-screen bg-[#2C2C2C] text-white font-inter-display select-none overflow-hidden">
+      {/* ── FULLSCREEN ORIGINKIT INFINITY CANVAS ── */}
+      <div className="w-full h-full">
+        <InfiniteGallery
+          images={activeImages}
+          width="100%"
+          height="100%"
+          imageWidth={260}
+          imageHeight={346}
+          rounded={0}
+          density={3.5}
+          dragSpeed={22}
+          driftAmount={18}
+          friction={8}
+          backgroundColor="#2C2C2C"
         />
       </div>
     </main>

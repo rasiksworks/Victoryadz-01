@@ -58,3 +58,16 @@ body::-webkit-scrollbar,
   height: 0px !important;
   background: transparent !important;
 }
+
+/* Mobile touch and responsive performance optimizations */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 1024px) {
+  html, body {
+    touch-action: pan-y;
+    overflow-x: hidden;
+  }
+}
+

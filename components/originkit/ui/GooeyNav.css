@@ -53,10 +53,19 @@
   text-shadow: 0 1px 1px hsl(205deg 30% 10% / 0.2);
 }
 
+@media (max-width: 768px) {
+  .gooey-nav-container nav ul {
+    gap: 0.35em;
+    padding: 0 0.25em;
+  }
+}
+
 .gooey-nav-container nav ul li {
   border-radius: 100vw;
   position: relative;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
@@ -72,6 +81,15 @@
   font-weight: 500;
   text-decoration: none;
   color: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .gooey-nav-container nav ul li a {
+    padding: 0.4em 0.75em;
+    font-size: 0.78rem;
+  }
 }
 
 .gooey-nav-container nav ul li:focus-within:has(:focus-visible) {

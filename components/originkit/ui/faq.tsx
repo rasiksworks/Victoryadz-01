@@ -73,7 +73,7 @@ export const FAQ: React.FC = () => {
       <div className="w-full flex flex-col gap-10 md:gap-14">
         
         {/* Header Section */}
-        <div className="w-full px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-3 max-w-2xl">
+        <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-3 max-w-2xl">
           <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block mb-1">
             [ FAQ ]
           </span>
@@ -107,16 +107,20 @@ export const FAQ: React.FC = () => {
                   delay: index * 0.05,
                   ease: LUXURY_EASE,
                 }}
-                onMouseEnter={() => setActiveId(faq.id)}
+                onMouseEnter={() => {
+                  if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+                    setActiveId(faq.id);
+                  }
+                }}
                 onClick={() => setActiveId(isOpen ? null : faq.id)}
-                className={`${faq.shade} w-full transition-all duration-500 ease-out cursor-pointer relative select-none hover:brightness-[1.12]`}
+                className={`${faq.shade} w-full transition-all duration-500 ease-out cursor-pointer relative select-none hover:brightness-[1.12] touch-manipulation`}
               >
-                <div className="w-full py-4 sm:py-6 md:py-9 lg:py-10 px-5 sm:px-6 md:px-[60px] lg:px-[80px] flex items-start justify-between gap-4 sm:gap-6 md:gap-8">
+                <div className="w-full py-4 sm:py-6 md:py-9 lg:py-10 px-4 sm:px-6 md:px-[60px] lg:px-[80px] flex items-start justify-between gap-3 sm:gap-6 md:gap-8">
                   {/* Left Side: Number + Title & Content */}
-                  <div className="flex items-start gap-4 sm:gap-6 md:gap-8 flex-1">
+                  <div className="flex items-start gap-3 sm:gap-6 md:gap-8 flex-1">
                     {/* Stepped Bold Number */}
                     <span
-                      className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight shrink-0 w-8 sm:w-12 leading-none pt-0.5 md:pt-1 transition-colors duration-500 ease-out"
+                      className="text-xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight shrink-0 w-6 sm:w-12 leading-none pt-0.5 md:pt-1 transition-colors duration-500 ease-out"
                       style={{ fontFamily: "'Instrument Serif', serif" }}
                     >
                       {faq.number}
@@ -125,7 +129,7 @@ export const FAQ: React.FC = () => {
                     {/* High-Contrast Editorial Title & Revealable Subtext */}
                     <div className="flex flex-col flex-1">
                       <h3
-                        className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-[1.15] text-white font-normal tracking-tight transition-colors duration-500 ease-out"
+                        className="text-xl sm:text-2xl md:text-3xl lg:text-[42px] leading-[1.2] sm:leading-[1.15] text-white font-normal tracking-tight transition-colors duration-500 ease-out"
                         style={{ fontFamily: "'Instrument Serif', serif" }}
                       >
                         {faq.question}

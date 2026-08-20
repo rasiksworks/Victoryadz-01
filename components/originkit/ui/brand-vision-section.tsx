@@ -11,7 +11,7 @@ import siteData from "@/data/site-images.json";
 export const BrandVisionSection: React.FC = () => {
   return (
     <section id="about" className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none" style={{ backgroundColor: "#2C2C2C" }}>
-      <div className="w-full px-6 md:px-[60px] lg:px-[60px]">
+      <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px]">
         
         {/* Top Header Row (Scrolls Up Past the Frame First, No Divider Line) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-14 pt-6 sm:pt-10 md:pt-16 pb-6 sm:pb-8 md:pb-12">
@@ -58,7 +58,7 @@ export const BrandVisionSection: React.FC = () => {
           <div className="w-full lg:w-1/2 flex flex-col gap-8 sm:gap-12 lg:gap-20 pt-2 sm:pt-4 md:pt-6 pb-6 sm:pb-10 md:pb-16">
             
             {/* Two Side-by-Side Images (24px Gap Between Them) */}
-            <div className="grid grid-cols-2 gap-6 w-full">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full">
               <ImageReveal className="relative aspect-[3/4] w-full overflow-hidden bg-[#222] border border-white/5" delay={0.1} duration={1.2}>
                 <Image
                   src={siteData.brandVision.image2}
@@ -106,14 +106,14 @@ export const BrandVisionSection: React.FC = () => {
               </ImageReveal>
               <Link
                 href="/works"
-                className="bg-white text-black px-7 py-3 text-xs tracking-[0.2em] uppercase font-semibold hover:bg-neutral-200 transition-colors shadow-xl flex items-center gap-1.5 cursor-pointer"
+                className="bg-white text-black px-7 py-3 min-h-[44px] text-xs tracking-[0.2em] uppercase font-semibold hover:bg-neutral-200 active:scale-95 transition-all shadow-xl flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation"
               >
                 DISCOVER <span className="font-serif italic lowercase font-normal text-sm">our</span> CRAFT
               </Link>
             </div>
 
             {/* Second Set of Two Side-by-Side Images (24px Gap Between Them) */}
-            <div className="grid grid-cols-2 gap-6 w-full pt-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full pt-4">
               <ImageReveal className="relative aspect-[3/4] w-full overflow-hidden bg-[#222] border border-white/5" delay={0.1} duration={1.2}>
                 <Image
                   src={siteData.brandVision.image5}

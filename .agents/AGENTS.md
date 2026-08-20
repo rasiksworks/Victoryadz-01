@@ -6,10 +6,8 @@
 ---
 
 ## 1. Scope & Component Isolation Rule
-- **Admin Panel Separation**: All Admin Panel code, state management, and dashboard components MUST live inside isolated directories:
-  - Pages/Routes: `app/admin/**`
-  - Components: `components/admin/**`
-  - API Routes: `app/api/admin/**`
+- **Admin Panel Separation**: All Admin Panel code, configurations, state management, and dashboard components MUST live strictly inside `admin-app/`.
+- **Strict Isolation**: When modifying anything in the admin panel, ONLY modify files inside `admin-app/`. Do NOT modify the main website or root-level files unless the user explicitly requests it.
 - **Zero Impact on Existing Sections**: Never mutate, rewrite, or reset public page components (`we-most-proud-of.tsx`, `brand-vision-section.tsx`, `gallery-tunnel.tsx`, `hero-03/*`) when implementing admin features or backend APIs.
 
 ---
