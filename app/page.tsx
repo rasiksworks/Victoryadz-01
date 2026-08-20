@@ -31,6 +31,10 @@ const Footer = dynamic(
   () => import("@/components/originkit/ui/footer").then((mod) => mod.Footer),
   { ssr: true }
 );
+const HowItWorksV2 = dynamic(
+  () => import("@/components/originkit/ui/how-it-works-v2").then((mod) => mod.HowItWorksV2),
+  { ssr: true }
+);
 
 export default function Home() {
   return (
@@ -43,6 +47,7 @@ export default function Home() {
       <WhyVictoryAdz />
       <FAQ />
       <Footer />
+      <HowItWorksV2 />
     </main>
   );
 }
