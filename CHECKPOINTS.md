@@ -10,6 +10,16 @@ This log records only **Major Milestones and Substantial Architecture Changes** 
 
 ---
 
+### `CP-09` · Before How It Works (v2) Artifact Test Section
+- **Timestamp**: August 20, 2026 at 13:35 IST
+- **Category**: State Checkpoint Before Process Section v2 Test
+- **Summary**:
+  - Saved snapshot of all components, public sections, and layouts before building the test "How It Works (v2)" staircase grid section below the footer.
+- **Core Files**:
+  - Entire project codebase
+
+---
+
 ### `CP-08` · 3D WebGL Background Micro-Delay Implemented
 - **Timestamp**: August 20, 2026 at 12:34 IST
 - **Category**: Mobile Paint & Performance Optimization
