@@ -1,9 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import PixelatedCursor from "@/components/originkit/ui/inkbleed-cursor";
 import { Preloader } from "@/components/preloader";
 import { Navbar } from "@/components/originkit/ui/hero-03/navbar";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter-display",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://victoryadz.com";
 
@@ -297,7 +304,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

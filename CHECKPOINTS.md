@@ -28,6 +28,19 @@ This log records only **Major Milestones and Substantial Architecture Changes** 
 
 ---
 
+### `CP-06` · Next.js Zero-Render-Blocking Font Optimization
+- **Timestamp**: August 20, 2026 at 12:16 IST
+- **Category**: Network & Core Web Vitals Optimization
+- **Summary**:
+  - Removed render-blocking `@import url('https://fonts.googleapis.com/...')` from `app/globals.css`.
+  - Configured Next.js self-hosted `Inter` with `next/font/google` (`subsets: ['latin']`, `display: 'swap'`).
+  - Slashed network FCP delay on mobile throttled networks.
+- **Core Files**:
+  - `app/layout.tsx`
+  - `app/globals.css`
+
+---
+
 ### `CP-05` · Performance & TBT Optimization (Preloader, Code Splitting, WebGL Pause)
 - **Timestamp**: August 20, 2026 at 11:45 IST
 - **Category**: Lighthouse & Core Web Vitals Optimization
