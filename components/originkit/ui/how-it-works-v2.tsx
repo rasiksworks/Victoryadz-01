@@ -121,10 +121,10 @@ export const HowItWorksV2: React.FC = () => {
                 width: "25%",
                 height: "50%",
                 backgroundColor: "rgba(0, 0, 0, 0.24)",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
               }}
-              className="pointer-events-auto border border-white/50 backdrop-blur-md flex flex-col justify-between"
+              className="pointer-events-auto border border-white/50 backdrop-blur-[4px] flex flex-col justify-between"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
@@ -161,11 +161,11 @@ export const HowItWorksV2: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
-              className="relative border border-white/50 bg-black/24 backdrop-blur-md p-6 sm:p-8 flex flex-col justify-between min-h-[340px]"
+              className="relative border border-white/50 bg-black/24 backdrop-blur-[4px] p-6 sm:p-8 flex flex-col justify-between min-h-[340px]"
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.24)",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
               }}
             >
               {/* Corner 7x7px Dots */}
