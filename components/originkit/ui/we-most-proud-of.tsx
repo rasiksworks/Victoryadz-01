@@ -88,9 +88,16 @@ export const WeMostProudOf: React.FC = () => {
   const displayedItems = WORK_ITEMS.slice(0, 15);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedItem(null);
+      }
+    };
+
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("detail-modal", { detail: { open: !!selectedItem } }));
       if (selectedItem) {
+        window.addEventListener("keydown", handleKeyDown);
         if ((window as any).lenis) {
           (window as any).lenis.stop();
         }
@@ -104,6 +111,7 @@ export const WeMostProudOf: React.FC = () => {
     }
     return () => {
       if (typeof window !== "undefined") {
+        window.removeEventListener("keydown", handleKeyDown);
         if ((window as any).lenis) {
           (window as any).lenis.start();
         }
@@ -291,6 +299,9 @@ export const WeMostProudOf: React.FC = () => {
         {selectedItem && (
           <motion.div
             key="work-detail-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedItem ? `${selectedItem.label || selectedItem.firstName} ${selectedItem.title || selectedItem.lastName}` : "Work details"}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -550,6 +561,15 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
         onMouseMove={(e) => handleMouseMove(e, item.id)}
         onMouseLeave={() => handleMouseLeave(item.id)}
         onClick={() => handleItemClick(item)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleItemClick(item);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label={`View details for ${item.label || item.firstName} ${item.title || item.lastName}`}
         animate={{
           opacity: dimmed ? 0.4 : 1,
           scale: 1,
@@ -565,7 +585,7 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
           transformStyle: "preserve-3d",
           y: isDesktop ? parallaxY : 0,
         }}
-        className="relative lg:cursor-none w-full flex justify-center"
+        className="relative lg:cursor-none w-full flex justify-center focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4"
       >
         <div className="flex flex-col items-start gap-2.5 w-full lg:w-[166px]">
           <ImageReveal

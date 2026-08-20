@@ -312,6 +312,12 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="relative bg-[#2C2C2C] text-white" style={{ backgroundColor: "#2C2C2C" }}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[999999] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-bold focus:shadow-2xl focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <Preloader />
         <Navbar />
         <div className="hidden lg:block">

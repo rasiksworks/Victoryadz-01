@@ -34,7 +34,7 @@ const Footer = dynamic(
 
 export default function Home() {
   return (
-    <main className="w-full bg-[#2C2C2C] flex flex-col overflow-x-clip">
+    <main id="main-content" className="w-full bg-[#2C2C2C] flex flex-col overflow-x-clip">
       <Hero03 />
       <HowItWorks />
       <BrandVisionSection />

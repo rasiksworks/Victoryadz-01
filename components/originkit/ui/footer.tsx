@@ -41,6 +41,19 @@ export const Footer: React.FC = () => {
     }
   };
 
+  // Escape key dismiss for modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveModal(null);
+      }
+    };
+    if (activeModal) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeModal]);
+
   // Scroll-based expanding frame animation (1320px card -> 100vw full width)
   useEffect(() => {
     const container = containerRef.current;
@@ -266,6 +279,9 @@ export const Footer: React.FC = () => {
         <AnimatePresence>
           {activeModal && (
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="footer-modal-title"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -280,11 +296,12 @@ export const Footer: React.FC = () => {
                 className="relative w-full max-w-lg bg-[#181818] border border-white/20 p-6 md:p-8 font-mono text-white shadow-2xl"
               >
                 <div className="flex items-center justify-between pb-4 mb-4">
-                  <h4 className="text-sm font-bold tracking-widest uppercase text-emerald-400">
+                  <h4 id="footer-modal-title" className="text-sm font-bold tracking-widest uppercase text-emerald-400">
                     VICTORYADZ &middot; {activeModal === "privacy" ? "PRIVACY POLICY" : "SUPPORT & HELP"}
                   </h4>
                   <button
                     onClick={() => setActiveModal(null)}
+                    aria-label="Close dialog"
                     className="text-white/60 hover:text-white transition-colors cursor-pointer"
                   >
                     &#10005;
@@ -305,6 +322,7 @@ export const Footer: React.FC = () => {
 
                 <button
                   onClick={() => setActiveModal(null)}
+                  aria-label="Close dialog"
                   className="mt-6 w-full bg-white text-black py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-neutral-200 transition-colors cursor-pointer"
                 >
                   CLOSE

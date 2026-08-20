@@ -113,13 +113,25 @@ export const FAQ: React.FC = () => {
                   }
                 }}
                 onClick={() => setActiveId(isOpen ? null : faq.id)}
-                className={`${faq.shade} w-full transition-all duration-500 ease-out cursor-pointer relative select-none hover:brightness-[1.12] touch-manipulation`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveId(isOpen ? null : faq.id);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isOpen}
+                aria-controls={`faq-answer-${faq.id}`}
+                id={`faq-header-${faq.id}`}
+                className={`${faq.shade} w-full transition-all duration-500 ease-out cursor-pointer relative select-none hover:brightness-[1.12] touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white`}
               >
                 <div className="w-full py-4 sm:py-6 md:py-9 lg:py-10 px-4 sm:px-6 md:px-[60px] lg:px-[80px] flex items-start justify-between gap-3 sm:gap-6 md:gap-8">
                   {/* Left Side: Number + Title & Content */}
                   <div className="flex items-start gap-3 sm:gap-6 md:gap-8 flex-1">
                     {/* Stepped Bold Number */}
                     <span
+                      aria-hidden="true"
                       className="text-xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight shrink-0 w-6 sm:w-12 leading-none pt-0.5 md:pt-1 transition-colors duration-500 ease-out"
                     >
                       {faq.number}
@@ -137,6 +149,9 @@ export const FAQ: React.FC = () => {
                       <AnimatePresence initial={false}>
                         {isOpen && (
                           <motion.div
+                            id={`faq-answer-${faq.id}`}
+                            role="region"
+                            aria-labelledby={`faq-header-${faq.id}`}
                             initial={{ height: 0, opacity: 0, marginTop: 0 }}
                             animate={{
                               height: "auto",
@@ -170,7 +185,7 @@ export const FAQ: React.FC = () => {
                   </div>
 
                   {/* Right Side: Mobile Plus Indicator (rotates smoothly on open) */}
-                  <div className="flex md:hidden shrink-0 items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white/90 self-start mt-0.5 transition-colors duration-500">
+                  <div aria-hidden="true" className="flex md:hidden shrink-0 items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white/90 self-start mt-0.5 transition-colors duration-500">
                     <motion.div
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.4, ease: LUXURY_EASE }}

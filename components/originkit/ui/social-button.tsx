@@ -80,6 +80,12 @@ export default function SocialButton({
       className={`relative w-40 ${className}`}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
+      onFocus={() => setIsVisible(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setIsVisible(false);
+        }
+      }}
     >
       {/* Default Button */}
       <motion.div

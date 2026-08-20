@@ -82,7 +82,7 @@ export const BrandVisionSection: React.FC = () => {
             {/* Captured Once Copy Section */}
             <div className="flex flex-col items-center text-center max-w-xl mx-auto space-y-4 pt-4">
               <MaskTextReveal
-                tag="h1"
+                tag="h2"
                 direction="center-horizontal"
                 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-snug text-center"
               >

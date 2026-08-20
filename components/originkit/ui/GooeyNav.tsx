@@ -238,12 +238,13 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
 
   return (
     <div className="gooey-nav-container" ref={containerRef}>
-      <nav>
+      <nav aria-label="Main Navigation">
         <ul ref={navRef}>
           {items.map((item, index) => (
             <li key={index} className={activeIndex === index ? "active" : ""}>
               <a
                 href={item.href}
+                aria-current={activeIndex === index ? "page" : undefined}
                 onClick={(e) => {
                   e.preventDefault();
                   handleClick(e, index);
@@ -256,8 +257,8 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
           ))}
         </ul>
       </nav>
-      <span className="effect filter" ref={filterRef} />
-      <span className="effect text" ref={textRef} />
+      <span aria-hidden="true" className="effect filter" ref={filterRef} />
+      <span aria-hidden="true" className="effect text" ref={textRef} />
     </div>
   );
 };

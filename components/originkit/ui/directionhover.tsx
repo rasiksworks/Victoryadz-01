@@ -84,11 +84,11 @@ export default function DirectionHover(props: any) {
                     transition: transitionToCss(transition),
                 }}
             >
-                <span style={{ ...labelStyle, color: hoverColor }}>
+                <span aria-hidden="true" style={{ ...labelStyle, color: hoverColor }}>
                     {title}
                 </span>
                 <span style={{ ...labelStyle, color: textColor }}>{title}</span>
-                <span style={{ ...labelStyle, color: hoverColor }}>
+                <span aria-hidden="true" style={{ ...labelStyle, color: hoverColor }}>
                     {title}
                 </span>
             </span>

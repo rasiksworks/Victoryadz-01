@@ -10,6 +10,37 @@ This log records only **Major Milestones and Substantial Architecture Changes** 
 
 ---
 
+### `CP-08` · Before 3D WebGL Background Micro-Delay
+- **Timestamp**: August 20, 2026 at 12:31 IST
+- **Category**: State Checkpoint Before 3D WebGL Background Micro-Delay
+- **Summary**:
+  - Saved snapshot before applying 100ms micro-delay to Three.js WebGL canvas mounting in `perspective-background.tsx`.
+- **Core Files**:
+  - `components/originkit/ui/hero-03/perspective-background.tsx`
+
+---
+
+### `CP-07` · Full Accessibility (WCAG 2.2 AA) Implementation
+- **Timestamp**: August 20, 2026 at 12:22 IST
+- **Category**: Accessibility & WCAG 2.2 AA Compliance
+- **Summary**:
+  - Screen Reader Optimization: Fixed `DirectionHover` triple text announcement with `aria-hidden="true"`.
+  - Keyboard & ARIA Accordion: Upgraded FAQ section with `tabIndex={0}`, `role="button"`, `aria-expanded`, `aria-controls`, and `Enter`/`Space` key toggles.
+  - Accessible Dialogs & Modals: Added `role="dialog"`, `aria-modal="true"`, and `Escape` key handlers to Work Detail modal and Footer Privacy/Support modals.
+  - Skip to Main Content Link: Added accessible focus-visible bypass link in `app/layout.tsx`.
+  - Heading Hierarchy & Nav Semantics: Corrected `<h1>` nesting in `brand-vision-section.tsx`, added `aria-current` & `aria-label` to `GooeyNav`, and keyboard focus expansion to `social-button.tsx`.
+- **Core Files**:
+  - `components/originkit/ui/directionhover.tsx`
+  - `components/originkit/ui/faq.tsx`
+  - `components/originkit/ui/brand-vision-section.tsx`
+  - `components/originkit/ui/we-most-proud-of.tsx`
+  - `components/originkit/ui/footer.tsx`
+  - `components/originkit/ui/GooeyNav.tsx`
+  - `components/originkit/ui/social-button.tsx`
+  - `app/layout.tsx`
+
+---
+
 ### `CP-05` · Font family optimize
 - **Timestamp**: August 20, 2026 at 11:40 IST
 - **Category**: Typography & Design System Optimization
