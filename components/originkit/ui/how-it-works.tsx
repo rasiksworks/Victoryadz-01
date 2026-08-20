@@ -283,9 +283,9 @@ export const HowItWorks: React.FC = () => {
     }, section);
 
     let lastWidth = window.innerWidth;
-    let resizeTimer;
+    let resizeTimer: NodeJS.Timeout | null = null;
     const onResize = () => {
-      clearTimeout(resizeTimer);
+      if (resizeTimer) clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if (window.innerWidth !== lastWidth) {
           lastWidth = window.innerWidth;
@@ -302,6 +302,7 @@ export const HowItWorks: React.FC = () => {
 
     return () => {
       window.removeEventListener("resize", onResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
       clearTimeout(timer);
       ctx.revert();
     };

@@ -90,7 +90,26 @@ export const WeMostProudOf: React.FC = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("detail-modal", { detail: { open: !!selectedItem } }));
+      if (selectedItem) {
+        if ((window as any).lenis) {
+          (window as any).lenis.stop();
+        }
+        document.body.style.overflow = "hidden";
+      } else {
+        if ((window as any).lenis) {
+          (window as any).lenis.start();
+        }
+        document.body.style.overflow = "";
+      }
     }
+    return () => {
+      if (typeof window !== "undefined") {
+        if ((window as any).lenis) {
+          (window as any).lenis.start();
+        }
+        document.body.style.overflow = "";
+      }
+    };
   }, [selectedItem]);
 
   const handleItemClick = (item: WorkItem) => {
@@ -101,7 +120,7 @@ export const WeMostProudOf: React.FC = () => {
     setSelectedItem(null);
   };
 
-  // FlyingPosters momentum lerp scroll progress loop
+  // FlyingPosters momentum lerp scroll progress loop (throttled to avoid idle re-renders)
   useEffect(() => {
     let animId: number;
 
@@ -119,9 +138,11 @@ export const WeMostProudOf: React.FC = () => {
     handleScroll();
 
     const loop = () => {
-      currentScrollProgressRef.current +=
-        (targetScrollProgressRef.current - currentScrollProgressRef.current) * 0.08;
-      setSmoothScrollProgress(currentScrollProgressRef.current);
+      const diff = targetScrollProgressRef.current - currentScrollProgressRef.current;
+      if (Math.abs(diff) > 0.0001) {
+        currentScrollProgressRef.current += diff * 0.08;
+        setSmoothScrollProgress(currentScrollProgressRef.current);
+      }
       animId = requestAnimationFrame(loop);
     };
 
@@ -273,7 +294,7 @@ export const WeMostProudOf: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 flex flex-row p-0 m-0 w-screen h-screen overflow-hidden bg-[#2C2C2C] pointer-events-auto"
+            className="fixed inset-0 z-50 flex flex-row p-0 m-0 w-full h-full overflow-hidden bg-[#2C2C2C] pointer-events-auto"
             style={{ backgroundColor: "#2C2C2C", perspective: "1500px" }}
           >
             {/* Dark Backdrop overlay for click outside */}

@@ -52,8 +52,11 @@ export const Preloader: React.FC = () => {
         setTimeout(() => {
           setIsLoading(false);
           document.body.style.overflow = "";
-          if (typeof window !== "undefined" && (window as any).lenis) {
-            (window as any).lenis.start();
+          if (typeof window !== "undefined") {
+            if ((window as any).lenis) {
+              (window as any).lenis.start();
+            }
+            window.dispatchEvent(new CustomEvent("preloader-complete"));
           }
         }, 250);
       }
@@ -63,8 +66,11 @@ export const Preloader: React.FC = () => {
 
     return () => {
       document.body.style.overflow = "";
-      if (typeof window !== "undefined" && (window as any).lenis) {
-        (window as any).lenis.start();
+      if (typeof window !== "undefined") {
+        if ((window as any).lenis) {
+          (window as any).lenis.start();
+        }
+        window.dispatchEvent(new CustomEvent("preloader-complete"));
       }
     };
   }, []);

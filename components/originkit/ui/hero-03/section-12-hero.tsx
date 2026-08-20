@@ -1,4 +1,4 @@
-﻿// Delivered by Originkit
+// Delivered by Originkit
 "use client";
 
 import { useState, useEffect } from "react";
@@ -21,17 +21,22 @@ export const Section12Hero = () => {
   };
 
   const handleBook = () => {
-    window.location.hash = "#book";
+    window.open(
+      "https://wa.me/919361312684?text=" +
+        encodeURIComponent("Hi VictoryAdz! I would like to order a custom frame."),
+      "_blank"
+    );
   };
 
   useEffect(() => {
     const handleOpenGallery = () => router.push("/works");
     window.addEventListener("open-hero-gallery", handleOpenGallery);
     return () => window.removeEventListener("open-hero-gallery", handleOpenGallery);
-  }, []);
+  }, [router]);
 
   return (
     <section
+      id="hero"
       aria-label="Portrait perspective gallery"
       className="relative isolate w-full overflow-hidden bg-[#2C2C2C]" style={{ backgroundColor: "#2C2C2C" }}
     >

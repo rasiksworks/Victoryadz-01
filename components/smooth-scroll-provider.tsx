@@ -40,15 +40,44 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     gsap.ticker.add(updateLenis);
     gsap.ticker.lagSmoothing(0);
 
-    // Handle hash scroll (e.g. #recent-works) on mount/navigation
-    if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash;
+    // Handle hash scroll helper
+    const scrollToHash = (hash: string, delay = 0) => {
       setTimeout(() => {
         const target = document.querySelector(hash);
         if (target) {
-          lenis.scrollTo(target as HTMLElement, { immediate: true });
+          lenis.scrollTo(target as HTMLElement, { offset: -20, duration: 1.2 });
         }
-      }, 150);
+      }, delay);
+    };
+
+    // Handle hash on initial mount (if no preloader or after delay)
+    if (typeof window !== "undefined" && window.location.hash) {
+      scrollToHash(window.location.hash, 300);
+    }
+
+    // Refresh ScrollTrigger and navigate hash when preloader completes
+    const handlePreloaderComplete = () => {
+      ScrollTrigger.refresh();
+      if (typeof window !== "undefined" && window.location.hash) {
+        scrollToHash(window.location.hash, 100);
+      }
+    };
+    window.addEventListener("preloader-complete", handlePreloaderComplete);
+
+    // Refresh ScrollTrigger on window resize and font load
+    let resizeTimer: NodeJS.Timeout | null = null;
+    const handleWindowResize = () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
+    window.addEventListener("resize", handleWindowResize);
+
+    if (typeof document !== "undefined" && "fonts" in document) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
     }
 
     // Handle tab visibility
@@ -59,6 +88,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       } else {
         lenis.start();
         gsap.ticker.wake();
+        ScrollTrigger.refresh();
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -74,6 +104,9 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("preloader-complete", handlePreloaderComplete);
+      window.removeEventListener("resize", handleWindowResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       gsap.ticker.remove(updateLenis);
       lenis.destroy();

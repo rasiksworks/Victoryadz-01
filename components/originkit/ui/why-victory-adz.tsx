@@ -101,8 +101,7 @@ export const WhyVictoryAdz: React.FC = () => {
     const cardsContainer = cardsContainerRef.current;
 
     const ctx = gsap.context(() => {
-      const scrollDistance = Math.max(0, track.scrollWidth - cardsContainer.clientWidth + 120);
-      const totalScroll = Math.max(2600, scrollDistance * 1.8);
+      const getScrollDistance = () => Math.max(0, track.scrollWidth - cardsContainer.clientWidth + 120);
 
       // Initial card states
       cardRefs.current.forEach((card) => {
@@ -116,7 +115,7 @@ export const WhyVictoryAdz: React.FC = () => {
           pin: true,
           pinSpacing: true, // Forces layout spacer so FAQ waits strictly below
           start: "top top",
-          end: "+=" + totalScroll,
+          end: () => "+=" + Math.max(2600, getScrollDistance() * 1.8),
           scrub: 0.8,
           anticipatePin: 1,
           fastScrollEnd: true,
@@ -137,26 +136,24 @@ export const WhyVictoryAdz: React.FC = () => {
       });
 
       // 2. Horizontal scrub across all 6 cards
-      if (scrollDistance > 0) {
-        tl.to(
-          track,
-          {
-            x: -scrollDistance,
-            ease: "none",
-            duration: 3.5,
-          },
-          0.8
-        );
-      }
+      tl.to(
+        track,
+        {
+          x: () => -getScrollDistance(),
+          ease: "none",
+          duration: 3.5,
+        },
+        0.8
+      );
 
       // 3. Resting hold so user can read card 06 before unpinning
       tl.to({}, { duration: 0.8 });
     }, section);
 
     let lastWidth = window.innerWidth;
-    let resizeTimer;
+    let resizeTimer: NodeJS.Timeout | null = null;
     const onResize = () => {
-      clearTimeout(resizeTimer);
+      if (resizeTimer) clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if (window.innerWidth !== lastWidth) {
           lastWidth = window.innerWidth;
@@ -172,6 +169,7 @@ export const WhyVictoryAdz: React.FC = () => {
 
     return () => {
       window.removeEventListener("resize", onResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
       clearTimeout(timer);
       ctx.revert();
     };

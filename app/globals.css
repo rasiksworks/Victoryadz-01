@@ -66,8 +66,7 @@ body::-webkit-scrollbar,
 
 @media (max-width: 1024px) {
   html, body {
-    touch-action: pan-y;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 

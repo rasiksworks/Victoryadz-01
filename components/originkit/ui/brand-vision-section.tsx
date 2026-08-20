@@ -42,7 +42,7 @@ export const BrandVisionSection: React.FC = () => {
           
           {/* Left Column: 50% Width, Sticky 3:4 Image (Top Aligned Flush, 24px Top Padding) */}
           <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex items-start justify-start pt-6 pb-6 shrink-0">
-            <ImageReveal className="relative w-full aspect-[3/4] overflow-hidden bg-[#222] rounded-sm border border-white/5 shadow-2xl" duration={1.4}>
+            <ImageReveal className="relative w-full aspect-[3/4] max-h-[85vh] overflow-hidden bg-[#222] rounded-sm border border-white/5 shadow-2xl" duration={1.4}>
               <Image
                 src={siteData.brandVision.image1}
                 alt="Sculptural artwork"

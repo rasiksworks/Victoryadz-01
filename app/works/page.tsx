@@ -45,7 +45,7 @@ export default function WorksPage() {
   const activeImages = galleryImages.length > 0 ? galleryImages : fallbackImages;
 
   return (
-    <main className="relative w-screen h-screen bg-[#2C2C2C] text-white font-inter-display select-none overflow-hidden">
+    <main className="relative w-full h-screen min-h-[100dvh] bg-[#2C2C2C] text-white font-inter-display select-none overflow-hidden">
       {/* ── FULLSCREEN ORIGINKIT INFINITY CANVAS ── */}
       <div className="w-full h-full">
         <InfiniteGallery
