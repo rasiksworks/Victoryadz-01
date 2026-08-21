@@ -5,6 +5,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/originkit/ui/hero-03/button";
+import { Button01 } from "@/components/ui/nextjsshop-button";
 import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
 import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
 
@@ -68,9 +69,12 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
           <Button variant="primary" aria-label="See Our Work" onClick={onExplore} className="w-full sm:w-auto">
             See Our Work
           </Button>
-          <Button variant="secondary" aria-label="Order on WhatsApp" onClick={onBook} className="w-full sm:w-auto">
-            Order on WhatsApp
-          </Button>
+          <Button01
+            text="Order on WhatsApp"
+            ariaLabel="Order on WhatsApp"
+            onClick={onBook}
+            className="w-full sm:w-auto"
+          />
         </motion.div>
       </div>
     </div>

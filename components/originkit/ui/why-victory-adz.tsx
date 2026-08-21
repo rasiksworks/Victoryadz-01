@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
+import { Button01 } from "@/components/ui/nextjsshop-button";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -240,12 +241,15 @@ export const WhyVictoryAdz: React.FC = () => {
             <p className="text-xs font-medium text-neutral-800 leading-snug">
               Message us to discuss sizing, frames, and delivery details.
             </p>
-            <button
-              onClick={handleWhatsAppOrder}
-              className="mt-4 w-full bg-[#1C1C1C] hover:bg-black active:scale-[0.98] text-white text-xs font-bold tracking-widest py-3 min-h-[44px] px-3 uppercase transition-all duration-200 cursor-pointer text-center touch-manipulation"
-            >
-              ORDER NOW
-            </button>
+            <div className="mt-4 w-full">
+              <Button01
+                variant="dark"
+                text="Order Now"
+                onClick={handleWhatsAppOrder}
+                ariaLabel="Order on WhatsApp"
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -275,12 +279,15 @@ export const WhyVictoryAdz: React.FC = () => {
               Message us to discuss sizing, frames, and delivery details.
             </p>
 
-            <button
-              onClick={handleWhatsAppOrder}
-              className="mt-4 w-full bg-[#1C1C1C] hover:bg-black text-white text-[11px] font-bold tracking-widest py-2.5 px-3 uppercase transition-colors duration-200 cursor-pointer text-center"
-            >
-              ORDER NOW
-            </button>
+            <div className="mt-4 w-full">
+              <Button01
+                variant="dark"
+                text="Order Now"
+                onClick={handleWhatsAppOrder}
+                ariaLabel="Order on WhatsApp"
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
 

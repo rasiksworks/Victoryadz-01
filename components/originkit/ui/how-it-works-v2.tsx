@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Button01 } from "@/components/ui/nextjsshop-button";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -16,37 +17,32 @@ interface StepData {
     left: string;
     top: string;
   };
-  contentPadding: string;
 }
 
 const STEPS: StepData[] = [
   {
     number: "01",
     title: "Send Your Photo",
-    body: "Share your photo with us on WhatsApp. Any photo. any condition.",
+    body: "Share your photo with us on WhatsApp. Any photo, any condition.",
     cellPosDesktop: { left: "0%", top: "0%" },
-    contentPadding: "pt-[36px] px-[32px] pb-[40px] lg:pt-[40px] lg:pl-[40px] lg:pr-[32px] lg:pb-[48px]",
   },
   {
     number: "02",
     title: "We Guide You",
-    body: "We help you choose the size, frame style, and lamination finish that suits your memory",
+    body: "We help you choose the size, frame style, and lamination finish that suits your memory.",
     cellPosDesktop: { left: "25%", top: "0%" },
-    contentPadding: "pt-[36px] px-[32px] pb-[40px] lg:pt-[40px] lg:pl-[50px] lg:pr-[30px] lg:pb-[48px]",
   },
   {
     number: "03",
     title: "We Craft It",
-    body: "Your frame is made by hand with the same care we have put into every order for 8+",
+    body: "Your frame is made by hand with the same care we have put into every order for 8+ years.",
     cellPosDesktop: { left: "50%", top: "50%" },
-    contentPadding: "pt-[36px] px-[32px] pb-[40px] lg:pt-[40px] lg:pl-[50px] lg:pr-[30px] lg:pb-[48px]",
   },
   {
     number: "04",
     title: "We Ship It Safely",
     body: "Packed carefully and shipped to your door, with WhatsApp updates the whole way.",
     cellPosDesktop: { left: "75%", top: "50%" },
-    contentPadding: "pt-[36px] px-[32px] pb-[40px] lg:pt-[40px] lg:pl-[40px] lg:pr-[32px] lg:pb-[48px]",
   },
 ];
 
@@ -64,12 +60,13 @@ export const HowItWorksV2: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const titleBlockRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileCardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [isMobile, setIsMobile] = useState(false);
   const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
   const currentFrameRef = useRef(0);
 
-  // Draw frame on canvas with aspect ratio cover centering
+  // Draw frame on canvas with aspect ratio cover & mobile smart centering
   const drawFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -98,10 +95,11 @@ export const HowItWorksV2: React.FC = () => {
 
     currentFrameRef.current = clampedIndex;
 
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const canvasW = canvas.width / dpr;
     const canvasH = canvas.height / dpr;
 
+    const isPortrait = canvasH > canvasW;
     const hRatio = canvasW / img.naturalWidth;
     const vRatio = canvasH / img.naturalHeight;
     const ratio = Math.max(hRatio, vRatio);
@@ -109,73 +107,73 @@ export const HowItWorksV2: React.FC = () => {
     const drawW = img.naturalWidth * ratio;
     const drawH = img.naturalHeight * ratio;
     const drawX = (canvasW - drawW) / 2;
-    const drawY = (canvasH - drawH) / 2;
+    // On mobile portrait, position with slight top bias so the main subject is clearly visible
+    const drawY = isPortrait
+      ? (canvasH - drawH) * 0.38
+      : (canvasH - drawH) / 2;
 
     ctx.clearRect(0, 0, canvasW, canvasH);
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
   }, []);
 
-  // Preload frame image sequence
+  // Preload all 151 frames
   useEffect(() => {
-    const isMobileDevice = window.innerWidth < 1024;
-    setIsMobile(isMobileDevice);
-
-    let resizeTimer: NodeJS.Timeout;
-    const checkMobile = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        setIsMobile(window.innerWidth < 1024);
-      }, 200);
+    const handleCheckMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
     };
-    window.addEventListener("resize", checkMobile);
+    handleCheckMobile();
 
-    if (isMobileDevice) {
-      return () => window.removeEventListener("resize", checkMobile);
-    }
+    let isMounted = true;
+    let loadedCount = 0;
 
-    // Load frame 0 immediately
     const firstImg = new window.Image();
+    firstImg.crossOrigin = "anonymous";
     firstImg.src = getFrameUrl(0);
     firstImg.onload = () => {
+      if (!isMounted) return;
       imagesRef.current[0] = firstImg;
       drawFrame(0);
     };
 
-    // Preload next 25 frames
-    for (let i = 1; i < Math.min(25, TOTAL_FRAMES); i++) {
-      const img = new window.Image();
-      img.src = getFrameUrl(i);
-      img.onload = () => {
-        imagesRef.current[i] = img;
-      };
-    }
+    const BATCH_SIZE = 12;
+    const loadBatch = (startIndex: number) => {
+      if (!isMounted || startIndex >= TOTAL_FRAMES) return;
+      const endIndex = Math.min(startIndex + BATCH_SIZE, TOTAL_FRAMES);
 
-    // Preload remaining frames
-    const timer = setTimeout(() => {
-      for (let i = 25; i < TOTAL_FRAMES; i++) {
+      for (let i = startIndex; i < endIndex; i++) {
         const img = new window.Image();
+        img.crossOrigin = "anonymous";
         img.src = getFrameUrl(i);
         img.onload = () => {
+          if (!isMounted) return;
           imagesRef.current[i] = img;
+          loadedCount++;
+          if (loadedCount === TOTAL_FRAMES || i === currentFrameRef.current) {
+            drawFrame(currentFrameRef.current);
+          }
         };
       }
-    }, 300);
+
+      if (endIndex < TOTAL_FRAMES) {
+        setTimeout(() => loadBatch(endIndex), 40);
+      }
+    };
+
+    loadBatch(1);
 
     return () => {
-      window.removeEventListener("resize", checkMobile);
-      clearTimeout(timer);
+      isMounted = false;
     };
   }, [drawFrame]);
 
-  // Master GSAP Timeline for Desktop: Pinned 5-Step Staircase Sequence Scroll
+  // Master GSAP ScrollTrigger Timeline
   useEffect(() => {
-    if (isMobile || !sectionRef.current || !canvasRef.current) return;
-
     const section = sectionRef.current;
     const canvas = canvasRef.current;
+    if (!section || !canvas) return;
 
     const setupCanvas = () => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       const c = canvas.getContext("2d");
@@ -189,7 +187,7 @@ export const HowItWorksV2: React.FC = () => {
     setupCanvas();
 
     const ctx = gsap.context(() => {
-      const totalScroll = 3600;
+      const totalScroll = isMobile ? 2600 : 3600;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -205,7 +203,7 @@ export const HowItWorksV2: React.FC = () => {
         },
       });
 
-      // Scrub frames across sequence duration (0.0 to 5.0)
+      // Scrub canvas video frames smoothly from 0 to 150 across scroll duration
       const frameTracker = { frame: 0 };
       tl.to(
         frameTracker,
@@ -220,57 +218,90 @@ export const HowItWorksV2: React.FC = () => {
         0
       );
 
-      // STEP 1 (0.0 -> 1.0): Hero Title Block reveals in Top-Right
-      if (titleBlockRef.current) {
-        tl.fromTo(
-          titleBlockRef.current,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          0.1
-        );
+      if (!isMobile) {
+        // Title block is static and immediately visible in its designated top-right position
+        if (titleBlockRef.current) {
+          gsap.set(titleBlockRef.current, { opacity: 1 });
+        }
+
+        // Ensure all 4 cards start completely off-screen below viewport
+        cardRefs.current.forEach((cardEl) => {
+          if (cardEl) {
+            gsap.set(cardEl, { y: () => window.innerHeight + 150, autoAlpha: 0 });
+          }
+        });
+
+        // Step 1 (0.3 -> 1.4): Card 01 rises from below screen into top-left cell
+        if (cardRefs.current[0]) {
+          tl.fromTo(
+            cardRefs.current[0],
+            { y: () => window.innerHeight + 150, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1.1, ease: "power2.out" },
+            0.3
+          );
+        }
+
+        // Step 2 (1.4 -> 2.5): Card 02 rises from below screen into top-center-left cell
+        if (cardRefs.current[1]) {
+          tl.fromTo(
+            cardRefs.current[1],
+            { y: () => window.innerHeight + 150, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1.1, ease: "power2.out" },
+            1.4
+          );
+        }
+
+        // Step 3 (2.5 -> 3.6): Card 03 rises from below screen into bottom-center-right cell
+        if (cardRefs.current[2]) {
+          tl.fromTo(
+            cardRefs.current[2],
+            { y: () => window.innerHeight + 150, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1.1, ease: "power2.out" },
+            2.5
+          );
+        }
+
+        // Step 4 (3.6 -> 4.7): Card 04 rises from below screen into bottom-right cell
+        if (cardRefs.current[3]) {
+          tl.fromTo(
+            cardRefs.current[3],
+            { y: () => window.innerHeight + 150, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1.0, ease: "power2.out" },
+            3.6
+          );
+        }
+      } else {
+        // --- MOBILE: STATIC HEADER & VERTICAL BOTTOM-UP CARDS ENTRANCE ---
+        mobileCardRefs.current.forEach((cardEl) => {
+          if (cardEl) {
+            gsap.set(cardEl, { y: "150%", autoAlpha: 0 });
+          }
+        });
+
+        mobileCardRefs.current.forEach((cardEl, idx) => {
+          if (!cardEl) return;
+          const stepStart = 0.3 + idx * 1.1;
+
+          // Slide UP from completely outside bottom into view
+          tl.fromTo(
+            cardEl,
+            { y: "150%", autoAlpha: 0 },
+            { y: "0%", autoAlpha: 1, duration: 0.9, ease: "power2.out" },
+            stepStart
+          );
+
+          // Glide up to make room for next card
+          if (idx < mobileCardRefs.current.length - 1) {
+            tl.to(
+              cardEl,
+              { y: "-20%", autoAlpha: 0, duration: 0.5, ease: "power2.in" },
+              stepStart + 0.95
+            );
+          }
+        });
       }
 
-      // STEP 2 (1.0 -> 2.0): Card 01 (Top-Left) reveals
-      if (cardRefs.current[0]) {
-        tl.fromTo(
-          cardRefs.current[0],
-          { opacity: 0, y: 60, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" },
-          1.0
-        );
-      }
-
-      // STEP 3 (2.0 -> 3.0): Card 02 (Top-Center-Left) reveals
-      if (cardRefs.current[1]) {
-        tl.fromTo(
-          cardRefs.current[1],
-          { opacity: 0, y: 60, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" },
-          2.0
-        );
-      }
-
-      // STEP 4 (3.0 -> 4.0): Card 03 (Bottom-Center-Right) reveals
-      if (cardRefs.current[2]) {
-        tl.fromTo(
-          cardRefs.current[2],
-          { opacity: 0, y: 60, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" },
-          3.0
-        );
-      }
-
-      // STEP 5 (4.0 -> 5.0): Card 04 (Bottom-Right) reveals
-      if (cardRefs.current[3]) {
-        tl.fromTo(
-          cardRefs.current[3],
-          { opacity: 0, y: 60, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" },
-          4.0
-        );
-      }
-
-      // HOLD (5.0 -> 5.8): Full 4-card staircase layout remains locked on screen
+      // HOLD (4.7 -> 5.5): Full staircase locked in view before release
       tl.to({}, { duration: 0.8 });
     }, section);
 
@@ -300,109 +331,47 @@ export const HowItWorksV2: React.FC = () => {
     };
   }, [isMobile, drawFrame]);
 
-  // --- MOBILE VIEW (< 1024px) ---
-  if (isMobile) {
-    return (
-      <section
-        id="how-it-works-v2-test"
-        aria-label="How It Works Process (Test V2)"
-        className="relative w-full bg-[#FFFFFF] text-white select-none overflow-hidden font-inter-display"
-        style={{ fontFamily: "'Inter Display', sans-serif" }}
-      >
-        <div className="w-full bg-[#1C1C1C] py-3 px-6 text-center border-t border-b border-white/10">
-          <span className="text-[11px] font-mono tracking-[0.25em] text-white/70 uppercase">
-            ✦ Design Artifact Test Section — How It Works (v2) ✦
-          </span>
-        </div>
-
-        <div className="relative w-full overflow-hidden bg-black py-12 px-6 sm:px-8">
-          {/* Static First Frame Background on Mobile */}
-          <div
-            className="absolute inset-0 z-0 bg-cover bg-center opacity-60 pointer-events-none"
-            style={{ backgroundImage: `url(${getFrameUrl(0)})` }}
-          />
-
-          <div className="relative z-10 max-w-xl mx-auto flex flex-col gap-8">
-            <div className="flex flex-col gap-3 text-center sm:text-left">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-tight">
-                Four Simple Steps,
-                <br />
-                Zero Confusion
-              </h2>
-              <p className="text-base sm:text-lg font-medium text-[#E8E8E8] leading-relaxed">
-                From your photo to your wall, wherever you are. No shop visit needed.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {STEPS.map((step) => (
-                <div
-                  key={step.number}
-                  className="relative border border-white/50 bg-black/30 backdrop-blur-[4px] p-6 sm:p-8 flex flex-col justify-between min-h-[300px]"
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.30)",
-                    backdropFilter: "blur(4px)",
-                    WebkitBackdropFilter: "blur(4px)",
-                  }}
-                >
-                  <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none" />
-                  <span className="absolute -top-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none" />
-                  <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none" />
-                  <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none" />
-
-                  <div className="text-3xl font-semibold text-white mb-6">
-                    {step.number}
-                  </div>
-
-                  <div className="flex flex-col gap-2.5">
-                    <h3 className="text-2xl font-semibold text-white leading-tight">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm font-medium text-white/90 leading-relaxed">
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+  const handleWhatsAppOrder = () => {
+    const message = encodeURIComponent(
+      "Hi VictoryAdz! I'm on the How It Works page and would like to start my custom photo frame order."
     );
-  }
+    window.open(`https://wa.me/919361312684?text=${message}`, "_blank");
+  };
 
-  // --- DESKTOP VIEW (≥ 1024px): Pinned Full-Screen Canvas 5-Step Staircase ---
   return (
     <section
       ref={sectionRef}
-      id="how-it-works-v2-test"
-      aria-label="How It Works Process (Test V2)"
-      className="relative z-20 w-full h-screen min-h-[100dvh] bg-[#FFFFFF] text-white select-none overflow-hidden font-inter-display"
+      id="how-it-works"
+      aria-label="How It Works Process"
+      className="relative z-20 w-full h-screen min-h-[100dvh] bg-[#181818] text-white select-none overflow-hidden font-inter-display"
       style={{ fontFamily: "'Inter Display', sans-serif" }}
     >
-      {/* Test Section Header Badge (Absolute floating badge at top) */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#1C1C1C]/90 backdrop-blur-sm py-1.5 px-4 rounded-none border border-white/20">
-        <span className="text-[10px] font-mono tracking-[0.25em] text-white/80 uppercase">
-          ✦ How It Works (v2) · 5-Step Sequence Scroll ✦
-        </span>
-      </div>
-
-      {/* Full Viewport Canvas for 151-frame sequence */}
+      {/* Full Viewport Canvas for 151-frame sequence (Desktop & Mobile) */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none block"
       />
 
-      {/* 1440x1024 Base Coordinate Grid Canvas Overlay */}
-      <div className="relative w-full max-w-[1440px] h-full mx-auto z-10 pointer-events-none">
-        {/* Floating Hero Title Block (Top-Right Area: left 54.16%, top 7.8%) */}
+      {/* Subtle overlay vignette for mobile contrast */}
+      <div className="lg:hidden absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70 z-0 pointer-events-none" />
+
+      {/* ==================================================================== */}
+      {/* DESKTOP VIEW (≥ 1024px): 100% Full Width 4-Quadrant Staircase Grid */}
+      {/* ==================================================================== */}
+      <div className="hidden lg:block relative w-full h-full z-10 pointer-events-none overflow-hidden">
+        {/* Floating Hero Title Block (Right-aligned in top-right quadrant, static on arrival) */}
         <div
           ref={titleBlockRef}
-          style={{ opacity: 0 }}
-          className="absolute left-[54.16%] top-[7.8%] max-w-[556px] flex flex-col gap-[18px] z-20"
+          style={{
+            position: "absolute",
+            left: "54.16%",
+            top: "7.8%",
+            textAlign: "right",
+          }}
+          className="max-w-[580px] xl:max-w-[640px] pr-8 xl:pr-12 flex flex-col items-end text-right gap-4 xl:gap-[18px] z-20 opacity-100"
         >
           <h2
-            className="text-[52px] xl:text-[60px] font-semibold text-white tracking-[-0.02em] leading-[1.08] max-w-[551px]"
+            className="text-[48px] xl:text-[62px] font-semibold text-white tracking-[-0.025em] leading-[1.06] text-right"
             style={{ fontFamily: "'Inter Display', sans-serif" }}
           >
             Four Simple Steps,
@@ -411,15 +380,25 @@ export const HowItWorksV2: React.FC = () => {
           </h2>
 
           <p
-            className="text-[20px] xl:text-[24px] font-medium text-[#E8E8E8] leading-snug max-w-[556px]"
+            className="text-[18px] xl:text-[22px] font-medium text-[#E8E8E8] leading-snug text-right"
             style={{ fontFamily: "'Inter Display', sans-serif" }}
           >
             From your photo to your wall, wherever you are. No shop visit needed.
           </p>
+
+          {/* CTA Button */}
+          <div className="pt-2 flex items-center justify-end">
+            <Button01
+              text="Order on WhatsApp"
+              onClick={handleWhatsAppOrder}
+              ariaLabel="Order on WhatsApp"
+              className="pointer-events-auto"
+            />
+          </div>
         </div>
 
-        {/* 4 Staircase Grid Cells (2 Top-Left, 2 Bottom-Right) */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
+        {/* 4 Staircase Grid Cells (Full Bleed: 2 Top-Left, 2 Bottom-Right) */}
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
           {STEPS.map((step, idx) => (
             <div
               key={step.number}
@@ -435,9 +414,11 @@ export const HowItWorksV2: React.FC = () => {
                 backgroundColor: "rgba(0, 0, 0, 0.24)",
                 backdropFilter: "blur(4px)",
                 WebkitBackdropFilter: "blur(4px)",
+                visibility: "hidden",
                 opacity: 0,
+                willChange: "transform, opacity",
               }}
-              className="pointer-events-auto border border-white/50 backdrop-blur-[4px] flex flex-col justify-between"
+              className="pointer-events-auto border border-white/50 backdrop-blur-[4px] p-6 lg:p-8 xl:p-10 flex flex-col justify-between"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
@@ -445,21 +426,100 @@ export const HowItWorksV2: React.FC = () => {
               <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
               <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
 
-              <div className={`w-full h-full flex flex-col justify-between ${step.contentPadding}`}>
-                {/* Step Number: SemiBold 40px #FFFFFF */}
-                <div className="text-[36px] xl:text-[40px] font-semibold text-white tracking-tight leading-none">
+              <div className="w-full h-full flex flex-col justify-between">
+                <div className="text-[32px] xl:text-[40px] font-semibold text-white tracking-tight leading-none">
                   {step.number}
                 </div>
 
-                {/* Text Container: Max width 280px, Spacing 18px */}
-                <div className="w-full max-w-[280px] flex flex-col gap-[18px]">
-                  <h3 className="text-[32px] xl:text-[40px] font-semibold text-white tracking-tight leading-[1.08]">
+                <div className="w-full flex flex-col gap-3 xl:gap-[18px]">
+                  <h3 className="text-[26px] lg:text-[30px] xl:text-[38px] font-semibold text-white tracking-tight leading-[1.08]">
                     {step.title}
                   </h3>
-                  <p className="text-[18px] xl:text-[20px] font-medium text-white leading-[1.3] text-pretty">
+                  <p className="text-[15px] lg:text-[16px] xl:text-[19px] font-medium text-white/95 leading-[1.3] text-pretty">
                     {step.body}
                   </p>
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ==================================================================== */}
+      {/* MOBILE VIEW (< 1024px): Pinned Stepped Vertical Bottom-Up Sequence */}
+      {/* ==================================================================== */}
+      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between p-6 sm:p-8 pointer-events-none overflow-hidden">
+        {/* Mobile Header Block (Starts centered, glides to top on scroll) */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "calc(100% - 48px)",
+            textAlign: "center",
+            willChange: "transform, top",
+          }}
+          className="mobile-header-block flex flex-col items-center text-center gap-2.5 z-20"
+        >
+          <h2
+            className="text-2xl sm:text-3xl font-semibold text-white tracking-tight leading-tight"
+            style={{ fontFamily: "'Inter Display', sans-serif" }}
+          >
+            Four Simple Steps,
+            <br />
+            Zero Confusion
+          </h2>
+          <p
+            className="text-xs sm:text-sm font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
+            style={{ fontFamily: "'Inter Display', sans-serif" }}
+          >
+            From your photo to your wall. No shop visit needed.
+          </p>
+          <div className="pt-1 flex items-center justify-center w-full">
+            <Button01
+              text="Order on WhatsApp"
+              onClick={handleWhatsAppOrder}
+              ariaLabel="Order on WhatsApp"
+              className="pointer-events-auto"
+            />
+          </div>
+        </div>
+
+        {/* Mobile Card Container (Positioned in bottom half of viewport) */}
+        <div className="relative w-full h-[260px] sm:h-[290px] mb-4 mt-auto pointer-events-none overflow-hidden">
+          {STEPS.map((step, idx) => (
+            <div
+              key={step.number}
+              ref={(el) => {
+                mobileCardRefs.current[idx] = el;
+              }}
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.35)",
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
+                visibility: "hidden",
+                opacity: 0,
+                willChange: "transform, opacity",
+              }}
+              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/50 backdrop-blur-[4px] p-6 sm:p-7 flex flex-col justify-between shadow-2xl"
+            >
+              {/* 4 Corner 7x7px White Dots */}
+              <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
+              <span className="absolute -top-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
+              <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
+              <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
+
+              <div className="text-3xl font-semibold text-white leading-none">
+                {step.number}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight leading-tight">
+                  {step.title}
+                </h3>
+                <p className="text-xs sm:text-sm font-medium text-white/90 leading-relaxed text-pretty">
+                  {step.body}
+                </p>
               </div>
             </div>
           ))}

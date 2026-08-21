@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Hero03 from "@/components/originkit/hero-03";
 
 const HowItWorks = dynamic(
-  () => import("@/components/originkit/ui/how-it-works").then((mod) => mod.HowItWorks),
+  () => import("@/components/originkit/ui/how-it-works-v2").then((mod) => mod.HowItWorksV2),
   { ssr: true }
 );
 const BrandVisionSection = dynamic(
@@ -31,10 +31,6 @@ const Footer = dynamic(
   () => import("@/components/originkit/ui/footer").then((mod) => mod.Footer),
   { ssr: true }
 );
-const HowItWorksV2 = dynamic(
-  () => import("@/components/originkit/ui/how-it-works-v2").then((mod) => mod.HowItWorksV2),
-  { ssr: true }
-);
 
 export default function Home() {
   return (
@@ -47,7 +43,6 @@ export default function Home() {
       <WhyVictoryAdz />
       <FAQ />
       <Footer />
-      <HowItWorksV2 />
     </main>
   );
 }

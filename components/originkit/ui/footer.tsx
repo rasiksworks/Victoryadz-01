@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Button01 } from "@/components/ui/nextjsshop-button";
+import WarpText from "@/components/ui/WarpText";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -54,13 +56,18 @@ export const Footer: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeModal]);
 
-  // Scroll-based expanding frame animation (1320px card -> 100vw full width)
+  // Scroll-based expanding frame animation with footer pull-up reveal
   useEffect(() => {
     const container = containerRef.current;
     const frame = frameRef.current;
     if (!container || !frame) return;
 
     const ctx = gsap.context(() => {
+      // Calculate responsive height of the logo to offset the footer starting position downwards
+      let initialY = 170;
+      if (window.innerWidth < 640) initialY = 110;
+      else if (window.innerWidth < 768) initialY = 140;
+
       gsap.fromTo(
         frame,
         {
@@ -70,7 +77,7 @@ export const Footer: React.FC = () => {
           borderColor: "rgba(255, 255, 255, 0.12)",
           scale: 0.96,
           boxShadow: "0 30px 60px -15px rgba(0, 0, 0, 0.9)",
-          y: 20,
+          y: initialY, // Shifted down off-screen initially
         },
         {
           maxWidth: "100%",
@@ -79,7 +86,7 @@ export const Footer: React.FC = () => {
           borderColor: "rgba(255, 255, 255, 0)",
           scale: 1,
           boxShadow: "0 0 0 0 rgba(0, 0, 0, 0)",
-          y: 0,
+          y: 0, // Fully visible at the bottom of the page
           ease: "none",
           scrollTrigger: {
             trigger: container,
@@ -115,7 +122,6 @@ export const Footer: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* The Scroll-Morphing Frame (starts at 1320px floating card, expands to 100vw) */}
       <footer
         ref={frameRef}
         style={{ willChange: "max-width, width, border-radius, transform" }}
@@ -161,16 +167,13 @@ export const Footer: React.FC = () => {
                 <span>ORDER</span>
                 <span className="text-white/20">/</span>
               </h3>
-              <button
+              <Button01
+                variant="light"
+                text="Order on WhatsApp"
                 onClick={() => handleSocialClick("WhatsApp", "https://wa.me/919361312684")}
-                aria-label="Order on WhatsApp"
-                className="w-full max-w-xs bg-[#2d342d] border border-white/15 px-4 py-3 min-h-[44px] text-white/90 hover:bg-[#394239] active:scale-[0.98] hover:text-white transition-all cursor-pointer rounded-none focus:outline-none flex items-center justify-center gap-2 touch-manipulation"
-              >
-                <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                </svg>
-                <span className="text-xs font-mono font-medium tracking-wider">ORDER ON WHATSAPP</span>
-              </button>
+                ariaLabel="Order on WhatsApp"
+                className="w-full max-w-xs"
+              />
               <p className="mt-4 font-mono text-[11px] text-white/50 leading-relaxed max-w-xs tracking-wider">
                 Message us to discuss sizing, frames, and delivery details.
               </p>
@@ -214,29 +217,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Massive VICTORYADZ Logo */}
-          <div className="group relative w-full my-8 md:my-14 select-none cursor-pointer overflow-hidden">
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            >
-              <svg
-                className="w-full h-auto text-white fill-current transition-all duration-500 group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]"
-                viewBox="0 0 1320 200"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <text
-                  x="50%"
-                  y="155"
-                  textAnchor="middle"
-                  className="fill-white font-extrabold tracking-tighter"
-                  style={{ fontSize: "165px", fontFamily: "var(--font-inter-display), system-ui, sans-serif" }}
-                >
-                  VICTORYADZ
-                </text>
-              </svg>
-            </motion.div>
-          </div>
+
 
           {/* Bottom Sub-footer */}
           <div className="flex flex-col sm:flex-row items-center justify-between pt-6 font-mono text-[11px] text-white/50 tracking-wider gap-4">
@@ -272,6 +253,27 @@ export const Footer: React.FC = () => {
                 <span>&uarr;</span>
               </motion.button>
             </div>
+          </div>
+        </div>
+
+        {/* Massive VICTORYADZ Logo - Viewport-width and bottom-cropped */}
+        <div className="w-full h-[300px] sm:h-[340px] md:h-[380px] relative mt-8 sm:mt-12 pointer-events-auto select-none">
+          <div className="absolute top-0 left-0 right-0 h-[220px] sm:h-[280px] md:h-[340px]">
+            <WarpText
+              text="VICTORYADZ"
+              color="#ffffff"
+              warpStrength={0.09}
+              warpScale={1.2}
+              speed={0.45}
+              pointerInfluence={0.3}
+              pointerStrength={0.4}
+              refraction={0.015}
+              ripple={true}
+              fontSize="clamp(4.5rem, 18vw, 18rem)"
+              fontWeight={900}
+              fontFamily="var(--font-inter-display), system-ui, sans-serif"
+              style={{ height: '100%' }}
+            />
           </div>
         </div>
 

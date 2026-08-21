@@ -5,15 +5,16 @@ import InfiniteGallery from "@/components/originkit/ui/infinitegallery-base";
 import siteData from "@/data/site-images.json";
 
 export default function WorksPage() {
-  const [galleryImages, setGalleryImages] = useState<{ src: string; alt?: string }[]>([]);
+  const [galleryImages, setGalleryImages] = useState<{ id?: string; src: string; alt?: string }[]>([]);
 
-  // Fetch dynamic items from /api/site-data with fallback to all 50 items
+  // Fetch dynamic items from /api/site-data
   useEffect(() => {
     fetch("/api/site-data")
       .then((res) => res.json())
       .then((data) => {
         if (data?.exploreGallery && Array.isArray(data.exploreGallery) && data.exploreGallery.length > 0) {
           const mapped = data.exploreGallery.map((item: any) => ({
+            id: item.id,
             src: item.image || item.src,
             alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
           }));
@@ -21,6 +22,7 @@ export default function WorksPage() {
         } else {
           setGalleryImages(
             (siteData.exploreGallery || []).map((item: any) => ({
+              id: item.id,
               src: item.image,
               alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
             }))
@@ -30,6 +32,7 @@ export default function WorksPage() {
       .catch(() => {
         setGalleryImages(
           (siteData.exploreGallery || []).map((item: any) => ({
+            id: item.id,
             src: item.image,
             alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
           }))
@@ -38,6 +41,7 @@ export default function WorksPage() {
   }, []);
 
   const fallbackImages = (siteData.exploreGallery || []).map((item: any) => ({
+    id: item.id,
     src: item.image,
     alt: `${item.label || item.firstName || ""} ${item.title || item.lastName || ""}`.trim() || "Handcrafted Frame",
   }));
@@ -60,6 +64,7 @@ export default function WorksPage() {
           driftAmount={18}
           friction={8}
           backgroundColor="#2C2C2C"
+          onImageClick={() => {}} // No detailed page action on click
         />
       </div>
     </main>

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/originkit/ui/hero-03/button";
+import { Button01 } from "@/components/ui/nextjsshop-button";
 import { MorphicNavbar } from "@/components/originkit/ui/hero-03/morphic-navbar";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, ArrowUpRight, MessageSquare } from "lucide-react";
@@ -239,13 +240,12 @@ export const Navbar = () => {
 
             {/* Bottom Actions */}
             <div className="mt-8 flex flex-col gap-3 max-w-sm w-full mx-auto">
-              <button
+              <Button01
+                text="Order on WhatsApp"
                 onClick={handleWhatsAppOrder}
-                className="w-full flex items-center justify-center gap-2 bg-white text-black py-3.5 px-4 font-bold text-xs uppercase tracking-widest hover:bg-neutral-200 active:scale-[0.98] transition-all rounded-sm cursor-pointer"
-              >
-                <MessageSquare size={16} />
-                <span>ORDER ON WHATSAPP</span>
-              </button>
+                ariaLabel="Order on WhatsApp"
+                className="w-full"
+              />
 
               <p className="text-[11px] text-white/40 text-center font-mono uppercase tracking-wider mt-1">
                 Handcrafted in Kanyakumari · Delivered Pan-India

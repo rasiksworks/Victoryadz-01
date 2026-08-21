@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button01 } from "@/components/ui/nextjsshop-button";
 import { ImageReveal } from "@/components/image-reveal";
 import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
 import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
@@ -104,12 +105,11 @@ export const BrandVisionSection: React.FC = () => {
                   className="object-cover object-center"
                 />
               </ImageReveal>
-              <Link
+              <Button01
+                text="Discover Our Craft"
                 href="/works"
-                className="bg-white text-black px-7 py-3 min-h-[44px] text-xs tracking-[0.2em] uppercase font-semibold hover:bg-neutral-200 active:scale-95 transition-all shadow-xl flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation"
-              >
-                DISCOVER <span className="italic lowercase font-normal text-sm">our</span> CRAFT
-              </Link>
+                ariaLabel="Discover our craft"
+              />
             </div>
 
             {/* Second Set of Two Side-by-Side Images (24px Gap Between Them) */}

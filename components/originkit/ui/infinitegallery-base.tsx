@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef } from "react"
 // Official prop schema:
 //   { url, width, height } — intrinsic dims kept for the image array, but tile
 //   footprint is now driven by imageWidth/imageHeight (fixed box, cover-fit).
-type GalleryImage = { src: string; srcSet?: string; alt?: string }
+type GalleryImage = { id?: string | number; src: string; srcSet?: string; alt?: string }
 
 export interface InfiniteGalleryProps {
     width?: string | number
@@ -25,6 +25,7 @@ export interface InfiniteGalleryProps {
     friction?: number
     backgroundColor?: string
     style?: React.CSSProperties
+    onImageClick?: (id: string) => void
 }
 
 const DEFAULT_IMAGES: GalleryImage[] = [
@@ -170,7 +171,13 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
         friction,
         backgroundColor,
         style,
+        onImageClick,
     } = props
+
+    const onImageClickRef = useRef(onImageClick)
+    useEffect(() => {
+        onImageClickRef.current = onImageClick
+    }, [onImageClick])
 
     const containerRef = useRef<HTMLDivElement | null>(null)
     const sceneRef = useRef<HTMLDivElement | null>(null)
@@ -356,20 +363,24 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
             const key = `${t.cx},${t.cy},${t.slot}`
             let el = pool.tileEls.get(key)
             if (!el) {
+                const src = safeImages[t.imgIdx]
                 el = document.createElement("div")
                 el.style.position = "absolute"
                 el.style.left = "50%"
                 el.style.top = "50%"
                 el.style.transformOrigin = "0 0"
                 el.style.willChange = "transform, opacity"
-                el.style.pointerEvents = "none"
+                el.style.pointerEvents = "auto"
+                el.style.cursor = "pointer"
                 el.style.backgroundColor = "#242424"
                 el.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.5)"
                 el.style.border = "1px solid rgba(255, 255, 255, 0.08)"
                 el.dataset.tileKey = key
+                if (src?.id != null) {
+                    el.dataset.id = String(src.id)
+                }
 
                 const img = document.createElement("img")
-                const src = safeImages[t.imgIdx]
                 img.src = src?.src || ""
                 if (src?.srcSet) img.srcset = src.srcSet
                 img.alt = src?.alt || ""
@@ -599,6 +610,7 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
         let lastPY = 0
         let lastT = 0
         let pid: number | null = null
+        let clickedId: string | null = null
 
         const onDown = (e: PointerEvent) => {
             if (e.button !== 0 && e.pointerType === "mouse") return
@@ -607,6 +619,17 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
             lastPX = e.clientX
             lastPY = e.clientY
             lastT = e.timeStamp
+
+            clickedId = null
+            let target = e.target as HTMLElement | null
+            while (target && target !== el) {
+                if (target.dataset && target.dataset.id) {
+                    clickedId = target.dataset.id
+                    break
+                }
+                target = target.parentElement
+            }
+
             try {
                 el.setPointerCapture(e.pointerId)
             } catch {}
@@ -658,6 +681,20 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
                 el.releasePointerCapture(e.pointerId)
             } catch {}
             el.style.cursor = "grab"
+
+            const dpx = e.clientX - lastPX
+            const dpy = e.clientY - lastPY
+            const dist = Math.hypot(dpx, dpy)
+            const dt = e.timeStamp - lastT
+
+            if (dist < 6 && dt < 280 && clickedId) {
+                if (onImageClickRef.current) {
+                    onImageClickRef.current(clickedId)
+                } else {
+                    window.location.href = `/works/${clickedId}`
+                }
+            }
+            clickedId = null
         }
 
         const onCancel = (e: PointerEvent) => onUp(e)
