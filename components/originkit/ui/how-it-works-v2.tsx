@@ -352,6 +352,12 @@ export const HowItWorksV2: React.FC = () => {
         className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none block"
       />
 
+      {/* Smooth gradient transition from Hero section background to soften the sharp edge */}
+      <div className="absolute top-0 left-0 w-full h-32 sm:h-48 bg-gradient-to-b from-[#2C2C2C] to-transparent z-10 pointer-events-none" />
+      
+      {/* Smooth gradient transition at the bottom to soften edge into the next section (Brand Vision #2C2C2C) */}
+      <div className="absolute bottom-0 left-0 w-full h-32 sm:h-48 bg-gradient-to-t from-[#2C2C2C] to-transparent z-10 pointer-events-none" />
+
       {/* Subtle overlay vignette for mobile contrast */}
       <div className="lg:hidden absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70 z-0 pointer-events-none" />
 
