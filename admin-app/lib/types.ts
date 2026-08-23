@@ -11,13 +11,24 @@ export interface GalleryItem {
   isFavorite?: boolean;
 }
 
+export interface TestimonialItem {
+  id: string;
+  quote: string;
+  name: string;
+  role: string;
+  avatar: string;
+  initials?: string;
+  featured?: boolean;
+}
+
 export interface SiteImages {
   brandVision: Record<string, string>;
   heroTunnel: Array<{ id: string; src: string; alt: string }>;
   exploreGallery: GalleryItem[];
+  testimonials?: TestimonialItem[];
 }
 
-export type SectionKey = "heroTunnel" | "brandVision" | "exploreGallery";
+export type SectionKey = "heroTunnel" | "brandVision" | "exploreGallery" | "testimonials";
 
 export interface SectionConfig {
   key: SectionKey;
@@ -60,5 +71,15 @@ export const SECTIONS: SectionConfig[] = [
     ratio: "3:4 Portrait",
     resolution: "1200 × 1600 px",
     minResolution: "900 × 1200 px",
+  },
+  {
+    key: "testimonials",
+    label: "Testimonials",
+    description: "Customer reviews, avatar photos, locations, and featured status",
+    icon: "💬",
+    count: "4+",
+    ratio: "1:1 Avatar",
+    resolution: "400 × 400 px",
+    minResolution: "200 × 200 px",
   },
 ];

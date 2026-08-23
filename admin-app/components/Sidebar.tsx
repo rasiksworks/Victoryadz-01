@@ -143,7 +143,7 @@ export function Sidebar() {
                   {s.label}
                 </div>
                 <div style={{ fontSize: 10, color: active ? "var(--text-muted)" : "var(--text-dim)", marginTop: 1 }}>
-                  {s.key === "exploreGallery" ? "50 items • 15 ⭐" : `${s.count} images`}
+                  {s.key === "exploreGallery" ? "50 items • 15 ⭐" : s.key === "testimonials" ? "Customer Reviews" : `${s.count} images`}
                 </div>
               </div>
 

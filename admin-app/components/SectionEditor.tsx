@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { ImageSlot } from "./ImageSlot";
 import { Toast } from "./Toast";
-import type { SectionKey, SiteImages, GalleryItem } from "@/lib/types";
+import type { SectionKey, SiteImages, GalleryItem, TestimonialItem } from "@/lib/types";
 import { SECTIONS } from "@/lib/types";
 
 interface ImageItem {
@@ -74,6 +74,10 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
   const [editingItemData, setEditingItemData] = useState<GalleryItem | null>(null);
   const [modalUploading, setModalUploading] = useState(false);
 
+  // Testimonial Item Editing Modal State
+  const [editingTestimonialIndex, setEditingTestimonialIndex] = useState<number | null>(null);
+  const [editingTestimonialData, setEditingTestimonialData] = useState<TestimonialItem | null>(null);
+
   const config = SECTIONS.find((s) => s.key === sectionKey)!;
 
   useEffect(() => {
@@ -83,6 +87,8 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setGalleryFilter("all");
     setEditingItemIndex(null);
     setEditingItemData(null);
+    setEditingTestimonialIndex(null);
+    setEditingTestimonialData(null);
     fetch("/api/images")
       .then((r) => r.json())
       .then((d) => {
@@ -146,7 +152,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setEditingItemData(cloned);
   };
 
-  // Save Modal Changes
+  // Save Work Modal Changes
   const handleSaveModalChanges = () => {
     if (editingItemIndex === null || !editingItemData || !data) return;
     const d = JSON.parse(JSON.stringify(data)) as SiteImages;
@@ -229,6 +235,112 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setModalUploading(false);
   };
 
+  // -------------------------------------------------------------
+  // TESTIMONIAL HANDLERS
+  // -------------------------------------------------------------
+  const handleAddNewTestimonial = () => {
+    if (!data) return;
+    const d = JSON.parse(JSON.stringify(data)) as SiteImages;
+    if (!Array.isArray(d.testimonials)) d.testimonials = [];
+
+    const newTestimonial: TestimonialItem = {
+      id: String(Date.now()),
+      quote: "VictoryAdz provided outstanding handcrafted frame quality and safe delivery. Highly recommended!",
+      name: "Customer Name",
+      role: "Chennai, Tamil Nadu",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+      initials: "CN",
+      featured: false,
+    };
+
+    d.testimonials.unshift(newTestimonial);
+    setData(d);
+    setDirty(true);
+    setEditingTestimonialIndex(0);
+    setEditingTestimonialData(JSON.parse(JSON.stringify(newTestimonial)));
+    setToast({ msg: "New review added! Edit details below and save.", type: "success" });
+  };
+
+  const handleOpenEditTestimonial = (index: number) => {
+    if (!data || !data.testimonials) return;
+    setEditingTestimonialIndex(index);
+    setEditingTestimonialData(JSON.parse(JSON.stringify(data.testimonials[index])));
+  };
+
+  const handleSaveTestimonialModal = () => {
+    if (editingTestimonialIndex === null || !editingTestimonialData || !data) return;
+    const d = JSON.parse(JSON.stringify(data)) as SiteImages;
+    if (!Array.isArray(d.testimonials)) d.testimonials = [];
+
+    // If setting this as featured, unset other featured
+    if (editingTestimonialData.featured) {
+      d.testimonials.forEach((t, i) => {
+        if (i !== editingTestimonialIndex) t.featured = false;
+      });
+    }
+
+    d.testimonials[editingTestimonialIndex] = editingTestimonialData;
+    setData(d);
+    setDirty(true);
+    setEditingTestimonialIndex(null);
+    setEditingTestimonialData(null);
+    setToast({ msg: "Review updated! Hit SAVE CHANGES to apply live.", type: "success" });
+  };
+
+  const handleDeleteTestimonial = (index: number) => {
+    if (!data || !data.testimonials) return;
+    if (!window.confirm("Are you sure you want to delete this customer review?")) return;
+    const d = JSON.parse(JSON.stringify(data)) as SiteImages;
+    if (d.testimonials) {
+      d.testimonials.splice(index, 1);
+    }
+    setData(d);
+    setDirty(true);
+    setToast({ msg: "Review deleted. Hit SAVE CHANGES to apply.", type: "success" });
+  };
+
+  const handleTestimonialAvatarUpload = async (file: File) => {
+    if (!editingTestimonialData) return;
+    setModalUploading(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const result = await res.json();
+      if (result.url) {
+        setEditingTestimonialData({ ...editingTestimonialData, avatar: result.url });
+        setToast({ msg: "Avatar uploaded and converted to WebP!", type: "success" });
+      } else {
+        setToast({ msg: "Upload failed: " + (result.error || "Unknown"), type: "error" });
+      }
+    } catch {
+      setToast({ msg: "Upload failed.", type: "error" });
+    }
+    setModalUploading(false);
+  };
+
+  const handleToggleFeaturedTestimonial = (index: number) => {
+    if (!data || !data.testimonials) return;
+    const d = JSON.parse(JSON.stringify(data)) as SiteImages;
+    if (!d.testimonials) return;
+    const isNowFeatured = !d.testimonials[index]?.featured;
+    
+    // Ensure single featured
+    d.testimonials.forEach((t, i) => {
+      t.featured = i === index ? isNowFeatured : false;
+    });
+
+    setData(d);
+    setDirty(true);
+    setToast({
+      msg: isNowFeatured ? "Set as main spotlight review." : "Unset from spotlight.",
+      type: "success",
+    });
+  };
+
+  // -------------------------------------------------------------
+  // SAVE CHANGES TO /api/images
+  // -------------------------------------------------------------
   const handleSave = async () => {
     if (!data) return;
     setSaving(true);
@@ -258,7 +370,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
       : 0;
   }, [sectionKey, data]);
 
-  // Filter & Search
+  // Filter & Search for Explore Gallery
   const visibleItems = useMemo(() => {
     let items = allItems;
     if (sectionKey === "exploreGallery") {
@@ -317,7 +429,9 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
               fontFamily: "JetBrains Mono",
             }}
           >
-            {allItems.length} ITEMS
+            {sectionKey === "testimonials"
+              ? `${data?.testimonials?.length || 0} REVIEWS`
+              : `${allItems.length} ITEMS`}
           </span>
 
           {/* Specifications Badge */}
@@ -378,6 +492,26 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
               }}
             >
               + ADD NEW WORK
+            </button>
+          )}
+
+          {sectionKey === "testimonials" && (
+            <button
+              onClick={handleAddNewTestimonial}
+              style={{
+                padding: "8px 14px",
+                background: "rgba(34, 197, 94, 0.12)",
+                color: "var(--green)",
+                border: "1px solid rgba(34, 197, 94, 0.3)",
+                borderRadius: 6,
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              + ADD REVIEW
             </button>
           )}
 
@@ -538,7 +672,188 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                 animation: "spin 0.6s linear infinite",
               }}
             />
-            <span style={{ fontSize: 12, fontWeight: 500 }}>Loading image data…</span>
+            <span style={{ fontSize: 12, fontWeight: 500 }}>Loading data…</span>
+          </div>
+        ) : sectionKey === "testimonials" ? (
+          /* ------------------------------------------------------------- */
+          /* TESTIMONIALS MANAGER VIEW                                     */
+          /* ------------------------------------------------------------- */
+          <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 1200, margin: "0 auto" }}>
+            <div
+              style={{
+                padding: "16px 20px",
+                background: "rgba(59, 130, 246, 0.08)",
+                border: "1px solid rgba(59, 130, 246, 0.25)",
+                borderRadius: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                fontSize: 12,
+                color: "#93c5fd",
+              }}
+            >
+              <span>
+                💡 The review marked as <strong>⭐ Spotlight</strong> appears as the large featured card in the testimonials section.
+              </span>
+              <button
+                onClick={handleAddNewTestimonial}
+                style={{
+                  padding: "6px 12px",
+                  background: "rgba(34, 197, 94, 0.15)",
+                  color: "#4ade80",
+                  border: "1px solid rgba(34, 197, 94, 0.35)",
+                  borderRadius: 6,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                + Add Customer Review
+              </button>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                gap: 18,
+              }}
+            >
+              {(data.testimonials || []).map((t, idx) => (
+                <div
+                  key={t.id || idx}
+                  className="card-hover animate-fade-in"
+                  style={{
+                    background: "var(--surface)",
+                    border: t.featured ? "1px solid rgba(234, 179, 8, 0.5)" : "1px solid var(--border)",
+                    borderRadius: 12,
+                    padding: 20,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: 16,
+                    position: "relative",
+                    boxShadow: t.featured ? "0 4px 24px rgba(234, 179, 8, 0.1)" : "none",
+                  }}
+                >
+                  {/* Top Bar with Star Rating and Spotlight Button */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span style={{ color: "#f59e0b", fontSize: 13, letterSpacing: 2 }}>★★★★★</span>
+                      <span style={{ fontSize: 10, fontFamily: "JetBrains Mono", color: "var(--text-dim)" }}>
+                        #{idx + 1}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => handleToggleFeaturedTestimonial(idx)}
+                      title="Set as Main Spotlight Card"
+                      style={{
+                        padding: "3px 8px",
+                        borderRadius: 99,
+                        border: t.featured ? "1px solid rgba(234,179,8,0.5)" : "1px solid var(--border)",
+                        background: t.featured ? "#eab308" : "var(--surface2)",
+                        color: t.featured ? "#000" : "var(--text-muted)",
+                        fontSize: 10,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 4,
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      <span>{t.featured ? "⭐" : "☆"}</span>
+                      <span>{t.featured ? "SPOTLIGHT" : "SET SPOTLIGHT"}</span>
+                    </button>
+                  </div>
+
+                  {/* Review Text */}
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.9)", lineHeight: 1.6, fontStyle: "italic" }}>
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+
+                  {/* Author Meta & Action Buttons */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingTop: 12,
+                      borderTop: "1px solid var(--border)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                      <div
+                        style={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: "50%",
+                          overflow: "hidden",
+                          background: "var(--surface3)",
+                          border: "1px solid var(--border)",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={
+                            t.avatar?.startsWith("http")
+                              ? t.avatar
+                              : t.avatar?.startsWith("/")
+                              ? t.avatar
+                              : "/" + (t.avatar || "")
+                          }
+                          alt={t.name}
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {t.name}
+                        </div>
+                        <div style={{ fontSize: 10, color: "var(--text-dim)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {t.role}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <button
+                        onClick={() => handleOpenEditTestimonial(idx)}
+                        style={{
+                          padding: "5px 9px",
+                          background: "var(--surface2)",
+                          color: "#fff",
+                          border: "1px solid var(--border)",
+                          borderRadius: 6,
+                          fontSize: 11,
+                          fontWeight: 600,
+                          cursor: "pointer",
+                        }}
+                      >
+                        ✎ Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTestimonial(idx)}
+                        title="Delete Review"
+                        style={{
+                          padding: "5px 8px",
+                          background: "rgba(239, 68, 68, 0.1)",
+                          color: "var(--red)",
+                          border: "1px solid rgba(239, 68, 68, 0.3)",
+                          borderRadius: 6,
+                          fontSize: 11,
+                          cursor: "pointer",
+                        }}
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : visibleItems.length === 0 ? (
           <div
@@ -976,6 +1291,331 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
               </button>
               <button
                 onClick={handleSaveModalChanges}
+                style={{
+                  padding: "8px 22px",
+                  background: "#fff",
+                  color: "#000",
+                  border: "none",
+                  borderRadius: 6,
+                  fontSize: 12,
+                  fontWeight: 800,
+                  cursor: "pointer",
+                }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Testimonial Detail Modal */}
+      {editingTestimonialIndex !== null && editingTestimonialData && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9990,
+            background: "rgba(0,0,0,0.85)",
+            backdropFilter: "blur(10px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 24,
+          }}
+          onClick={() => {
+            setEditingTestimonialIndex(null);
+            setEditingTestimonialData(null);
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="animate-fade-in"
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border-hover)",
+              borderRadius: 14,
+              width: "100%",
+              maxWidth: 640,
+              maxHeight: "92vh",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              boxShadow: "0 24px 60px rgba(0,0,0,0.9)",
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: "18px 24px",
+                borderBottom: "1px solid var(--border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "var(--surface2)",
+              }}
+            >
+              <div>
+                <h2 style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>
+                  Edit Customer Review
+                </h2>
+                <span style={{ fontSize: 11, color: "var(--text-dim)" }}>
+                  Review ID: {editingTestimonialData.id}
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setEditingTestimonialIndex(null);
+                  setEditingTestimonialData(null);
+                }}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-muted)",
+                  fontSize: 18,
+                  cursor: "pointer",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Form Body */}
+            <div style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+              
+              {/* Quote / Feedback */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                  Customer Review Quote
+                </label>
+                <textarea
+                  rows={4}
+                  value={editingTestimonialData.quote || ""}
+                  onChange={(e) => setEditingTestimonialData({ ...editingTestimonialData, quote: e.target.value })}
+                  placeholder="Enter the customer review text..."
+                  style={{
+                    background: "var(--surface2)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 6,
+                    padding: "10px 12px",
+                    fontSize: 13,
+                    color: "#fff",
+                    outline: "none",
+                    fontFamily: "inherit",
+                    resize: "vertical",
+                  }}
+                />
+              </div>
+
+              {/* Author & Location */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                    Customer Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editingTestimonialData.name || ""}
+                    onChange={(e) => setEditingTestimonialData({ ...editingTestimonialData, name: e.target.value })}
+                    placeholder="e.g. Karthik Raja"
+                    style={{
+                      background: "var(--surface2)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 6,
+                      padding: "9px 12px",
+                      fontSize: 13,
+                      color: "#fff",
+                      outline: "none",
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                    City / State / Role
+                  </label>
+                  <input
+                    type="text"
+                    value={editingTestimonialData.role || ""}
+                    onChange={(e) => setEditingTestimonialData({ ...editingTestimonialData, role: e.target.value })}
+                    placeholder="e.g. Chennai, Tamil Nadu"
+                    style={{
+                      background: "var(--surface2)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 6,
+                      padding: "9px 12px",
+                      fontSize: 13,
+                      color: "#fff",
+                      outline: "none",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Avatar Upload / URL */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 16,
+                  alignItems: "center",
+                  padding: 14,
+                  background: "var(--surface2)",
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <div
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    background: "var(--surface3)",
+                    border: "1px solid var(--border)",
+                    flexShrink: 0,
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={
+                      editingTestimonialData.avatar?.startsWith("http")
+                        ? editingTestimonialData.avatar
+                        : editingTestimonialData.avatar?.startsWith("/")
+                        ? editingTestimonialData.avatar
+                        : "/" + (editingTestimonialData.avatar || "")
+                    }
+                    alt={editingTestimonialData.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </div>
+
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                    Avatar Image URL (1:1 Square)
+                  </label>
+                  <input
+                    type="text"
+                    value={editingTestimonialData.avatar || ""}
+                    onChange={(e) => setEditingTestimonialData({ ...editingTestimonialData, avatar: e.target.value })}
+                    placeholder="https://... or /uploads/..."
+                    style={{
+                      width: "100%",
+                      background: "var(--surface)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 6,
+                      padding: "7px 10px",
+                      fontSize: 11,
+                      color: "#fff",
+                      outline: "none",
+                      fontFamily: "JetBrains Mono",
+                    }}
+                  />
+                  <div>
+                    <label
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        padding: "6px 12px",
+                        background: "var(--surface3)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 6,
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: "#fff",
+                        cursor: modalUploading ? "default" : "pointer",
+                        opacity: modalUploading ? 0.6 : 1,
+                      }}
+                    >
+                      <span>📁 {modalUploading ? "Uploading…" : "Upload Avatar Photo"}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={modalUploading}
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleTestimonialAvatarUpload(f);
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Spotlight / Featured Checkbox */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  padding: "14px 16px",
+                  background: editingTestimonialData.featured ? "rgba(234, 179, 8, 0.1)" : "var(--surface2)",
+                  border: editingTestimonialData.featured ? "1px solid rgba(234, 179, 8, 0.4)" : "1px solid var(--border)",
+                  borderRadius: 8,
+                  cursor: "pointer",
+                }}
+                onClick={() =>
+                  setEditingTestimonialData({
+                    ...editingTestimonialData,
+                    featured: !editingTestimonialData.featured,
+                  })
+                }
+              >
+                <input
+                  type="checkbox"
+                  checked={!!editingTestimonialData.featured}
+                  onChange={(e) =>
+                    setEditingTestimonialData({
+                      ...editingTestimonialData,
+                      featured: e.target.checked,
+                    })
+                  }
+                  style={{ width: 18, height: 18, cursor: "pointer" }}
+                />
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: editingTestimonialData.featured ? "#eab308" : "#fff" }}>
+                    ⭐ Spotlight Review (Large Card on Desktop)
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 1 }}>
+                    If enabled, this review will be displayed in the 2-row spotlight card slot.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              style={{
+                padding: "16px 24px",
+                borderTop: "1px solid var(--border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: 10,
+                background: "var(--surface2)",
+              }}
+            >
+              <button
+                onClick={() => {
+                  setEditingTestimonialIndex(null);
+                  setEditingTestimonialData(null);
+                }}
+                style={{
+                  padding: "8px 16px",
+                  background: "transparent",
+                  border: "1px solid var(--border)",
+                  borderRadius: 6,
+                  color: "var(--text-muted)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveTestimonialModal}
                 style={{
                   padding: "8px 22px",
                   background: "#fff",
