@@ -22,14 +22,14 @@ export const BrandVisionSection: React.FC = () => {
               className="text-[13px] sm:text-[14px] md:text-[15px] font-inter-display font-medium leading-relaxed text-[#DCDCDC] max-w-lg block"
               style={{ letterSpacing: "0.5px" }}
             >
-              Over 15,000 heirloom frames crafted across South India. We turn wedding vows, newborn firsts, and family portraits into museum-grade wall art using 12-color pigment printing, scratch-proof matte lamination, and warp-resistant timber mouldings.
+              Specializing in premium photo frames, we focus on craftsmanship that preserves your memories with the quality they deserve. Every frame is made with precision, using quality materials and lamination finishes chosen to protect your photo for years to come. Whether you&apos;re across the street or across the state, every frame is packed and shipped the same way we&apos;d hand it to you in person.
             </p>
           </div>
 
           {/* Right Big Headline (40% font size reduction) */}
           <div className="flex items-start">
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-[1.18]">
-              Photos trapped on screens get forgotten. Framed on your wall, they live forever.
+              Crafting frames that turn your memories into art
             </h2>
           </div>
         </div>
@@ -83,14 +83,14 @@ export const BrandVisionSection: React.FC = () => {
                   Captured once.
                 </span>
                 <span className="block font-great-vibes text-3xl sm:text-4xl md:text-5xl font-normal text-white pt-1 -mt-1">
-                  Built to last generations.
+                  Meant to last.
                 </span>
               </h2>
               <p
                 className="font-inter-display font-medium text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed text-[#DCDCDC] block text-center"
                 style={{ letterSpacing: "0.5px" }}
               >
-                A digital photo is easily buried in camera rolls. On your wall, it becomes a daily reminder of the people and moments that matter most. We consult with you 1-on-1 on WhatsApp, providing personal guidance on custom frame styles, matte or gloss lamination finishes, and proportional wall sizing before anything is crafted. Once confirmed, our master craftsmen handcraft your piece and ship it in 5-layer shockproof boxing anywhere in India.
+                A photo is a single moment — but it deserves to be seen every day, not stored away in a phone. For 8+ years, VictoryAdz has been turning photographs into lasting pieces, using quality materials and a range of lamination finishes to protect every detail. Every order starts with understanding what you need, and we personally guide you through choosing the right size, finish, and frame for your memory. Send us your photo on WhatsApp, and we&apos;ll walk you through every choice before anything gets printed — you approve it, then we frame and ship it to you, wherever you are.
               </p>
             </div>
 
@@ -106,9 +106,9 @@ export const BrandVisionSection: React.FC = () => {
                 />
               </ImageReveal>
               <Button01
-                text="Explore Real Frames"
+                text="DISCOVER our CRAFT"
                 href="/works"
-                ariaLabel="Explore real frames"
+                ariaLabel="Discover our craft"
               />
             </div>
 
@@ -137,7 +137,7 @@ export const BrandVisionSection: React.FC = () => {
             {/* Bottom Pull Quote */}
             <div className="text-center max-w-md mx-auto pt-4 pb-6 sm:pb-10">
               <ScrollHighlight className="text-xl md:text-2xl font-bold tracking-tight text-center leading-snug block">
-                &quot;A photo fades inside a camera roll. On your wall, in a handcrafted VictoryAdz frame, it becomes an heirloom your family treasures forever.&quot;
+                &quot;A photo fades on a screen. On your wall, in a VictoryAdz frame, it becomes something you never stop noticing.&quot;
               </ScrollHighlight>
             </div>
 

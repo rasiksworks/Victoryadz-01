@@ -18,43 +18,43 @@ const FAQS: FAQItem[] = [
   {
     id: "q1",
     number: "01",
-    question: "How do I choose the right frame and size before ordering?",
-    answer: "Simply send your photo on WhatsApp! Our framing experts review your image quality, recommend proportional dimensions for your wall, and share real photos of available frame styles, wood mouldings, and lamination finishes before you confirm.",
+    question: "I'm not near your shop, can I still order?",
+    answer: "Yes, absolutely! Many of our customers order from across the state. You send your photo on WhatsApp, we discuss sizes and frames together, and then we ship the final piece directly to your door.",
     shade: "bg-[#181818]",
   },
   {
     id: "q2",
     number: "02",
-    question: "My photo was taken on a phone, will it look blurry when enlarged?",
-    answer: "No. Before printing, our photo technicians run your image through professional AI enhancement and noise reduction to sharpen details, balance colors, and ensure crisp, vibrant large-format prints.",
+    question: "How do I know the frame will look good before it's made?",
+    answer: "We guide you through the process on WhatsApp. We'll show you frame choices, recommend lamination styles, and make sure you're happy with the selection before anything gets printed and framed.",
     shade: "bg-[#212121]",
   },
   {
     id: "q3",
     number: "03",
-    question: "What if my frame or glass gets damaged during shipping?",
-    answer: "We pack every order in custom 5-layer bubble wrap, foam corner guards, and heavy-duty corrugated boxes. In the rare event of transit damage, simply send us a photo on WhatsApp and we dispatch a brand-new replacement immediately, 100% free with zero hassle.",
+    question: "What if my photo is old or damaged?",
+    answer: "We offer photo restoration. Before printing, we can digitally repair old, torn, or faded photos so they look their best once framed.",
     shade: "bg-[#2b2b2b]",
   },
   {
     id: "q4",
     number: "04",
-    question: "Can you repair and frame old or damaged vintage photos?",
-    answer: "Yes! We specialize in digital photo restoration. We can remove tears, water stains, spots, and restore faded colors so your heritage family moments look brand new before framing.",
+    question: "How long does an order take, start to delivery?",
+    answer: "Usually 5–7 days from approval to delivery, depending on your location.",
     shade: "bg-[#353535]",
   },
   {
     id: "q5",
     number: "05",
-    question: "How long does crafting and delivery take?",
-    answer: "Standard handcrafting takes 2-3 business days once your frame style and size are confirmed. Tracked courier delivery takes 2-4 days across Tamil Nadu and all major Indian cities, with live WhatsApp dispatch updates.",
+    question: "What if something arrives damaged?",
+    answer: "We pack every frame carefully to prevent damage in transit. In the rare case something arrives damaged, message us a photo on WhatsApp right away and we'll sort out a replacement.",
     shade: "bg-[#3f3f3f]",
   },
   {
     id: "q6",
     number: "06",
-    question: "How do I make payment and what areas do you ship to?",
-    answer: "We accept all UPI apps (GPay, PhonePe, Paytm) and net banking. We deliver to all pin codes across Tamil Nadu and all Indian states with doorstep tracking.",
+    question: "What areas do you deliver to?",
+    answer: "Tamil Nadu and pan-India shipping.",
     shade: "bg-[#4a4a4a]",
   },
 ];
@@ -76,7 +76,7 @@ export const FAQ: React.FC = () => {
         <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-3 max-w-2xl">
           <h2>
             <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl font-semibold tracking-normal text-white leading-[1.05]">
-              Frequently Asked
+              Common
             </span>
             <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
               Questions
@@ -87,7 +87,7 @@ export const FAQ: React.FC = () => {
             className="text-sm md:text-base text-[#DCDCDC] font-inter-display font-medium leading-relaxed mt-2 block"
             style={{ letterSpacing: "0.5px" }}
           >
-            Everything you need to know about photo resolution checks, custom frame moulding finishes, and safe nationwide doorstep delivery.
+            Everything you need to know about our remote framing and delivery process.
           </p>
         </div>
 

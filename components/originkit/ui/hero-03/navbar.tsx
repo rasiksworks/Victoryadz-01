@@ -16,8 +16,8 @@ function asset(file: string) {
 
 const MOBILE_NAV_LINKS = [
   { number: "01", label: "Home", href: "/" },
-  { number: "02", label: "About", href: "/#about" },
-  { number: "03", label: "Works", href: "/#recent-works" },
+  { number: "02", label: "Works", href: "/#recent-works" },
+  { number: "03", label: "About", href: "/#about" },
   { number: "04", label: "Why Us", href: "/#why-victory-adz" },
   { number: "05", label: "How It Works", href: "/#how-it-works" },
   { number: "06", label: "FAQ", href: "/#faq" },
@@ -68,57 +68,52 @@ export const Navbar = () => {
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (mobileMenuOpen) return;
     const previous = scrollY.getPrevious() ?? 0;
-    if (latest > previous && latest > 120) {
+    if (latest > previous && latest > 150) {
       setHidden(true);
-    } else if (latest < previous) {
+    } else {
       setHidden(false);
     }
   });
 
-  const handleLogoClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setMobileMenuOpen(false);
+  const handleWhatsAppOrder = () => {
+    const message = encodeURIComponent(
+      "Hi VictoryAdz! I'd like to get frame options & pricing for my photo."
+    );
+    window.open(`https://wa.me/919361312684?text=${message}`, "_blank");
+  };
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (pathname === "/") {
+      e.preventDefault();
       if (typeof window !== "undefined" && (window as any).lenis) {
         (window as any).lenis.scrollTo(0, { duration: 1.2 });
       } else {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
-    } else {
-      router.push("/");
     }
   };
 
-  const handleNavLinkClick = (href: string, e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleNavLinkClick = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
     setMobileMenuOpen(false);
-
-    if (href.startsWith("/#")) {
+    if (href.startsWith("/#") && pathname === "/") {
+      e.preventDefault();
       const targetId = href.replace("/#", "");
-      if (pathname === "/") {
-        const elem = document.getElementById(targetId);
-        if (elem) {
-          if (typeof window !== "undefined" && (window as any).lenis) {
-            (window as any).lenis.scrollTo(elem, { offset: -20, duration: 1.2 });
-          } else {
-            elem.scrollIntoView({ behavior: "smooth" });
-          }
+      const el = document.getElementById(targetId);
+      if (el) {
+        if (typeof window !== "undefined" && (window as any).lenis) {
+          (window as any).lenis.scrollTo(el, { duration: 1.2 });
+        } else {
+          el.scrollIntoView({ behavior: "smooth" });
         }
-      } else {
-        router.push(href);
       }
-    } else {
-      router.push(href);
+    } else if (href === "/" && pathname === "/") {
+      e.preventDefault();
+      if (typeof window !== "undefined" && (window as any).lenis) {
+        (window as any).lenis.scrollTo(0, { duration: 1.2 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
-  };
-
-  const handleWhatsAppOrder = () => {
-    setMobileMenuOpen(false);
-    window.open(
-      "https://wa.me/919361312684?text=" +
-        encodeURIComponent("Hi VictoryAdz! I would like to order a custom frame."),
-      "_blank"
-    );
   };
 
   // Don't show public navbar on dedicated admin page
@@ -131,32 +126,32 @@ export const Navbar = () => {
       <motion.header
         variants={{
           visible: { y: 0, opacity: 1 },
-          hidden: { y: "-140%", opacity: 0 },
+          hidden: { y: -100, opacity: 0 },
         }}
-        initial="visible"
-        animate={(hidden && !mobileMenuOpen) || modalOpen ? "hidden" : "visible"}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-[90] w-full pt-3 sm:pt-4 px-4 sm:px-6 md:px-[60px] lg:px-[60px] bg-transparent pb-0 pointer-events-none"
+        animate={modalOpen || hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-[60px] lg:px-[60px] py-3.5 sm:py-4 bg-[#141414]/90 backdrop-blur-md border-b border-white/10"
       >
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 sm:gap-4 pointer-events-auto">
-          {/* Brand Logo */}
+        <div className="w-full flex items-center justify-between max-w-[1520px] mx-auto">
+          {/* Left Brand Logo */}
           <a
             href="/"
             onClick={handleLogoClick}
-            aria-label="VictoryAdz home"
-            className="inline-flex items-center gap-2 sm:gap-[11px] touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white shrink-0"
+            className="flex items-center gap-2.5 group cursor-pointer focus-visible:outline-2 focus-visible:outline-white shrink-0"
+            aria-label="VictoryAdz Home"
           >
+            {/* Hexagon Shield Icon */}
             <svg
-              width="20"
+              width="24"
               height="24"
               viewBox="0 0 20 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="shrink-0 text-white"
+              className="text-white group-hover:scale-105 transition-transform duration-300 shrink-0"
               aria-hidden="true"
             >
               <path
-                d="M10 0L20 6V18L10 24L0 18V6L10 0Z"
+                d="M10 2L18 7V17L10 22L2 17V7L10 2Z"
                 fill="currentColor"
                 fillOpacity="0.1"
               />
@@ -188,16 +183,10 @@ export const Navbar = () => {
             {/* Desktop Order Now Button (hidden on mobile/tablet < md) */}
             <div className="hidden md:block shrink-0">
               <Button01
-                text="Order Now"
-                ariaLabel="Order Now"
+                text="Order on WhatsApp"
+                ariaLabel="Order on WhatsApp"
                 variant="light"
-                onClick={() => {
-                  window.open(
-                    "https://wa.me/919361312684?text=" +
-                      encodeURIComponent("Hi VictoryAdz! I'd like to get frame options & pricing for my photo."),
-                    "_blank"
-                  );
-                }}
+                onClick={handleWhatsAppOrder}
               />
             </div>
 

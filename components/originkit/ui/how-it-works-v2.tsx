@@ -22,26 +22,26 @@ interface StepData {
 const STEPS: StepData[] = [
   {
     number: "01",
-    title: "Send on WhatsApp",
-    body: "Drop your photo on WhatsApp. Any resolution — our team checks quality and enhances it for crystal-clear printing.",
+    title: "Send Your Photo",
+    body: "Share your photo with us on WhatsApp — any photo, any condition.",
     cellPosDesktop: { left: "0%", top: "0%" },
   },
   {
     number: "02",
-    title: "1-on-1 Frame Advice",
-    body: "We guide you directly on WhatsApp through custom sizes, frame styles, and matte or gloss lamination options.",
+    title: "We Guide You",
+    body: "We help you choose the size, frame style, and lamination finish that suits your memory best, over a real conversation, not a checkout form.",
     cellPosDesktop: { left: "25%", top: "0%" },
   },
   {
     number: "03",
-    title: "Archival Crafting",
-    body: "Printed with 12-color archival inks and finished with scratch-proof, anti-glare lamination that won't fade for 25+ years.",
+    title: "We Craft It",
+    body: "Your frame is made by hand with the same care we've put into every order for 8+ years.",
     cellPosDesktop: { left: "50%", top: "50%" },
   },
   {
     number: "04",
-    title: "Safe Doorstep Delivery",
-    body: "Protected in 5-layer shockproof boxing and shipped tracked to your door. If it arrives damaged, we replace it free.",
+    title: "We Ship It Safely",
+    body: "Packed carefully and shipped to your door, with WhatsApp updates the whole way.",
     cellPosDesktop: { left: "75%", top: "50%" },
   },
 ];
@@ -376,10 +376,10 @@ export const HowItWorksV2: React.FC = () => {
         >
           <h2 className="text-right select-none">
             <span className="block font-cal-sans text-[36px] xl:text-[48px] font-semibold text-white tracking-normal leading-[1.04]">
-              Four Simple Steps,
+              From Your Photo to Your Wall,
             </span>
             <span className="block font-great-vibes text-[42px] xl:text-[56px] font-normal text-white pt-1 -mt-1 leading-[1.05]">
-              Zero Confusion
+              Wherever You Are
             </span>
           </h2>
 
@@ -387,7 +387,7 @@ export const HowItWorksV2: React.FC = () => {
             className="text-[15px] xl:text-[17px] font-inter-display font-medium text-[#E8E8E8] leading-snug text-right"
             style={{ letterSpacing: "0.5px" }}
           >
-            From your phone to your wall in 4 simple steps. No shop visit, no guesswork.
+            No shop visit needed. Here&apos;s exactly what happens after you message us.
           </p>
 
           {/* CTA Button */}
@@ -455,30 +455,28 @@ export const HowItWorksV2: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE VIEW (< 1024px): Card Sequence Stack */}
       {/* ==================================================================== */}
-      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between pt-14 xs:pt-16 sm:pt-20 pb-3 xs:pb-4 px-4 xs:px-5 select-none pointer-events-none">
+      <div className="lg:hidden absolute inset-0 z-20 flex flex-col justify-between pointer-events-none p-4 xs:p-5 sm:p-6 overflow-hidden">
         {/* Mobile Header Title */}
         <div
           ref={mobileHeaderRef}
           style={{
-            transform: "translateY(0px)",
-            opacity: 1,
             willChange: "transform, opacity",
           }}
           className="mobile-header-block flex flex-col items-center text-center gap-1 xs:gap-1.5 z-20"
         >
           <h2 className="text-center select-none">
             <span className="block font-cal-sans text-xl xs:text-2xl sm:text-3xl font-semibold text-white tracking-normal leading-tight">
-              Four Simple Steps,
+              From Your Photo to Your Wall,
             </span>
             <span className="block font-great-vibes text-2xl xs:text-3xl sm:text-4xl font-normal text-white pt-0.5 -mt-0.5 leading-tight">
-              Zero Confusion
+              Wherever You Are
             </span>
           </h2>
           <p
             className="text-[11px] xs:text-xs sm:text-[13px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
             style={{ letterSpacing: "0.5px" }}
           >
-            From your phone to your wall in 4 simple steps. No shop visit needed.
+            No shop visit needed. Here&apos;s exactly what happens after you message us.
           </p>
           <div className="pt-1 flex items-center justify-center w-full">
             <Button01

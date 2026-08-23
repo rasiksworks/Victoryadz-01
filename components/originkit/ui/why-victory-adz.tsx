@@ -29,12 +29,12 @@ export const WHY_PILLARS: WhyPillar[] = [
   {
     id: "pillar-1",
     number: "01",
-    shortTitle: "25-Yr Archival Inks",
-    title: "12-Color Archival Pigment Printing",
-    badge: "MUSEUM ARCHIVAL",
+    shortTitle: "Quality Materials",
+    title: "Quality Materials",
+    badge: "BUILT TO LAST",
     description:
-      "We use genuine 12-color archival pigment inks combined with UV-protective matte or gloss lamination that prevents yellowing, moisture damage, and color fading for over 25 years.",
-    highlights: ["12-Color Pigment Engine", "Zero Discoloration", "UV Blocking Lamination"],
+      "We never compromise on frame material — every piece is built to last, not just look good on day one.",
+    highlights: ["Premium Core Materials", "Moisture Resistant", "Long-Lasting Craftsmanship"],
     image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=1200&q=85",
     accentColor: "#0A84FF",
     iconType: "inks",
@@ -42,12 +42,12 @@ export const WHY_PILLARS: WhyPillar[] = [
   {
     id: "pillar-2",
     number: "02",
-    shortTitle: "100% Transit Armor",
-    title: "5-Layer Shockproof Transit Packaging",
-    badge: "ZERO RISK GUARANTEE",
+    shortTitle: "Multiple Finishes",
+    title: "Multiple Lamination Finishes",
+    badge: "CUSTOM FINISH",
     description:
-      "Every frame is encased in high-density foam corner guards, multi-ply bubble wrap, and rigid corrugated shock boxes. If any damage happens in transit, we send an instant brand-new replacement for free.",
-    highlights: ["High-Density Foam Corners", "Multi-Ply Bubble Shield", "100% Free Replacement"],
+      "From matte to glossy to textured — choose the finish that protects and elevates your photo the way you want.",
+    highlights: ["Matte Lamination", "Glossy Finish", "Textured Protection"],
     image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=85",
     accentColor: "#FF453A",
     iconType: "armor",
@@ -55,12 +55,12 @@ export const WHY_PILLARS: WhyPillar[] = [
   {
     id: "pillar-3",
     number: "03",
-    shortTitle: "1-on-1 WhatsApp Chat",
-    title: "Direct Master Framer Consultation",
-    badge: "PERSONAL GUIDANCE",
+    shortTitle: "8+ Years Craft",
+    title: "8+ Years of Experience",
+    badge: "TRUSTED EXPERTISE",
     description:
-      "No confusing forms or app downloads. Chat directly with our framing experts on WhatsApp for personalized advice on frame widths, matting styles, wall proportions, and transparent pricing.",
-    highlights: ["Direct Master Framer Chat", "Wall Proportions Advice", "Instant Clear Quotes"],
+      "We've been perfecting this craft since day one — every frame reflects years of precision and care.",
+    highlights: ["8+ Years In Business", "Proven Handcrafting", "Family Trusted"],
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=85",
     accentColor: "#30D158",
     iconType: "chat",
@@ -68,12 +68,12 @@ export const WHY_PILLARS: WhyPillar[] = [
   {
     id: "pillar-4",
     number: "04",
-    shortTitle: "Seamless Joinery",
-    title: "Reinforced 45° Corner Joinery",
-    badge: "MASTER CRAFT",
+    shortTitle: "Honest Pricing",
+    title: "Reasonable, Honest Pricing",
+    badge: "FAIR VALUE",
     description:
-      "Crafted from moisture-resistant synthetic and solid hardwood mouldings with V-nail reinforced 45° corner joints that never gap, warp, or split over time in tropical climates.",
-    highlights: ["Reinforced 45° V-Nails", "Moisture-Resistant Core", "Pre-Installed Hanging Kit"],
+      "High quality shouldn't mean high prices. We keep it fair, without cutting corners.",
+    highlights: ["Transparent Rates", "No Hidden Charges", "Studio Direct Value"],
     image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=1200&q=85",
     accentColor: "#BF5AF2",
     iconType: "joinery",
@@ -81,12 +81,12 @@ export const WHY_PILLARS: WhyPillar[] = [
   {
     id: "pillar-5",
     number: "05",
-    shortTitle: "Free Photo Retouching",
-    title: "AI Resolution Upscaling & Photo Repair",
-    badge: "COMPLIMENTARY SERVICE",
+    shortTitle: "Personal Guidance",
+    title: "Personally Guided Orders",
+    badge: "1-ON-1 WHATSAPP",
     description:
-      "Have a low-light phone snap or vintage family picture? Our technicians perform noise reduction, contrast balancing, and digital scratch repair before printing at zero extra charge.",
-    highlights: ["Low-Res Upscaling", "Torn & Scratch Removal", "Color & Contrast Balancing"],
+      "No confusing checkout — you talk to us directly on WhatsApp, and we help you pick exactly what's right.",
+    highlights: ["Direct Consultation", "Frame & Finish Help", "Proportion Guidance"],
     image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1200&q=85",
     accentColor: "#FF9F0A",
     iconType: "ai",
@@ -94,12 +94,12 @@ export const WHY_PILLARS: WhyPillar[] = [
   {
     id: "pillar-6",
     number: "06",
-    shortTitle: "Studio Direct Value",
-    title: "Direct Workshop Rates with No Middlemen",
-    badge: "HONEST VALUE",
+    shortTitle: "Safe Delivery",
+    title: "Delivered Safely, Anywhere",
+    badge: "TRACKED SHIPPING",
     description:
-      "Get boutique framing quality directly from our studio workshop. Transparent rates, honest craftsmanship, and zero showroom markups or surprise shipping fees.",
-    highlights: ["Direct Workshop Pricing", "Zero Hidden Fees", "Clear Size Tier Pricing"],
+      "Every frame is carefully packed and shipped, with WhatsApp updates so you always know where your order is.",
+    highlights: ["Shockproof Packaging", "WhatsApp Updates", "Safe Doorstep Transit"],
     image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=1200&q=85",
     accentColor: "#64D2FF",
     iconType: "direct",
@@ -220,10 +220,10 @@ export const WhyVictoryAdz: React.FC = () => {
           <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <h2>
               <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
-                Engineered to preserve
+                Why Choose VictoryAdz
               </span>
               <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
-                what matters most
+                8 years of craftsmanship
               </span>
             </h2>
 
@@ -231,7 +231,7 @@ export const WhyVictoryAdz: React.FC = () => {
               className="text-sm sm:text-base text-[#DCDCDC] font-inter-display font-medium max-w-md leading-relaxed"
               style={{ letterSpacing: "0.5px" }}
             >
-              From 25-year anti-fade pigment chemistry and moisture-sealed timber to 5-layer shockproof transit armor — handcrafted by master framers in Kanyakumari.
+              Built on quality and trust, not shortcuts.
             </p>
           </div>
         </div>
@@ -332,12 +332,12 @@ export const WhyVictoryAdz: React.FC = () => {
                 className="text-[13px] text-white/70 font-inter-display font-medium leading-relaxed"
                 style={{ letterSpacing: "0.5px" }}
               >
-                Have specific size or frame requirements? Talk directly with our team.
+                Message us to discuss sizing, frames, and delivery details.
               </p>
               <Button01
-                text="Order on WhatsApp"
+                text="ORDER NOW"
                 onClick={handleWhatsAppOrder}
-                ariaLabel="Order on WhatsApp"
+                ariaLabel="Order Now"
                 className="w-full"
               />
             </div>
@@ -440,12 +440,12 @@ export const WhyVictoryAdz: React.FC = () => {
             className="text-xs xs:text-[13px] text-white/70 text-center font-inter-display font-medium leading-relaxed"
             style={{ letterSpacing: "0.5px" }}
           >
-            Have specific size or frame requirements? Talk directly with our team on WhatsApp.
+            Message us to discuss sizing, frames, and delivery details.
           </p>
           <Button01
-            text="Order on WhatsApp"
+            text="ORDER NOW"
             onClick={handleWhatsAppOrder}
-            ariaLabel="Order on WhatsApp"
+            ariaLabel="Order Now"
             className="w-full"
           />
         </div>

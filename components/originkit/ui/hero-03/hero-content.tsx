@@ -41,11 +41,10 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
           <motion.div {...reveal(0.12)} className="text-center w-full">
             <h1 className="w-full text-center text-white select-none">
               <span className="block font-cal-sans text-[36px] xs:text-[44px] sm:text-[54px] ipad:text-[62px] desktop-sm:text-[66px] leading-[1.03] tracking-normal font-semibold text-white">
-                Your Best<br />
-                Moments, Framed
+                Your Photos, Framed
               </span>
               <span className="block font-great-vibes text-[44px] xs:text-[54px] sm:text-[68px] ipad:text-[76px] desktop-sm:text-[84px] leading-[1.05] font-normal text-white mt-0.5 sm:mt-1">
-                to Last Forever
+                to Last a Lifetime
               </span>
             </h1>
           </motion.div>
@@ -55,7 +54,7 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
               className="w-full max-w-[348px] ipad:max-w-[450px] desktop-sm:max-w-[460px] text-center font-inter-display font-medium text-[13px] sm:text-[14px] ipad:text-[14.5px] desktop-sm:text-[15px] leading-relaxed text-[#E0E0E0] px-2 block"
               style={{ letterSpacing: "0.5px" }}
             >
-              Studio grade framing &amp; archival lamination trusted by 15,000+ homes across Tamil Nadu. Send photo on WhatsApp for custom sizes, frame choices &amp; instant pricing.
+              Custom photo framing and premium lamination, trusted by families across Tamil Nadu for 8+ years — even if you&apos;re ordering from another state.
             </p>
           </motion.div>
         </div>
@@ -65,8 +64,8 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
           className="pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-3 sm:gap-4 ipad:gap-5 w-full px-2"
         >
           <Button01
-            text="Explore Gallery"
-            ariaLabel="Explore Gallery"
+            text="See Our Work"
+            ariaLabel="See Our Work"
             variant="dark"
             onClick={onExplore}
             className="w-full sm:w-auto"

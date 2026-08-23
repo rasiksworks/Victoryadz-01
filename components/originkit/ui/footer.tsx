@@ -138,11 +138,11 @@ export const Footer: React.FC = () => {
               </h3>
               <ul className="space-y-3 font-mono text-xs text-white/90">
                 {[
-                  { label: "[ HOME ]", target: "hero" },
-                  { label: "[ HOW IT WORKS ]", target: "how-it-works" },
-                  { label: "[ RECENT WORKS ]", target: "recent-works" },
-                  { label: "[ WHY US ]", target: "why-victory-adz" },
-                  { label: "[ FAQ ]", target: "faq" },
+                  { label: "Home", target: "hero" },
+                  { label: "How It Works", target: "how-it-works" },
+                  { label: "Recent Works", target: "recent-works" },
+                  { label: "Why Us", target: "why-victory-adz" },
+                  { label: "FAQ", target: "faq" },
                 ].map((item) => (
                   <li key={item.label}>
                     <button
@@ -178,7 +178,7 @@ export const Footer: React.FC = () => {
                 className="mt-4 font-inter-display text-[12px] sm:text-[13px] text-white/70 font-medium leading-relaxed max-w-xs"
                 style={{ letterSpacing: "0.5px" }}
               >
-                Send your photo on WhatsApp for custom sizing advice, frame options, and an instant price quote.
+                Message us to discuss sizing, frames, and delivery details.
               </p>
             </div>
 
