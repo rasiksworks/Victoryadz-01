@@ -44,7 +44,7 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
                 Your Best<br />
                 Moments, Framed
               </span>
-              <span className="block font-great-vibes text-[44px] xs:text-[54px] sm:text-[68px] ipad:text-[76px] desktop-sm:text-[84px] leading-[1.1] font-normal text-white mt-2.5 sm:mt-4 ipad:mt-5">
+              <span className="block font-great-vibes text-[44px] xs:text-[54px] sm:text-[68px] ipad:text-[76px] desktop-sm:text-[84px] leading-[1.05] font-normal text-white mt-0.5 sm:mt-1">
                 to Last Forever
               </span>
             </h1>
