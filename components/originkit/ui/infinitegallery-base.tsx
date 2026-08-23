@@ -713,12 +713,141 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
             driftTY.set(0)
         }
 
+        // ---- Touch Multi-touch & Pinch Support for Mobile ----
+        let touchStartDist = 0
+        let touchStartMidX = 0
+        let touchStartMidY = 0
+        let touchLastX = 0
+        let touchLastY = 0
+        let touchLastT = 0
+        let isTouching = false
+        let touchCount = 0
+
+        const getTouchDist = (t1: Touch, t2: Touch) => {
+            return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY)
+        }
+
+        const getTouchMid = (t1: Touch, t2: Touch) => {
+            return {
+                x: (t1.clientX + t2.clientX) / 2,
+                y: (t1.clientY + t2.clientY) / 2,
+            }
+        }
+
+        const onTouchStart = (e: TouchEvent) => {
+            if (e.touches.length === 1) {
+                isTouching = true
+                touchCount = 1
+                touchLastX = e.touches[0].clientX
+                touchLastY = e.touches[0].clientY
+                touchLastT = e.timeStamp
+            } else if (e.touches.length >= 2) {
+                isTouching = true
+                touchCount = e.touches.length
+                touchStartDist = getTouchDist(e.touches[0], e.touches[1])
+                const mid = getTouchMid(e.touches[0], e.touches[1])
+                touchStartMidX = mid.x
+                touchStartMidY = mid.y
+                touchLastT = e.timeStamp
+            }
+        }
+
+        const onTouchMove = (e: TouchEvent) => {
+            if (!isTouching) return
+            if (e.cancelable) e.preventDefault()
+
+            const lz = logZoom.get()
+            const frac = lz - Math.floor(lz)
+            const effScale =
+                (1 - frac) * Math.pow(2, frac) + frac * Math.pow(2, frac - 1)
+
+            if (e.touches.length === 1 && touchCount === 1) {
+                const curX = e.touches[0].clientX
+                const curY = e.touches[0].clientY
+                const dpx = curX - touchLastX
+                const dpy = curY - touchLastY
+
+                const dWorldX = (-dpx / (PX_PER_UNIT * effScale)) * safeDragSpeed
+                const dWorldY = (-dpy / (PX_PER_UNIT * effScale)) * safeDragSpeed
+                targetX.set(targetX.get() + dWorldX)
+                targetY.set(targetY.get() + dWorldY)
+
+                const dt = Math.max(1, e.timeStamp - touchLastT)
+                const k = 16 / dt
+                velX.set(dWorldX * k)
+                velY.set(dWorldY * k)
+
+                touchLastX = curX
+                touchLastY = curY
+                touchLastT = e.timeStamp
+            } else if (e.touches.length >= 2) {
+                const curDist = getTouchDist(e.touches[0], e.touches[1])
+                const mid = getTouchMid(e.touches[0], e.touches[1])
+
+                // Pinch Zoom
+                if (touchStartDist > 0) {
+                    const distDelta = curDist - touchStartDist
+                    const zoomStep = distDelta * 0.005 * safeDragSpeed
+                    velLogZoom.set(velLogZoom.get() + zoomStep)
+                }
+
+                // 2-finger Pan
+                const dpx = mid.x - touchStartMidX
+                const dpy = mid.y - touchStartMidY
+                const dWorldX = (-dpx / (PX_PER_UNIT * effScale)) * safeDragSpeed * 0.8
+                const dWorldY = (-dpy / (PX_PER_UNIT * effScale)) * safeDragSpeed * 0.8
+                targetX.set(targetX.get() + dWorldX)
+                targetY.set(targetY.get() + dWorldY)
+
+                touchStartDist = curDist
+                touchStartMidX = mid.x
+                touchStartMidY = mid.y
+                touchLastT = e.timeStamp
+            }
+        }
+
+        const onTouchEnd = (e: TouchEvent) => {
+            if (e.touches.length === 0) {
+                isTouching = false
+                touchCount = 0
+                touchStartDist = 0
+            } else if (e.touches.length === 1) {
+                touchCount = 1
+                touchLastX = e.touches[0].clientX
+                touchLastY = e.touches[0].clientY
+                touchLastT = e.timeStamp
+            }
+        }
+
+        // Custom Event Listeners for Floating Zoom Controls
+        const handleCustomZoom = (e: any) => {
+            const amount = e?.detail?.amount || 0.4
+            velLogZoom.set(velLogZoom.get() + amount)
+        }
+        const handleCustomReset = () => {
+            targetX.set(0)
+            targetY.set(0)
+            targetLogZoom.set(0)
+            velX.set(0)
+            velY.set(0)
+            velLogZoom.set(0)
+        }
+
         el.addEventListener("pointerdown", onDown)
         el.addEventListener("pointermove", onMove)
         el.addEventListener("pointerup", onUp)
         el.addEventListener("pointercancel", onCancel)
         el.addEventListener("wheel", onWheel, { passive: false })
         el.addEventListener("pointerleave", onLeave)
+
+        // Native touch listeners for mobile 60fps gestures and pinch-to-zoom
+        el.addEventListener("touchstart", onTouchStart, { passive: false })
+        el.addEventListener("touchmove", onTouchMove, { passive: false })
+        el.addEventListener("touchend", onTouchEnd, { passive: false })
+        el.addEventListener("touchcancel", onTouchEnd, { passive: false })
+
+        window.addEventListener("gallery-zoom", handleCustomZoom as EventListener)
+        window.addEventListener("gallery-reset", handleCustomReset as EventListener)
 
         el.style.cursor = "grab"
 
@@ -729,6 +858,14 @@ function __OriginkitBase_InfiniteGallery(props: InfiniteGalleryProps) {
             el.removeEventListener("pointercancel", onCancel)
             el.removeEventListener("wheel", onWheel)
             el.removeEventListener("pointerleave", onLeave)
+
+            el.removeEventListener("touchstart", onTouchStart)
+            el.removeEventListener("touchmove", onTouchMove)
+            el.removeEventListener("touchend", onTouchEnd)
+            el.removeEventListener("touchcancel", onTouchEnd)
+
+            window.removeEventListener("gallery-zoom", handleCustomZoom as EventListener)
+            window.removeEventListener("gallery-reset", handleCustomReset as EventListener)
         }
     }, [
         isStatic,
