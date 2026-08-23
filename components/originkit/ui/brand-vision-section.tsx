@@ -19,10 +19,10 @@ export const BrandVisionSection: React.FC = () => {
           {/* Left Description */}
           <div className="flex flex-col justify-start">
             <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block mb-3">
-              ABOUT US
+              [ THE VICTORY ADZ PROMISE ]
             </span>
             <ScrollHighlight className="text-xs md:text-sm leading-relaxed max-w-lg font-light block">
-              Specializing in premium photo frames, we focus on craftsmanship that preserves your memories with the quality they deserve. Every frame is made with precision, using high-quality materials and lamination finishes that stand the test of time. Whether you&apos;re across the street or across the state, every frame is packed and shipped the same way we&apos;d hand it to you in person.
+              For 8+ years, we&apos;ve transformed cherished moments — wedding vows, newborn smiles, and family milestones — into heirloom-grade wall art. Using 12-color archival pigment printing, scratch-resistant lamination, and moisture-proof mouldings, we craft frames built to outlast generations.
             </ScrollHighlight>
           </div>
 
@@ -33,7 +33,7 @@ export const BrandVisionSection: React.FC = () => {
               direction="center-horizontal"
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08]"
             >
-              Crafting frames that turn your memories into art
+              Photos trapped on screens get forgotten. Framed on your wall, they live forever.
             </MaskTextReveal>
           </div>
         </div>
@@ -87,10 +87,10 @@ export const BrandVisionSection: React.FC = () => {
                 direction="center-horizontal"
                 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-snug text-center"
               >
-                Captured once.{"\n"}Meant to last forever.
+                Captured once.{"\n"}Built to last generations.
               </MaskTextReveal>
               <ScrollHighlight className="text-xs md:text-sm leading-relaxed font-light block">
-                A photo is a single moment, but it deserves to be seen every day, not stored away in a phone. For 8 years, VictoryAdz has been turning photographs into lasting pieces, using premium materials and a range of lamination finishes to protect every detail. Every order starts with understanding what you need, and we personally guide you through choosing the right size, finish, and frame for your memory. Send us your photo on WhatsApp, and we&apos;ll walk you through every choice before anything gets printed. You approve it, then we frame and ship it to you, wherever you are.
+                A digital photo is easily buried in camera rolls. On your wall, it becomes a daily reminder of the people and moments that matter most. We consult with you 1-on-1 on WhatsApp, providing live digital previews with custom frame styles, matte/gloss finishes, and proportional wall sizing before anything is printed. Once approved, our master craftsmen handcraft your piece and ship it in 5-layer shockproof boxing anywhere in India.
               </ScrollHighlight>
             </div>
 
@@ -106,9 +106,9 @@ export const BrandVisionSection: React.FC = () => {
                 />
               </ImageReveal>
               <Button01
-                text="Discover Our Craft"
+                text="Explore Real Frames"
                 href="/works"
-                ariaLabel="Discover our craft"
+                ariaLabel="Explore real frames"
               />
             </div>
 
@@ -137,7 +137,7 @@ export const BrandVisionSection: React.FC = () => {
             {/* Bottom Pull Quote */}
             <div className="text-center max-w-md mx-auto pt-4 pb-6 sm:pb-10">
               <ScrollHighlight className="text-xl md:text-2xl font-bold tracking-tight text-center leading-snug block">
-                &quot;A photo fades on a screen. On your wall, in a VictoryAdz frame, it becomes something you never stop noticing.&quot;
+                &quot;A photo fades inside a camera roll. On your wall, in a handcrafted VictoryAdz frame, it becomes an heirloom your family treasures forever.&quot;
               </ScrollHighlight>
             </div>
 

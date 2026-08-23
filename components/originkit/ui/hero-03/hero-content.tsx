@@ -50,14 +50,13 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
               direction="center-horizontal"
               className="w-full max-w-[378px] text-center font-instrument-serif text-[38px] sm:text-[46px] leading-[44px] sm:leading-[54px] tracking-[-1.1px] sm:tracking-[-1.38px] text-white text-balance ipad:max-w-[490px] ipad:text-[62px] ipad:leading-[75px] ipad:tracking-[-1.86px] desktop-sm:max-w-[502px] desktop-sm:text-[68px] desktop-sm:leading-[70px] desktop-sm:tracking-[-2.04px]"
             >
-              Your Photos, Framed to Last a Lifetime
+              Your Best Moments, Framed to Last Forever
             </MaskTextReveal>
           </motion.div>
 
           <motion.div {...reveal(0.22)}>
-            <ScrollHighlight className="w-full max-w-[338px] text-center font-tight text-[13px] sm:text-[14px] leading-relaxed tracking-[-0.28px] text-pretty ipad:max-w-[438px] ipad:text-[18px] ipad:tracking-[-0.36px] desktop-sm:max-w-[321px] desktop-sm:text-[17px] desktop-sm:leading-[25.5px] desktop-sm:tracking-[-0.34px] block px-2">
-              Premium custom framing and lamination, trusted by families across
-              Tamil Nadu for 8+ years, even if you&apos;re miles away.
+            <ScrollHighlight className="w-full max-w-[348px] text-center font-tight text-[13px] sm:text-[14px] leading-relaxed tracking-[-0.28px] text-pretty ipad:max-w-[448px] ipad:text-[17px] ipad:tracking-[-0.36px] desktop-sm:max-w-[340px] desktop-sm:text-[16px] desktop-sm:leading-[24px] desktop-sm:tracking-[-0.34px] block px-2">
+              Studio-grade framing &amp; archival lamination, trusted by 15,000+ homes across India. Send your photo on WhatsApp — get a free preview in minutes.
             </ScrollHighlight>
           </motion.div>
         </div>
@@ -66,12 +65,12 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
           {...reveal(0.32)}
           className="pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-3 sm:gap-[17px] ipad:gap-[22px] desktop-sm:gap-4 w-full px-2"
         >
-          <Button variant="primary" aria-label="See Our Work" onClick={onExplore} className="w-full sm:w-auto">
-            See Our Work
+          <Button variant="primary" aria-label="Explore Gallery" onClick={onExplore} className="w-full sm:w-auto">
+            Explore Gallery
           </Button>
           <Button01
-            text="Order on WhatsApp"
-            ariaLabel="Order on WhatsApp"
+            text="Get Free WhatsApp Preview"
+            ariaLabel="Get Free WhatsApp Preview"
             onClick={onBook}
             className="w-full sm:w-auto"
           />

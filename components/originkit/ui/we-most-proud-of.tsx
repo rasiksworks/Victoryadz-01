@@ -246,13 +246,13 @@ export const WeMostProudOf: React.FC = () => {
               dimColor="rgba(255, 255, 255, 0.2)"
               highlightColor="#FFFFFF"
             >
-              RECENT WORK&apos;S
+              FEATURED FRAMES &amp; GALLERY
             </ScrollHighlight>
           </div>
 
-          <a href="/works" className="block">
+          <a href="/works" className="block" aria-label="View full gallery">
             <Button variant="secondary" className="px-5 sm:px-6 uppercase tracking-widest text-xs touch-manipulation">
-              EXPLORE ALL
+              VIEW FULL GALLERY
             </Button>
           </a>
         </div>

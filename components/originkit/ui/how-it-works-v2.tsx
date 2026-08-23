@@ -22,26 +22,26 @@ interface StepData {
 const STEPS: StepData[] = [
   {
     number: "01",
-    title: "Send Your Photo",
-    body: "Share your photo with us on WhatsApp. Any photo, any condition.",
+    title: "Send on WhatsApp",
+    body: "Drop your photo on WhatsApp. Any resolution — our team enhances and upscales it for crystal-clear printing.",
     cellPosDesktop: { left: "0%", top: "0%" },
   },
   {
     number: "02",
-    title: "We Guide You",
-    body: "We help you choose the size, frame style, and lamination finish that suits your memory.",
+    title: "Free Digital Mockup",
+    body: "See exact frame styles, border matting, and size previews on WhatsApp before you pay a single rupee.",
     cellPosDesktop: { left: "25%", top: "0%" },
   },
   {
     number: "03",
-    title: "We Craft It",
-    body: "Your frame is made by hand with the same care we have put into every order for 8+ years.",
+    title: "Archival Crafting",
+    body: "Printed with 12-color archival inks and finished with scratch-proof, anti-glare lamination that won't fade for 25+ years.",
     cellPosDesktop: { left: "50%", top: "50%" },
   },
   {
     number: "04",
-    title: "We Ship It Safely",
-    body: "Packed carefully and shipped to your door, with WhatsApp updates the whole way.",
+    title: "Safe Doorstep Delivery",
+    body: "Protected in 5-layer shockproof boxing and shipped tracked to your door. If it arrives damaged, we replace it free.",
     cellPosDesktop: { left: "75%", top: "50%" },
   },
 ];
@@ -330,7 +330,7 @@ export const HowItWorksV2: React.FC = () => {
 
   const handleWhatsAppOrder = () => {
     const message = encodeURIComponent(
-      "Hi VictoryAdz! I'm on the How It Works page and would like to start my custom photo frame order."
+      "Hi VictoryAdz! I'd like to get a free digital mockup for my photo frame."
     );
     window.open(`https://wa.me/919361312684?text=${message}`, "_blank");
   };
@@ -386,15 +386,15 @@ export const HowItWorksV2: React.FC = () => {
             className="text-[18px] xl:text-[22px] font-medium text-[#E8E8E8] leading-snug text-right"
             style={{ fontFamily: "'Inter Display', sans-serif" }}
           >
-            From your photo to your wall, wherever you are. No shop visit needed.
+            From your phone to your wall in 4 simple steps. No shop visit, no guesswork.
           </p>
 
           {/* CTA Button */}
           <div className="pt-2 flex items-center justify-end">
             <Button01
-              text="Order on WhatsApp"
+              text="Get Free Digital Mockup"
               onClick={handleWhatsAppOrder}
-              ariaLabel="Order on WhatsApp"
+              ariaLabel="Get Free Digital Mockup on WhatsApp"
               className="pointer-events-auto"
             />
           </div>
@@ -477,13 +477,13 @@ export const HowItWorksV2: React.FC = () => {
             className="text-xs xs:text-sm font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
             style={{ fontFamily: "'Inter Display', sans-serif" }}
           >
-            From your photo to your wall. No shop visit needed.
+            From your phone to your wall in 4 simple steps. No shop visit needed.
           </p>
           <div className="pt-1 flex items-center justify-center w-full">
             <Button01
-              text="Order on WhatsApp"
+              text="Get Free Digital Mockup"
               onClick={handleWhatsAppOrder}
-              ariaLabel="Order on WhatsApp"
+              ariaLabel="Get Free Digital Mockup on WhatsApp"
               className="pointer-events-auto"
             />
           </div>

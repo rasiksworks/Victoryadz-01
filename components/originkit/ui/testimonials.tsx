@@ -15,26 +15,26 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     id: "t1",
-    quote: "I was nervous sending my only copy of my parents' wedding photo, but the WhatsApp updates put me at ease. The final frame is gorgeous.",
-    name: "Priya",
-    location: "Nagercoil",
-  },
-  {
-    id: "t2",
-    quote: "Exceptional quality. They walked me through the lamination choices on WhatsApp before printing. It arrived in perfect condition.",
-    name: "Arun",
-    location: "Trivandrum",
-  },
-  {
-    id: "t3",
-    quote: "The packaging was incredibly secure. Even being so far away, I felt like I was in the shop picking out the frame myself.",
-    name: "Lakshmi",
+    quote: "I sent an old, blurry phone photo of my parents' 50th anniversary. They upscaled the resolution, sent a digital mockup, and framed it in teak wood. Arrived in Chennai in 4 days with zero damage.",
+    name: "Priya Sundaram",
     location: "Chennai",
   },
   {
+    id: "t2",
+    quote: "The WhatsApp preview helped us choose the exact size for our living room wall. The anti-glare matte lamination has zero reflection even under direct sunlight. True craftsmanship.",
+    name: "Arun Kumar",
+    location: "Coimbatore",
+  },
+  {
+    id: "t3",
+    quote: "I was genuinely nervous about glass breaking during transit to Bangalore. But the 5-layer foam crating was rock-solid. The wedding portrait is now the center of our new home.",
+    name: "Dr. Lakshmi V.",
+    location: "Bangalore",
+  },
+  {
     id: "t4",
-    quote: "The attention to detail is amazing. It's not just a photo frame, it's a piece of art that completely transformed our living room.",
-    name: "Karthik",
+    quote: "Best framing studio in Tamil Nadu. The 1-on-1 WhatsApp guidance felt like visiting a luxury boutique in person. We've already ordered 3 more frames for our parents.",
+    name: "Karthik Raja",
     location: "Madurai",
   },
 ];

@@ -23,8 +23,8 @@ export const WHY_VICTORY_CARDS: WhyReasonCard[] = [
   {
     id: "card-1",
     number: "01",
-    badge: "PREMIUM MATERIALS",
-    tagline: "Museum-Grade Acrylic & Solid Hardwood Built to Endure!",
+    badge: "25-YR ARCHIVAL",
+    tagline: "12-Color Archival Pigment Inks That Never Fade or Discolor",
     bgColor: "#0a7cc1",
     image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80",
     iconType: "materials",
@@ -32,47 +32,47 @@ export const WHY_VICTORY_CARDS: WhyReasonCard[] = [
   {
     id: "card-2",
     number: "02",
-    badge: "CUSTOM FINISHES",
-    tagline: "Matte, Glossy & Textured Anti-Glare Lamination Finishes!",
+    badge: "100% SAFE TRANSIT",
+    tagline: "5-Layer Shockproof Boxing. Zero-Risk Free Replacement Guarantee.",
     bgColor: "#ff431e",
-    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900&q=80",
-    iconType: "finishes",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&q=80",
+    iconType: "shipping",
   },
   {
     id: "card-3",
     number: "03",
-    badge: "8+ YEARS MASTERY",
-    tagline: "Master Artisans Perfecting Every Single Precision Cut!",
+    badge: "FREE MOCKUP",
+    tagline: "1-on-1 WhatsApp Guidance with Live Frame & Wall Visualizers",
     bgColor: "#307c5f",
-    image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=900&q=80",
-    iconType: "craft",
-  },
-  {
-    id: "card-4",
-    number: "04",
-    badge: "HONEST VALUE",
-    tagline: "Direct Workshop Pricing: Zero Middlemen & Fair Rates.",
-    bgColor: "#ff431e",
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=900&q=80",
-    iconType: "pricing",
-  },
-  {
-    id: "card-5",
-    number: "05",
-    badge: "1-ON-1 GUIDANCE",
-    tagline: "Personal WhatsApp Consultation & Live Photo Previews.",
-    bgColor: "#0a7cc1",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=80",
     iconType: "support",
   },
   {
+    id: "card-4",
+    number: "04",
+    badge: "MASTER CRAFT",
+    tagline: "Seamless Precision Corner Joinery & Moisture-Resistant Mouldings",
+    bgColor: "#ff431e",
+    image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=900&q=80",
+    iconType: "craft",
+  },
+  {
+    id: "card-5",
+    number: "05",
+    badge: "FREE AI RETOUCHING",
+    tagline: "We Upscale Low-Res Snaps & Restore Vintage Photos at No Extra Cost",
+    bgColor: "#0a7cc1",
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900&q=80",
+    iconType: "finishes",
+  },
+  {
     id: "card-6",
     number: "06",
-    badge: "PAN-INDIA COURIER",
-    tagline: "5-Layer Shock-Proof Crating Delivered to Your Doorstep.",
+    badge: "STUDIO DIRECT",
+    tagline: "Direct Workshop Pricing with No Middleman or Hidden Shipping Costs",
     bgColor: "#307c5f",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&q=80",
-    iconType: "shipping",
+    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=900&q=80",
+    iconType: "pricing",
   },
 ];
 
@@ -140,7 +140,7 @@ export const WhyVictoryAdz: React.FC = () => {
   const handleWhatsAppOrder = () => {
     window.open(
       "https://wa.me/919361312684?text=" +
-        encodeURIComponent("Hi VictoryAdz! I would like to order a custom frame."),
+        encodeURIComponent("Hi VictoryAdz! I'd like to get a free mockup and price quote for my photo frame."),
       "_blank"
     );
   };
@@ -357,14 +357,14 @@ export const WhyVictoryAdz: React.FC = () => {
 
       {/* ── BOTTOM CALL TO ACTION ── */}
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-white/10 z-10">
-        <p className="text-xs sm:text-base text-white/70 font-medium text-center sm:text-left">
-          Have a custom idea in mind? Message us for instant mockups &amp; quotes.
+        <p className="text-xs sm:text-base text-white/80 font-medium text-center sm:text-left">
+          Have a photo in mind? Send it over for an instant free digital mockup &amp; quote.
         </p>
 
         <Button01
-          text="Order on WhatsApp"
+          text="Get Free WhatsApp Mockup"
           onClick={handleWhatsAppOrder}
-          ariaLabel="Order on WhatsApp"
+          ariaLabel="Get Free WhatsApp Mockup"
         />
       </div>
     </section>

@@ -23,7 +23,7 @@ export const Section12Hero = () => {
   const handleBook = () => {
     window.open(
       "https://wa.me/919361312684?text=" +
-        encodeURIComponent("Hi VictoryAdz! I would like to order a custom frame."),
+        encodeURIComponent("Hi VictoryAdz! I would like to get a free preview & quote for my photo frame."),
       "_blank"
     );
   };
