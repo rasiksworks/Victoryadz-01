@@ -40,7 +40,7 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
         <div className="flex w-full flex-col items-center gap-[14px] ipad:gap-[18px] desktop-sm:gap-3.5">
           <motion.div {...reveal(0.12)} className="text-center w-full">
             <h1 className="w-full text-center text-white select-none">
-              <span className="block font-cal-sans text-[36px] xs:text-[44px] sm:text-[54px] ipad:text-[62px] desktop-sm:text-[66px] leading-[1.03] tracking-[-0.02em] font-semibold text-white">
+              <span className="block font-cal-sans text-[36px] xs:text-[44px] sm:text-[54px] ipad:text-[62px] desktop-sm:text-[66px] leading-[1.03] tracking-normal font-semibold text-white">
                 Your Best<br />
                 Moments, Framed
               </span>
