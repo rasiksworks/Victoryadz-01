@@ -74,31 +74,32 @@ export const WhyVictoryAdz: React.FC = () => {
     const track = trackRef.current;
     if (!section || !trackWrapper || !track) return;
 
-    const mm = gsap.matchMedia();
-
-    // DESKTOP (>= 1024px): Pinned horizontal card glide with magnetic step locks
-    mm.add("(min-width: 1024px)", () => {
-      const getCardStep = (stepIdx: number) => {
-        const firstCard = track.querySelector(".why-card") as HTMLElement | null;
-        const cardWidth = firstCard ? firstCard.offsetWidth : trackWrapper.clientWidth;
-        const maxScroll = Math.max(0, track.scrollWidth - trackWrapper.clientWidth);
-        return Math.min(maxScroll, stepIdx * cardWidth);
-      };
-
+    const ctx = gsap.context(() => {
       const numCards = WHY_REASONS.length; // 6
       const stepDuration = 1.0;
-      const snapIncrement = 1 / (numCards - 1);
+      const snapIncrement = 1 / (numCards - 1); // 0.2
+
+      const getCardStep = (idx: number) => {
+        const cards = track.querySelectorAll(".why-card");
+        if (!cards || cards.length === 0) return 0;
+        const firstCard = cards[0] as HTMLElement;
+        const cardWidth = firstCard.offsetWidth;
+        const maxScroll = Math.max(0, track.scrollWidth - trackWrapper.clientWidth);
+        return Math.min(maxScroll, idx * cardWidth);
+      };
+
+      const isMobile = window.innerWidth < 768;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${numCards * 480}`,
+          end: () => `+=${numCards * (isMobile ? 480 : 560)}`,
           scrub: 0.5,
           snap: {
             snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
-            duration: { min: 0.25, max: 0.5 },
+            duration: { min: 0.2, max: 0.45 },
             delay: 0.05,
             ease: "power2.out",
           },
@@ -117,39 +118,45 @@ export const WhyVictoryAdz: React.FC = () => {
         },
       });
 
+      // Sequential Step-by-Step Card Revelations and Discrete Track Glides
       WHY_REASONS.forEach((_, idx) => {
         const textEl = cardTextRefs.current[idx];
         const lineEl = cardLineRefs.current[idx];
         const plusEl = cardPlusRefs.current[idx];
         const stepStart = idx * stepDuration;
 
+        // For Card 2 through Card 6: Glide track to bring card `idx` into view
         if (idx > 0) {
           tl.to(
             track,
             {
               x: () => -getCardStep(idx),
               ease: "power2.inOut",
-              duration: stepDuration * 0.5,
+              duration: stepDuration * 0.45,
             },
-            stepStart - stepDuration * 0.45
+            stepStart
           );
         }
 
+        // 1. Text reveals with smooth fade-in
         if (textEl) {
           tl.fromTo(
             textEl,
             { opacity: 0, y: 14 },
             { opacity: 1, y: 0, duration: stepDuration * 0.35, ease: "power1.out" },
-            stepStart
+            idx === 0 ? 0 : stepStart + 0.15
           );
         }
 
+        // 2. Plus button spins and moves from left to right, drawing the line behind it
         if (lineEl && plusEl) {
+          const animStart = idx === 0 ? 0.05 : stepStart + 0.2;
+
           tl.fromTo(
             plusEl,
             { opacity: 0, left: "0%", rotation: 0 },
             { opacity: 1, duration: 0.08, ease: "power1.out" },
-            stepStart
+            animStart
           );
 
           tl.to(
@@ -158,9 +165,9 @@ export const WhyVictoryAdz: React.FC = () => {
               left: "100%",
               rotation: 360,
               ease: "none",
-              duration: stepDuration * 0.8,
+              duration: stepDuration * 0.7,
             },
-            stepStart + 0.05
+            animStart + 0.05
           );
 
           tl.fromTo(
@@ -169,11 +176,12 @@ export const WhyVictoryAdz: React.FC = () => {
             {
               width: "100%",
               ease: "none",
-              duration: stepDuration * 0.8,
+              duration: stepDuration * 0.7,
             },
-            stepStart + 0.05
+            animStart + 0.05
           );
 
+          // Settle straight
           tl.to(
             plusEl,
             {
@@ -182,37 +190,23 @@ export const WhyVictoryAdz: React.FC = () => {
               duration: 0.08,
               ease: "power1.out",
             },
-            stepStart + stepDuration * 0.85
+            animStart + stepDuration * 0.75
           );
         }
       });
-    });
-
-    // MOBILE & TABLET (< 1024px): Natural unpinned flow so Testimonials is 100% visible
-    mm.add("(max-width: 1023px)", () => {
-      cardTextRefs.current.forEach((el) => {
-        if (el) gsap.set(el, { opacity: 1, y: 0 });
-      });
-      cardLineRefs.current.forEach((el) => {
-        if (el) gsap.set(el, { width: "100%" });
-      });
-      cardPlusRefs.current.forEach((el) => {
-        if (el) gsap.set(el, { opacity: 1, left: "100%", rotation: 360 });
-      });
-      gsap.set(track, { x: 0 });
-    });
+    }, section);
 
     const handleResize = () => {
       ScrollTrigger.refresh();
     };
 
     window.addEventListener("resize", handleResize);
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 200);
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 250);
 
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(timer);
-      mm.revert();
+      ctx.revert();
     };
   }, []);
 
@@ -220,7 +214,7 @@ export const WhyVictoryAdz: React.FC = () => {
     <section
       id="why-victory-adz"
       ref={sectionRef}
-      className="relative z-20 w-full bg-[#141414] text-white font-inter-display select-none py-14 sm:py-20 lg:py-24 overflow-hidden border-t border-white/5"
+      className="relative z-20 w-full min-h-screen h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-10 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
       style={{ backgroundColor: "#141414" }}
     >
       <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
@@ -239,8 +233,8 @@ export const WhyVictoryAdz: React.FC = () => {
           </h2>
         </div>
 
-        {/* ── DESKTOP ONLY: SEQUENTIAL CARD-BY-CARD REVEAL TRACK (>= 1024px) ── */}
-        <div ref={trackWrapperRef} className="hidden lg:block w-full overflow-x-hidden overflow-y-visible pb-8 sm:pb-12 pt-8 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
+        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK (1 Card at a time on mobile, multi-card on desktop) ── */}
+        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
           <div
             ref={trackRef}
             className="flex flex-col w-max will-change-transform overflow-visible"
@@ -250,7 +244,7 @@ export const WhyVictoryAdz: React.FC = () => {
               {WHY_REASONS.map((reason, index) => (
                 <div
                   key={reason.id}
-                  className="why-card flex flex-col justify-between w-[400px] xl:w-[420px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                  className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[460px] lg:w-[400px] xl:w-[420px] h-[260px] xs:h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
                 >
                   {/* Card Text Content */}
                   <div
@@ -260,12 +254,12 @@ export const WhyVictoryAdz: React.FC = () => {
                     className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
                   >
                     {/* Eyebrow Label */}
-                    <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-3 sm:mb-4">
+                    <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-2.5 sm:mb-4">
                       REASON - {reason.number}
                     </span>
 
                     {/* Title */}
-                    <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-3 sm:mb-4">
+                    <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-2.5 sm:mb-4">
                       {reason.title}
                     </h3>
 
@@ -300,37 +294,6 @@ export const WhyVictoryAdz: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* ── MOBILE & TABLET: RESPONSIVE BENEFIT GRID (< 1024px) ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-8 pb-4 lg:hidden w-full">
-          {WHY_REASONS.map((reason) => (
-            <div
-              key={reason.id}
-              className="flex flex-col justify-between p-6 sm:p-7 rounded-xl bg-[#1a1a1c] border border-white/10 gap-5 shadow-xl"
-              style={{ backgroundColor: "#1a1a1c" }}
-            >
-              <div className="flex flex-col gap-2.5">
-                <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium">
-                  REASON - {reason.number}
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                  {reason.title}
-                </h3>
-                <p className="text-sm text-white/75 font-light leading-relaxed">
-                  {reason.content}
-                </p>
-              </div>
-              <div className="relative w-full pt-4 border-t border-white/10 flex items-center justify-between">
-                <span className="text-[11px] font-mono text-white/40 uppercase tracking-widest">
-                  VictoryAdz Standard
-                </span>
-                <span className="text-white font-mono text-sm font-bold">
-                  +
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
 
       </div>
