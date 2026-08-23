@@ -216,17 +216,7 @@ export const WhyVictoryAdz: React.FC = () => {
       <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* ── TOP SECTION HEADER ── */}
-        <div className="w-full flex flex-col items-start gap-3 pb-8 sm:pb-12 border-b border-white/10">
-          <div className="flex items-center gap-2.5">
-            <span
-              className="inline-block w-2.5 h-2.5 rounded-full transition-colors duration-500 animate-pulse"
-              style={{ backgroundColor: activePillar.accentColor }}
-            />
-            <span className="text-xs font-mono font-medium tracking-[0.25em] text-white/60 uppercase">
-              [ WHY CHOOSE VICTORY ADZ ]
-            </span>
-          </div>
-
+        <div className="w-full flex flex-col items-start gap-4 pb-8 sm:pb-12 border-b border-white/10">
           <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <h2>
               <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
@@ -241,7 +231,7 @@ export const WhyVictoryAdz: React.FC = () => {
               className="text-sm sm:text-base text-[#DCDCDC] font-inter-display font-medium max-w-md leading-relaxed"
               style={{ letterSpacing: "0.5px" }}
             >
-              Every frame is built from the inside out — from 25-year anti-fade pigment chemistry to 5-layer shockproof transit armor.
+              From 25-year anti-fade pigment chemistry and moisture-sealed timber to 5-layer shockproof transit armor — handcrafted by master framers in Kanyakumari.
             </p>
           </div>
         </div>

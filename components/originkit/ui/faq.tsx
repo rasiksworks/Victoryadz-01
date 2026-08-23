@@ -74,10 +74,6 @@ export const FAQ: React.FC = () => {
         
         {/* Header Section */}
         <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-3 max-w-2xl">
-          <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block mb-1">
-            [ FAQ ]
-          </span>
-          
           <h2>
             <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl font-semibold tracking-normal text-white leading-[1.05]">
               Frequently Asked
@@ -91,7 +87,7 @@ export const FAQ: React.FC = () => {
             className="text-sm md:text-base text-[#DCDCDC] font-inter-display font-medium leading-relaxed mt-2 block"
             style={{ letterSpacing: "0.5px" }}
           >
-            Everything you need to know about our remote framing and delivery process.
+            Everything you need to know about photo resolution checks, custom frame moulding finishes, and safe nationwide doorstep delivery.
           </p>
         </div>
 
