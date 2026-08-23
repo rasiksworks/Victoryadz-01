@@ -74,7 +74,10 @@ export const WhyVictoryAdz: React.FC = () => {
     const track = trackRef.current;
     if (!section || !trackWrapper || !track) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    // DESKTOP (>= 1024px): Pinned horizontal card glide with magnetic step locks
+    mm.add("(min-width: 1024px)", () => {
       const getCardStep = (stepIdx: number) => {
         const firstCard = track.querySelector(".why-card") as HTMLElement | null;
         const cardWidth = firstCard ? firstCard.offsetWidth : trackWrapper.clientWidth;
@@ -114,15 +117,12 @@ export const WhyVictoryAdz: React.FC = () => {
         },
       });
 
-      // Card by card stepped reveal and track glide
       WHY_REASONS.forEach((_, idx) => {
         const textEl = cardTextRefs.current[idx];
         const lineEl = cardLineRefs.current[idx];
         const plusEl = cardPlusRefs.current[idx];
-
         const stepStart = idx * stepDuration;
 
-        // For steps after card 1, smoothly glide the track to bring card `idx` into view
         if (idx > 0) {
           tl.to(
             track,
@@ -135,7 +135,6 @@ export const WhyVictoryAdz: React.FC = () => {
           );
         }
 
-        // 1. Text reveals with smooth fade-in
         if (textEl) {
           tl.fromTo(
             textEl,
@@ -145,7 +144,6 @@ export const WhyVictoryAdz: React.FC = () => {
           );
         }
 
-        // 2. Plus button spins and moves from left to right, drawing the line behind it
         if (lineEl && plusEl) {
           tl.fromTo(
             plusEl,
@@ -176,7 +174,6 @@ export const WhyVictoryAdz: React.FC = () => {
             stepStart + 0.05
           );
 
-          // Once line is drawn, plus settles straight (rotation 360) and stays as fixed marker
           tl.to(
             plusEl,
             {
@@ -189,21 +186,33 @@ export const WhyVictoryAdz: React.FC = () => {
           );
         }
       });
+    });
 
-      // Card animations complete cleanly with card 6
-    }, section);
+    // MOBILE & TABLET (< 1024px): Natural unpinned flow so Testimonials is 100% visible
+    mm.add("(max-width: 1023px)", () => {
+      cardTextRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { opacity: 1, y: 0 });
+      });
+      cardLineRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { width: "100%" });
+      });
+      cardPlusRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { opacity: 1, left: "100%", rotation: 360 });
+      });
+      gsap.set(track, { x: 0 });
+    });
 
     const handleResize = () => {
       ScrollTrigger.refresh();
     };
 
     window.addEventListener("resize", handleResize);
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 200);
 
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(timer);
-      ctx.revert();
+      mm.revert();
     };
   }, []);
 
@@ -211,26 +220,27 @@ export const WhyVictoryAdz: React.FC = () => {
     <section
       id="why-victory-adz"
       ref={sectionRef}
-      className="relative z-20 w-full min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-12 sm:py-16 lg:py-24 overflow-hidden border-t border-white/5"
+      className="relative z-20 w-full bg-[#141414] text-white font-inter-display select-none py-14 sm:py-20 lg:py-24 overflow-hidden border-t border-white/5"
+      style={{ backgroundColor: "#141414" }}
     >
       <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
         {/* ── SECTION HEADER ── */}
         <div className="w-full flex flex-col items-start gap-1 pt-2 sm:pt-4">
           <h2 className="flex flex-col items-start">
             <span
-              className="font-cal-sans text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white/90 leading-[1.08]"
+              className="font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-semibold text-white/90 leading-[1.08]"
               style={{ letterSpacing: "0.5px" }}
             >
               Why Choose VictoryAdz
             </span>
-            <span className="font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
+            <span className="font-great-vibes text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
               8 years of craftsmanship
             </span>
           </h2>
         </div>
 
-        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
-        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-8 sm:pb-12 pt-2 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
+        {/* ── DESKTOP ONLY: SEQUENTIAL CARD-BY-CARD REVEAL TRACK (>= 1024px) ── */}
+        <div ref={trackWrapperRef} className="hidden lg:block w-full overflow-x-hidden overflow-y-visible pb-8 sm:pb-12 pt-8 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
           <div
             ref={trackRef}
             className="flex flex-col w-max will-change-transform overflow-visible"
@@ -240,9 +250,9 @@ export const WhyVictoryAdz: React.FC = () => {
               {WHY_REASONS.map((reason, index) => (
                 <div
                   key={reason.id}
-                  className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[440px] lg:w-[400px] xl:w-[420px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                  className="why-card flex flex-col justify-between w-[400px] xl:w-[420px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
                 >
-                  {/* Card Text Content (Fades in smoothly when active) */}
+                  {/* Card Text Content */}
                   <div
                     ref={(el) => {
                       cardTextRefs.current[index] = el;
@@ -265,9 +275,8 @@ export const WhyVictoryAdz: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Individual Bottom Line Segment with Spinning Plus (Invisible until drawn) */}
+                  {/* Individual Bottom Line Segment with Spinning Plus */}
                   <div className="relative w-full py-5 mt-auto select-none overflow-visible">
-                    {/* Active Revealed Line Drawn Behind the Plus Button (Half-white) */}
                     <div
                       ref={(el) => {
                         cardLineRefs.current[index] = el;
@@ -275,8 +284,6 @@ export const WhyVictoryAdz: React.FC = () => {
                       className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/45 will-change-[width]"
                       style={{ width: "0%" }}
                     />
-
-                    {/* Spinning Plus Button that travels left to right to draw the line (Full-white, Unclipped) */}
                     <div
                       ref={(el) => {
                         cardPlusRefs.current[index] = el;
@@ -294,6 +301,38 @@ export const WhyVictoryAdz: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* ── MOBILE & TABLET: RESPONSIVE BENEFIT GRID (< 1024px) ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-8 pb-4 lg:hidden w-full">
+          {WHY_REASONS.map((reason) => (
+            <div
+              key={reason.id}
+              className="flex flex-col justify-between p-6 sm:p-7 rounded-xl bg-[#1a1a1c] border border-white/10 gap-5 shadow-xl"
+              style={{ backgroundColor: "#1a1a1c" }}
+            >
+              <div className="flex flex-col gap-2.5">
+                <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium">
+                  REASON - {reason.number}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
+                  {reason.title}
+                </h3>
+                <p className="text-sm text-white/75 font-light leading-relaxed">
+                  {reason.content}
+                </p>
+              </div>
+              <div className="relative w-full pt-4 border-t border-white/10 flex items-center justify-between">
+                <span className="text-[11px] font-mono text-white/40 uppercase tracking-widest">
+                  VictoryAdz Standard
+                </span>
+                <span className="text-white font-mono text-sm font-bold">
+                  +
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
