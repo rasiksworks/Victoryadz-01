@@ -1,13 +1,7 @@
-// Delivered by Originkit · stack: nextjs · styling: tailwind
-"use client";
-
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { Button } from "@/components/originkit/ui/hero-03/button";
 import { Button01 } from "@/components/ui/nextjsshop-button";
-import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
-import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
 
 /** ease-out-cubic */
 const EASE_OUT = [0.215, 0.61, 0.355, 1] as const;
@@ -42,32 +36,42 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
         className="pointer-events-none absolute top-1/2 left-1/2 h-[300px] w-[360px] -translate-x-1/2 -translate-y-1/2 bg-[#2C2C2C] blur-[36px] ipad:h-[497px] ipad:w-[591px] ipad:blur-[56px] desktop-sm:h-[364px] desktop-sm:w-[433px] desktop-sm:blur-[41px]"
       />
 
-      <div className="relative flex w-full flex-col items-center gap-[34px] ipad:gap-[44px] desktop-sm:gap-8">
-        <div className="flex w-full flex-col items-center gap-[17px] ipad:gap-[22px] desktop-sm:gap-4">
-          <motion.div {...reveal(0.12)} className="text-center">
-            <MaskTextReveal
-              tag="h1"
-              direction="center-horizontal"
-              className="w-full max-w-[378px] text-center font-instrument-serif text-[38px] sm:text-[46px] leading-[44px] sm:leading-[54px] tracking-[-1.1px] sm:tracking-[-1.38px] text-white text-balance ipad:max-w-[490px] ipad:text-[62px] ipad:leading-[75px] ipad:tracking-[-1.86px] desktop-sm:max-w-[502px] desktop-sm:text-[68px] desktop-sm:leading-[70px] desktop-sm:tracking-[-2.04px]"
-            >
-              Your Best Moments, Framed to Last Forever
-            </MaskTextReveal>
+      <div className="relative flex w-full flex-col items-center gap-[28px] ipad:gap-[36px] desktop-sm:gap-7">
+        <div className="flex w-full flex-col items-center gap-[14px] ipad:gap-[18px] desktop-sm:gap-3.5">
+          <motion.div {...reveal(0.12)} className="text-center w-full">
+            <h1 className="w-full text-center text-white select-none">
+              <span className="block font-cal-sans text-[36px] xs:text-[44px] sm:text-[54px] ipad:text-[62px] desktop-sm:text-[66px] leading-[1.03] tracking-[-0.02em] font-semibold text-white">
+                Your Best<br />
+                Moments, Framed
+              </span>
+              <span className="block font-great-vibes text-[44px] xs:text-[54px] sm:text-[68px] ipad:text-[76px] desktop-sm:text-[84px] leading-[1.0] font-normal text-white pt-1 -mt-1 sm:-mt-2">
+                to Last Forever
+              </span>
+            </h1>
           </motion.div>
 
-          <motion.div {...reveal(0.22)}>
-            <ScrollHighlight className="w-full max-w-[348px] text-center font-tight text-[13px] sm:text-[14px] leading-relaxed tracking-[-0.28px] text-pretty ipad:max-w-[448px] ipad:text-[17px] ipad:tracking-[-0.36px] desktop-sm:max-w-[340px] desktop-sm:text-[16px] desktop-sm:leading-[24px] desktop-sm:tracking-[-0.34px] block px-2">
-              Studio-grade framing &amp; archival lamination, trusted by 15,000+ homes across India. Send your photo on WhatsApp for custom sizes, frame choices &amp; instant pricing.
-            </ScrollHighlight>
+          <motion.div {...reveal(0.22)} className="w-full flex justify-center">
+            <p
+              className="w-full max-w-[348px] ipad:max-w-[450px] desktop-sm:max-w-[460px] text-center font-inter-display font-medium text-[13px] sm:text-[14px] ipad:text-[14.5px] desktop-sm:text-[15px] leading-relaxed text-[#E0E0E0] px-2 block"
+              style={{ letterSpacing: "0.5px" }}
+            >
+              Studio grade framing &amp; archival lamination trusted by 15,000+ homes across Tamil Nadu. Send photo on WhatsApp for custom sizes, frame choices &amp; instant pricing.
+            </p>
           </motion.div>
         </div>
 
         <motion.div
           {...reveal(0.32)}
-          className="pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-3 sm:gap-[17px] ipad:gap-[22px] desktop-sm:gap-4 w-full px-2"
+          className="pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-3 sm:gap-4 ipad:gap-5 w-full px-2"
         >
-          <Button variant="primary" aria-label="Explore Gallery" onClick={onExplore} className="w-full sm:w-auto">
-            Explore Gallery
-          </Button>
+          <button
+            type="button"
+            onClick={onExplore}
+            aria-label="Explore Gallery"
+            className="h-[46px] sm:h-[48px] px-6 sm:px-7 bg-[#202020]/90 hover:bg-[#2c2c2c] border border-white/40 text-white font-mono text-xs sm:text-[13px] font-semibold uppercase tracking-[0.16em] transition-all duration-200 cursor-pointer shadow-lg rounded-none flex items-center justify-center active:scale-[0.98]"
+          >
+            EXPLORE GALLERY
+          </button>
           <Button01
             text="Order on WhatsApp"
             ariaLabel="Order on WhatsApp"

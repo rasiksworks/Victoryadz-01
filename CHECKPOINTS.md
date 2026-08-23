@@ -10,6 +10,23 @@ This log records only **Major Milestones and Substantial Architecture Changes** 
 
 ---
 
+### `CP-16` · Hero Section Typography Alignment (Cal Sans + Great Vibes + Inter Display) & Secondary Button
+- **Timestamp**: August 23, 2026 at 17:08 IST
+- **Category**: Visual Styling, Typography & Design Alignment
+- **Summary**:
+  - Re-aligned Hero 1st section typography to exact design specifications:
+    - Main headline ("Your Best Moments, Framed") in **Cal Sans** (`font-cal-sans`).
+    - Script emphasis ("to Last Forever") in **Great Vibes** (`font-great-vibes`).
+    - Subheadline in **Inter Display** Medium with precise `0.5px` letter spacing (`tracking-[0.5px]`).
+  - Implemented crisp secondary outline button for "EXPLORE GALLERY" with rectangular box border and uppercase monospace tracking.
+  - Paired with primary white NextjsShop button for "ORDER ON WHATSAPP ▪".
+- **Core Files**:
+  - `components/originkit/ui/hero-03/hero-content.tsx`
+  - `app/layout.tsx`
+  - `app/globals.css`
+
+---
+
 ### `CP-15` · Cinematic Sticky Split-Screen Redesign for Why Choose Victory Adz
 - **Timestamp**: August 23, 2026 at 16:20 IST
 - **Category**: Section Redesign, Interactive UI & Motion Engineering

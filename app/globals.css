@@ -30,6 +30,22 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+@font-face {
+  font-family: 'Cal Sans';
+  src: url('https://cdn.jsdelivr.net/npm/cal-sans@1.0.1/fonts/web/CalSans-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-cal-sans {
+  font-family: 'Cal Sans', system-ui, -apple-system, sans-serif !important;
+}
+
+.font-great-vibes {
+  font-family: var(--font-great-vibes), 'Great Vibes', cursive !important;
+}
+
 .font-inter-display,
 .font-sans,
 .font-mono,
