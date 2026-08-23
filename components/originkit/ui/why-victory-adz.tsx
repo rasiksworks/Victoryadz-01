@@ -92,6 +92,7 @@ export const WhyVictoryAdz: React.FC = () => {
           end: () => `+=${Math.max(3600, numCards * 700)}`,
           scrub: 0.8,
           pinSpacing: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
           onLeave: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {

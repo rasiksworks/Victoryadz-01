@@ -563,7 +563,7 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
         delay: (idx % 5) * 0.08,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className={idx >= 8 ? "hidden lg:block w-full" : "w-full"}
+      className={idx >= 12 ? "hidden lg:block w-full" : "w-full"}
     >
       <motion.div
         onMouseEnter={() => setHoveredId(item.id)}

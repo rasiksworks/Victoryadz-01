@@ -15,13 +15,13 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Initialize Lenis
+    // Initialize Lenis with natural, 1:1 touch multiplier
     const lenis = new Lenis({
       duration: 1.1,
       easing: (t) => (1 === t ? 1 : 1 - Math.pow(2, -10 * t)), // easeOutExpo
       lerp: 0.1,
       wheelMultiplier: 1,
-      touchMultiplier: 2,
+      touchMultiplier: 1,
       infinite: false,
     });
     lenisRef.current = lenis;
