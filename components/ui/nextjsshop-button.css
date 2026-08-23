@@ -43,8 +43,9 @@
 /* Dark Theme (Charcoal / Black fill with white text) */
 .button01.button01-dark {
   --btn-text-color: #ffffff;
-  --btn-bg-color: #222222;
-  --btn-pixel-color: #ffffff;
+  --btn-bg-color: #202020;
+  --btn-pixel-color: #202020;
+  --btn-overlay-color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 0px !important;
 }
@@ -93,6 +94,10 @@
 }
 
 .button01_bg-right-overlay .button01_bg-pixel {
+  aspect-ratio: 1;
+  background-color: var(--btn-overlay-color, #ffffff);
+  width: 100%;
+  height: 100%;
   opacity: 0;
   transition-delay: 0s;
 }
