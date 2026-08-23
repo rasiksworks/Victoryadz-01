@@ -64,17 +64,17 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
           {...reveal(0.32)}
           className="pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-3 sm:gap-4 ipad:gap-5 w-full px-2"
         >
-          <button
-            type="button"
+          <Button01
+            text="Explore Gallery"
+            ariaLabel="Explore Gallery"
+            variant="dark"
             onClick={onExplore}
-            aria-label="Explore Gallery"
-            className="h-[46px] sm:h-[48px] px-6 sm:px-7 bg-[#202020]/90 hover:bg-[#2c2c2c] border border-white/40 text-white font-mono text-xs sm:text-[13px] font-semibold uppercase tracking-[0.16em] transition-all duration-200 cursor-pointer shadow-lg rounded-none flex items-center justify-center active:scale-[0.98]"
-          >
-            EXPLORE GALLERY
-          </button>
+            className="w-full sm:w-auto"
+          />
           <Button01
             text="Order on WhatsApp"
             ariaLabel="Order on WhatsApp"
+            variant="light"
             onClick={onBook}
             className="w-full sm:w-auto"
           />

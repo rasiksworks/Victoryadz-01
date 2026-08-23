@@ -250,7 +250,7 @@ export const WhyVictoryAdz: React.FC = () => {
               <button
                 key={p.id}
                 onClick={() => scrollToPillar(idx)}
-                className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 cursor-pointer touch-manipulation snap-start ${
+                className={`shrink-0 px-4 py-2 rounded-none text-xs font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 cursor-pointer touch-manipulation snap-start ${
                   isActive
                     ? "bg-white text-black shadow-lg shadow-white/10"
                     : "bg-white/10 text-white/70 hover:bg-white/15"
@@ -292,7 +292,7 @@ export const WhyVictoryAdz: React.FC = () => {
                     <button
                       key={pillar.id}
                       onClick={() => scrollToPillar(idx)}
-                      className={`group relative flex items-start gap-4 text-left pl-6 pr-4 py-3.5 rounded-xl transition-all duration-300 cursor-pointer ${
+                      className={`group relative flex items-start gap-4 text-left pl-6 pr-4 py-3.5 rounded-none transition-all duration-300 cursor-pointer ${
                         isActive
                           ? "bg-white/10 backdrop-blur-md border border-white/15"
                           : "hover:bg-white/5 opacity-60 hover:opacity-90"
@@ -355,7 +355,7 @@ export const WhyVictoryAdz: React.FC = () => {
                 <div
                   key={pillar.id}
                   ref={(el) => { cardRefs.current[idx] = el; }}
-                  className={`group relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#242424] border transition-all duration-500 shadow-2xl ${
+                  className={`group relative w-full rounded-none overflow-hidden bg-[#242424] border transition-all duration-500 shadow-2xl ${
                     isActive
                       ? "border-white/30 ring-1 ring-white/20 shadow-black/80"
                       : "border-white/10 hover:border-white/20"
@@ -376,7 +376,7 @@ export const WhyVictoryAdz: React.FC = () => {
                     {/* Top Floating Badge & Icon */}
                     <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between z-10">
                       <span
-                        className="text-[11px] sm:text-xs font-mono font-bold tracking-widest px-3.5 py-1.5 rounded-full uppercase backdrop-blur-md border"
+                        className="text-[11px] sm:text-xs font-mono font-bold tracking-widest px-3.5 py-1.5 rounded-none uppercase backdrop-blur-md border"
                         style={{
                           backgroundColor: "rgba(0,0,0,0.6)",
                           borderColor: pillar.accentColor,
@@ -387,7 +387,7 @@ export const WhyVictoryAdz: React.FC = () => {
                       </span>
 
                       <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 text-white shadow-lg"
+                        className="w-10 h-10 rounded-none flex items-center justify-center backdrop-blur-md border border-white/20 text-white shadow-lg"
                         style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
                       >
                         {renderPillarIcon(pillar.iconType)}
@@ -420,7 +420,7 @@ export const WhyVictoryAdz: React.FC = () => {
                       {pillar.highlights.map((h) => (
                         <span
                           key={h}
-                          className="text-[11px] sm:text-xs font-medium text-white/90 bg-white/10 border border-white/15 px-3 py-1.5 rounded-lg flex items-center gap-1.5"
+                          className="text-[11px] sm:text-xs font-medium text-white/90 bg-white/10 border border-white/15 px-3 py-1.5 rounded-none flex items-center gap-1.5"
                         >
                           <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

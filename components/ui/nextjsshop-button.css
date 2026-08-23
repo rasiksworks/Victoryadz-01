@@ -25,6 +25,7 @@
   vertical-align: middle;
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  border-radius: 0px !important;
 }
 
 .button01:active {
@@ -36,14 +37,16 @@
   --btn-text-color: #000000;
   --btn-bg-color: #ffffff;
   --btn-pixel-color: #ffffff;
+  border-radius: 0px !important;
 }
 
 /* Dark Theme (Charcoal / Black fill with white text) */
 .button01.button01-dark {
   --btn-text-color: #ffffff;
-  --btn-bg-color: #1a1a1a;
-  --btn-pixel-color: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  --btn-bg-color: #222222;
+  --btn-pixel-color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0px !important;
 }
 
 .button01_bg {

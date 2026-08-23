@@ -204,7 +204,7 @@ export const Navbar = () => {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav-drawer"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-              className="flex md:hidden w-11 h-11 min-w-[44px] min-h-[44px] items-center justify-center rounded-lg bg-[#1c1c1c]/90 border border-white/15 text-white backdrop-blur-md hover:bg-[#2c2c2c] active:scale-95 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-white"
+              className="flex md:hidden w-11 h-11 min-w-[44px] min-h-[44px] items-center justify-center rounded-none bg-[#1c1c1c]/90 border border-white/15 text-white backdrop-blur-md hover:bg-[#2c2c2c] active:scale-95 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-white"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
