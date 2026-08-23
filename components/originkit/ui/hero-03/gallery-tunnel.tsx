@@ -127,7 +127,8 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
             alpha: false,
             powerPreference: "high-performance",
         });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        const getDPR = () => Math.min(window.devicePixelRatio || 1, window.innerWidth < 1024 ? 1.5 : 2);
+        renderer.setPixelRatio(getDPR());
 
         const lineMaterial = new THREE.MeshBasicMaterial({
             color: new THREE.Color(lineColor),
@@ -348,6 +349,7 @@ export default function ImageBox(props: Partial<ImageBoxProps>) {
             const h = Math.max(1, frame.clientHeight);
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
+            renderer.setPixelRatio(getDPR());
             renderer.setSize(w, h, false);
         };
         const ro = new ResizeObserver(resize);

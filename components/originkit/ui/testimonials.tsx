@@ -74,6 +74,18 @@ export const Testimonials: React.FC = () => {
     scrollTrackRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
+  const [activeTestimonialIdx, setActiveTestimonialIdx] = useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const itemWidth = 280;
+    const idx = Math.min(
+      TESTIMONIALS.length - 1,
+      Math.max(0, Math.round(target.scrollLeft / itemWidth))
+    );
+    setActiveTestimonialIdx(idx);
+  };
+
   return (
     <section
       id="testimonials"
@@ -93,8 +105,8 @@ export const Testimonials: React.FC = () => {
           >
             Trusted from Near and Far
           </MaskTextReveal>
-          <ScrollHighlight className="text-xs sm:text-sm md:text-base text-white/70 font-light leading-relaxed mt-1 block">
-            Real stories from customers who trusted us with their memories.
+          <ScrollHighlight className="text-xs md:text-sm text-white/70 font-light mt-1 max-w-lg">
+            Every frame represents a memory entrusted to us. Here is what our customers say about their experience.
           </ScrollHighlight>
         </div>
 
@@ -102,6 +114,7 @@ export const Testimonials: React.FC = () => {
         <div className="w-full lg:px-[60px]">
           <div
             ref={scrollTrackRef}
+            onScroll={handleScroll}
             onMouseDown={handleMouseDown}
             onMouseLeave={handleMouseUpOrLeave}
             onMouseUp={handleMouseUpOrLeave}
@@ -128,6 +141,18 @@ export const Testimonials: React.FC = () => {
 
             {/* Mobile trailing spacer */}
             <div className="w-4 md:w-9 lg:hidden shrink-0 pointer-events-none" aria-hidden="true" />
+          </div>
+
+          {/* Mobile indicator dots */}
+          <div className="lg:hidden flex items-center justify-center gap-1.5 pt-3">
+            {TESTIMONIALS.map((_, idx) => (
+              <span
+                key={idx}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  activeTestimonialIdx === idx ? "w-6 bg-emerald-400" : "w-1.5 bg-white/30"
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>

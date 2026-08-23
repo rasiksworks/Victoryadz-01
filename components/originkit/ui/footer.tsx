@@ -224,13 +224,13 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => setActiveModal("privacy")}
-                className="hover:text-white transition-colors duration-200 uppercase focus:outline-none cursor-pointer"
+                className="hover:text-white transition-colors duration-200 uppercase focus:outline-none cursor-pointer py-2.5 min-h-[44px] flex items-center touch-manipulation focus-visible:text-white focus-visible:underline"
               >
                 PRIVACY POLICY
               </button>
               <button
                 onClick={() => setActiveModal("support")}
-                className="hover:text-white transition-colors duration-200 uppercase focus:outline-none cursor-pointer"
+                className="hover:text-white transition-colors duration-200 uppercase focus:outline-none cursor-pointer py-2.5 min-h-[44px] flex items-center touch-manipulation focus-visible:text-white focus-visible:underline"
               >
                 SUPPORT
               </button>

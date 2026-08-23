@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
 import { Button01 } from "@/components/ui/nextjsshop-button";
 
 if (typeof window !== "undefined") {
@@ -14,61 +12,115 @@ if (typeof window !== "undefined") {
 export interface WhyReasonCard {
   id: string;
   number: string;
-  label: string;
-  title: string;
-  description: string;
+  badge: string;
+  tagline: string;
+  bgColor: string;
+  image: string;
+  iconType: "materials" | "finishes" | "craft" | "pricing" | "support" | "shipping";
 }
 
-export const WHY_CHOOSE_US_CARDS: WhyReasonCard[] = [
+export const WHY_VICTORY_CARDS: WhyReasonCard[] = [
   {
     id: "card-1",
     number: "01",
-    label: "Reason number",
-    title: "Premium Quality Materials",
-    description:
-      "We never compromise on frame material. Every piece is built to last, not just look good on day one.",
+    badge: "PREMIUM MATERIALS",
+    tagline: "Museum-Grade Acrylic & Solid Hardwood Built to Endure!",
+    bgColor: "#0a7cc1",
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80",
+    iconType: "materials",
   },
   {
     id: "card-2",
     number: "02",
-    label: "Reason number",
-    title: "Multiple Lamination Finishes",
-    description:
-      "From matte to glossy to textured, choose the finish that protects and elevates your photo the way you want.",
+    badge: "CUSTOM FINISHES",
+    tagline: "Matte, Glossy & Textured Anti-Glare Lamination Finishes!",
+    bgColor: "#ff431e",
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900&q=80",
+    iconType: "finishes",
   },
   {
     id: "card-3",
     number: "03",
-    label: "Reason number",
-    title: "8+ Years of Experience",
-    description:
-      "We have been perfecting this craft since day one. Every frame reflects years of precision and care.",
+    badge: "8+ YEARS MASTERY",
+    tagline: "Master Artisans Perfecting Every Single Precision Cut!",
+    bgColor: "#307c5f",
+    image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=900&q=80",
+    iconType: "craft",
   },
   {
     id: "card-4",
     number: "04",
-    label: "Reason number",
-    title: "Reasonable, Honest Pricing",
-    description:
-      "High quality should not mean high prices. We keep it fair, without cutting corners.",
+    badge: "HONEST VALUE",
+    tagline: "Direct Workshop Pricing: Zero Middlemen & Fair Rates.",
+    bgColor: "#ff431e",
+    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=900&q=80",
+    iconType: "pricing",
   },
   {
     id: "card-5",
     number: "05",
-    label: "Reason number",
-    title: "Personally Guided Orders",
-    description:
-      "No confusing checkout. You talk to us directly on WhatsApp, and we help you pick exactly what is right.",
+    badge: "1-ON-1 GUIDANCE",
+    tagline: "Personal WhatsApp Consultation & Live Photo Previews.",
+    bgColor: "#0a7cc1",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=80",
+    iconType: "support",
   },
   {
     id: "card-6",
     number: "06",
-    label: "Reason number",
-    title: "Delivered Safely, Anywhere",
-    description:
-      "From Kanyakumari to your doorstep, every frame is carefully packed and shipped, with WhatsApp updates the whole way.",
+    badge: "PAN-INDIA COURIER",
+    tagline: "5-Layer Shock-Proof Crating Delivered to Your Doorstep.",
+    bgColor: "#307c5f",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&q=80",
+    iconType: "shipping",
   },
 ];
+
+const renderIcon = (type: WhyReasonCard["iconType"]) => {
+  switch (type) {
+    case "materials":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      );
+    case "finishes":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10" />
+          <circle cx="12" cy="12" r="4" />
+        </svg>
+      );
+    case "craft":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+      );
+    case "pricing":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      );
+    case "support":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+        </svg>
+      );
+    case "shipping":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+          <rect x="1" y="3" width="15" height="13" />
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+          <circle cx="5.5" cy="18.5" r="2.5" />
+          <circle cx="18.5" cy="18.5" r="2.5" />
+        </svg>
+      );
+  }
+};
 
 export const WhyVictoryAdz: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -93,7 +145,6 @@ export const WhyVictoryAdz: React.FC = () => {
     );
   };
 
-  // Desktop Pinned Scroll: Strictly locks viewport for horizontal cards scrub
   useEffect(() => {
     if (isMobile || !sectionRef.current || !trackRef.current || !cardsContainerRef.current) return;
 
@@ -102,21 +153,25 @@ export const WhyVictoryAdz: React.FC = () => {
     const cardsContainer = cardsContainerRef.current;
 
     const ctx = gsap.context(() => {
-      const getScrollDistance = () => Math.max(0, track.scrollWidth - cardsContainer.clientWidth + 120);
+      const getScrollDistance = () => Math.max(0, track.scrollWidth - cardsContainer.clientWidth + 160);
 
-      // Initial card states
-      cardRefs.current.forEach((card) => {
+      cardRefs.current.forEach((card, idx) => {
         if (!card) return;
-        gsap.set(card, { opacity: 0, y: 60, scale: 0.94 });
+        const isStaggered = idx % 2 === 1;
+        gsap.set(card, {
+          opacity: 0,
+          y: isStaggered ? 120 : 60,
+          scale: 0.94,
+        });
       });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           pin: true,
-          pinSpacing: true, // Forces layout spacer so FAQ waits strictly below
+          pinSpacing: true,
           start: "top top",
-          end: () => "+=" + Math.max(2600, getScrollDistance() * 1.8),
+          end: () => "+=" + Math.max(2800, getScrollDistance() * 1.6),
           scrub: 0.8,
           anticipatePin: 1,
           fastScrollEnd: true,
@@ -124,30 +179,28 @@ export const WhyVictoryAdz: React.FC = () => {
         },
       });
 
-      // 1. Initial stagger spring entrance for visible cards (0.0 to 1.0)
       cardRefs.current.forEach((card, idx) => {
         if (!card) return;
-        const startPos = idx * 0.12;
+        const startPos = idx * 0.1;
+        const isStaggered = idx % 2 === 1;
         tl.fromTo(
           card,
-          { opacity: 0, y: 60, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power2.out" },
+          { opacity: 0, y: isStaggered ? 120 : 60, scale: 0.94 },
+          { opacity: 1, y: isStaggered ? 55 : 0, scale: 1, duration: 0.6, ease: "power2.out" },
           startPos
         );
       });
 
-      // 2. Horizontal scrub across all 6 cards
       tl.to(
         track,
         {
           x: () => -getScrollDistance(),
           ease: "none",
-          duration: 3.5,
+          duration: 4.0,
         },
-        0.8
+        0.6
       );
 
-      // 3. Resting hold so user can read card 06 before unpinning
       tl.to({}, { duration: 0.8 });
     }, section);
 
@@ -163,10 +216,7 @@ export const WhyVictoryAdz: React.FC = () => {
       }, 250);
     };
     window.addEventListener("resize", onResize);
-
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 300);
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
 
     return () => {
       window.removeEventListener("resize", onResize);
@@ -176,183 +226,146 @@ export const WhyVictoryAdz: React.FC = () => {
     };
   }, [isMobile]);
 
-  // ── MOBILE LAYOUT (< 1024px) ───────────────────────────────────────────────
-  if (isMobile) {
-    return (
-      <section
-        id="why-victory-adz"
-        className="relative z-20 w-full bg-[#3D3D3D] text-white select-none py-10 sm:py-14 md:py-20 px-4 sm:px-6"
-        style={{ fontFamily: "'Inter Display', 'Inter', system-ui, sans-serif" }}
-      >
-        <div className="w-full max-w-xl mx-auto flex flex-col gap-10">
-          {/* Header */}
-          <div className="flex flex-col items-start gap-2">
-            <span className="text-sm text-white/70 font-normal tracking-tight">
-              Why Choose VictoryAdz
-            </span>
-            <MaskTextReveal
-              tag="h2"
-              direction="center-horizontal"
-              className="text-2xl sm:text-4xl font-bold tracking-[-0.03em] text-white"
-              style={{ lineHeight: "110%" }}
-            >
-              8 years of craftsmanship, built on quality and trust, not shortcuts.
-            </MaskTextReveal>
-          </div>
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
 
-          {/* Cards Frame */}
-          <div className="flex flex-col gap-6">
-            {WHY_CHOOSE_US_CARDS.map((card, index) => (
-              <motion.div
-                key={card.id}
-                initial={{ opacity: 0, y: 50, scale: 0.92 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "0px 0px -40px 0px" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 14,
-                  delay: index * 0.08,
-                }}
-                className="w-full flex flex-col shadow-2xl"
-              >
-                <div className="flex items-center h-10 w-full">
-                  <div className="flex-1 bg-[#292929] text-white/90 text-xs font-semibold px-4 h-full flex items-center tracking-tight">
-                    {card.label}
-                  </div>
-                  <div className="bg-[#1C1C1C] text-white text-xs font-bold px-3.5 h-full flex items-center justify-center border-l border-white/10 shrink-0">
-                    {card.number}
-                  </div>
-                </div>
-                <div className="bg-white text-black p-5 sm:p-6 flex flex-col justify-end min-h-[200px] sm:min-h-[220px]">
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-neutral-900 leading-snug mb-2">
-                    {card.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-neutral-600 font-normal leading-relaxed">
-                    {card.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Bottom Order Card */}
-          <div className="bg-white text-black p-5 rounded-none shadow-2xl">
-            <p className="text-xs font-medium text-neutral-800 leading-snug">
-              Message us to discuss sizing, frames, and delivery details.
-            </p>
-            <div className="mt-4 w-full">
-              <Button01
-                variant="dark"
-                text="Order Now"
-                onClick={handleWhatsAppOrder}
-                ariaLabel="Order on WhatsApp"
-                className="w-full"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+  const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!isMobile) return;
+    const target = e.currentTarget;
+    const scrollLeft = target.scrollLeft;
+    const cardWidth = 320; // approximate mobile card snap width
+    const index = Math.min(
+      WHY_VICTORY_CARDS.length - 1,
+      Math.max(0, Math.round(scrollLeft / cardWidth))
     );
-  }
+    setActiveCardIndex(index);
+  };
 
-  // ── DESKTOP PINNED SCROLL (>= 1024px): SINGLE VIEWPORT LOCK ──────────────
   return (
     <section
       id="why-victory-adz"
       ref={sectionRef}
-      className="relative z-20 w-full h-screen min-h-[640px] bg-[#3D3D3D] text-white select-none overflow-hidden"
-      style={{ fontFamily: "'Inter Display', 'Inter', system-ui, sans-serif" }}
+      className="relative z-20 w-full min-h-screen bg-[#1E1E1E] text-white select-none overflow-hidden py-10 lg:py-16 flex flex-col justify-between"
+      style={{ fontFamily: "'Inter Display', system-ui, -apple-system, sans-serif" }}
     >
-      <div className="w-full h-full flex flex-row">
+      {/* ── TOP HERO TYPOGRAPHY ZONE (FIGMA CONTAINER TRIBE INSPIRATION) ── */}
+      <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-10 lg:px-16 pt-2 pb-4 sm:pb-6 flex flex-col items-center justify-center">
         
-        {/* LEFT SIDEBAR: Fixed in place during horizontal scrub */}
-        <div className="w-[260px] xl:w-[300px] h-full bg-[#2A2A2A] p-8 lg:p-10 flex flex-col justify-between shrink-0 border-r border-white/5 z-20">
-          <div className="flex flex-col gap-1">
-            <span className="text-[12px] uppercase tracking-[0.25em] text-white/40 font-medium">
-              [ VICTORYADZ ]
-            </span>
+        {/* Giant Ghost Watermark Typography in Background */}
+        <div className="w-full flex flex-col items-center justify-center pointer-events-none select-none overflow-hidden">
+          <p className="font-extrabold text-[44px] xs:text-[56px] sm:text-[100px] md:text-[130px] xl:text-[160px] leading-[0.92] tracking-[-0.04em] text-[#E8E8E8]/10 sm:text-[#E8E8E8]/[0.12] text-center uppercase whitespace-nowrap">
+            WHY CHOOSE
+          </p>
+          <p className="font-extrabold text-[44px] xs:text-[56px] sm:text-[100px] md:text-[130px] xl:text-[160px] leading-[0.92] tracking-[-0.04em] text-[#E8E8E8]/10 sm:text-[#E8E8E8]/[0.12] text-center uppercase whitespace-nowrap">
+            VICTORY ADZ
+          </p>
+        </div>
+
+        {/* Staggered Floating Editorial Sub-Headlines */}
+        <div className="absolute inset-0 w-full h-full max-w-[1440px] mx-auto pointer-events-none flex flex-col justify-between py-2 px-4 sm:px-8">
+          {/* Top Left Title Block */}
+          <div className="self-start max-w-[280px] xs:max-w-[320px] sm:max-w-[420px] pt-1 sm:pt-3">
+            <h2 className="text-[16px] xs:text-[18px] sm:text-[26px] xl:text-[34px] font-bold text-[#FFFFFF] tracking-[-0.025em] uppercase leading-[1.12]">
+              A place where memories <br />
+              <span className="font-extrabold italic text-[#FFA07A]">find their</span> true form.
+            </h2>
           </div>
 
-          <div className="bg-white text-black p-6 rounded-none shadow-2xl max-w-[240px]">
-            <p className="text-[13px] font-medium text-neutral-800 leading-snug">
-              Message us to discuss sizing, frames, and delivery details.
+          {/* Bottom Right Title Block */}
+          <div className="self-end max-w-[290px] xs:max-w-[340px] sm:max-w-[460px] text-right pb-1 sm:pb-3">
+            <p className="text-[16px] xs:text-[18px] sm:text-[26px] xl:text-[34px] font-bold text-[#FFFFFF] tracking-[-0.025em] uppercase leading-[1.12]">
+              Crafted with passion &amp; <br />
+              <span className="font-extrabold italic text-[#FFA07A]">built to</span> last forever.
             </p>
-
-            <div className="mt-4 w-full">
-              <Button01
-                variant="dark"
-                text="Order Now"
-                onClick={handleWhatsAppOrder}
-                ariaLabel="Order on WhatsApp"
-                className="w-full"
-              />
-            </div>
           </div>
         </div>
+      </div>
 
-        {/* RIGHT MAIN CANVAS: Top Header + Horizontal Scrub Track */}
-        <div className="flex-1 h-full p-8 lg:p-12 xl:p-14 flex flex-col justify-between overflow-hidden relative bg-[#3D3D3D]">
-          
-          {/* Main Top Header */}
-          <div className="flex flex-col items-start gap-2 max-w-4xl mb-6 z-10">
-            <span className="text-base sm:text-lg md:text-xl lg:text-[22px] text-white/70 font-normal tracking-[-0.01em] block">
-              Why Choose VictoryAdz
-            </span>
+      {/* ── STAGGERED HORIZONTAL CARDS SHOWCASE ── */}
+      <div
+        ref={cardsContainerRef}
+        onScroll={handleMobileScroll}
+        className="w-full overflow-x-auto lg:overflow-hidden scrollbar-none py-4 sm:py-8 select-none snap-x snap-mandatory touch-pan-x"
+      >
+        <div
+          ref={trackRef}
+          className="flex gap-4 sm:gap-8 px-4 sm:px-12 xl:px-16 w-max will-change-transform items-start"
+        >
+          {WHY_VICTORY_CARDS.map((card, index) => {
+            const isStaggered = index % 2 === 1;
 
-            <MaskTextReveal
-              tag="h2"
-              direction="center-horizontal"
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] xl:text-[58px] font-bold tracking-[-0.03em] text-white"
-              style={{ lineHeight: "105%" }}
-            >
-              8 years of craftsmanship, built on quality and trust, not shortcuts.
-            </MaskTextReveal>
-          </div>
+            return (
+              <div
+                key={card.id}
+                ref={(el) => { cardRefs.current[index] = el; }}
+                style={{
+                  backgroundColor: card.bgColor,
+                  marginTop: !isMobile && isStaggered ? "55px" : "0px",
+                }}
+                className="relative w-[280px] xs:w-[320px] sm:w-[380px] md:w-[440px] xl:w-[480px] h-[320px] xs:h-[350px] sm:h-[380px] rounded-[20px] overflow-hidden shrink-0 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-black/70 group snap-center"
+              >
+                {/* Background Photography with Soft Color Tone */}
+                <div className="absolute inset-0 w-full h-full">
+                  <img
+                    src={card.image}
+                    alt={card.tagline}
+                    loading="lazy"
+                    className="w-full h-full object-cover opacity-50 mix-blend-luminosity group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                  />
+                  {/* Deep Dark Gradient Overlay for Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                </div>
 
-          {/* Cards Track Container */}
-          <div
-            ref={cardsContainerRef}
-            className="w-full overflow-hidden pb-2 pt-2 select-none"
-          >
-            <div
-              ref={trackRef}
-              className="flex gap-6 w-max will-change-transform"
-            >
-              {WHY_CHOOSE_US_CARDS.map((card, index) => {
-                return (
-                  <div
-                    key={card.id}
-                    ref={(el) => { cardRefs.current[index] = el; }}
-                    className="w-[280px] sm:w-[310px] md:w-[340px] shrink-0 flex flex-col shadow-2xl transform-gpu will-change-transform transition-colors duration-300 hover:shadow-black/60"
-                  >
-                    {/* Card Dark Header Bar */}
-                    <div className="flex items-center h-10 w-full">
-                      <div className="flex-1 bg-[#292929] text-white/90 text-xs sm:text-[13px] font-semibold px-4 h-full flex items-center tracking-tight">
-                        {card.label}
-                      </div>
-                      <div className="bg-[#1C1C1C] text-white text-xs sm:text-[13px] font-bold px-3.5 h-full flex items-center justify-center border-l border-white/10 shrink-0">
-                        {card.number}
-                      </div>
-                    </div>
+                {/* Card Top Pill Badge */}
+                <div className="absolute top-4 sm:top-5 left-4 sm:left-5 right-4 sm:right-5 flex justify-between items-center z-10">
+                  <span className="text-[10px] sm:text-[12px] font-bold tracking-wider text-white/90 bg-white/15 backdrop-blur-md px-3 sm:px-3.5 py-0.5 sm:py-1 rounded-full uppercase border border-white/20">
+                    {card.badge}
+                  </span>
+                  <span className="text-white/80 font-mono text-xs sm:text-sm font-bold tracking-tighter">
+                    {card.number}
+                  </span>
+                </div>
 
-                    {/* Card White Body */}
-                    <div className="bg-white text-black p-6 sm:p-7 md:p-8 flex flex-col justify-end min-h-[290px] sm:min-h-[320px] md:min-h-[340px]">
-                      <h3 className="text-xl sm:text-2xl md:text-[25px] font-bold tracking-[-0.02em] text-neutral-900 leading-tight mb-3">
-                        {card.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm md:text-[14px] text-neutral-600 font-normal leading-relaxed">
-                        {card.description}
-                      </p>
-                    </div>
+                {/* Card Bottom Content & Minimalist Icon */}
+                <div className="absolute bottom-0 left-0 w-full p-5 sm:p-7 flex flex-col gap-2.5 sm:gap-3 z-10">
+                  {/* Clean Icon Container */}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-lg">
+                    {renderIcon(card.iconType)}
                   </div>
-                );
-              })}
-            </div>
-          </div>
 
+                  {/* Punchy Editorial Tagline */}
+                  <p className="text-[16px] xs:text-[18px] sm:text-[21px] xl:text-[23px] font-bold text-[#EDEDED] leading-[1.24] tracking-tight">
+                    {card.tagline}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
+      </div>
 
+      {/* Mobile Card Dots Indicator */}
+      <div className="lg:hidden flex items-center justify-center gap-1.5 py-2">
+        {WHY_VICTORY_CARDS.map((_, idx) => (
+          <span
+            key={idx}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeCardIndex === idx ? "w-6 bg-white" : "w-1.5 bg-white/30"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* ── BOTTOM CALL TO ACTION ── */}
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-white/10 z-10">
+        <p className="text-xs sm:text-base text-white/70 font-medium text-center sm:text-left">
+          Have a custom idea in mind? Message us for instant mockups &amp; quotes.
+        </p>
+
+        <Button01
+          text="Order on WhatsApp"
+          onClick={handleWhatsAppOrder}
+          ariaLabel="Order on WhatsApp"
+        />
       </div>
     </section>
   );

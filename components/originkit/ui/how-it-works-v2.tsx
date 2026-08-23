@@ -173,7 +173,7 @@ export const HowItWorksV2: React.FC = () => {
     if (!section || !canvas) return;
 
     const setupCanvas = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 1024 ? 1.5 : 2);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       const c = canvas.getContext("2d");

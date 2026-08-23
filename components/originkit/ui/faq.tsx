@@ -124,7 +124,7 @@ export const FAQ: React.FC = () => {
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${faq.id}`}
                 id={`faq-header-${faq.id}`}
-                className={`${faq.shade} w-full transition-all duration-500 ease-out cursor-pointer relative select-none hover:brightness-[1.12] touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white`}
+                className={`${faq.shade} w-full min-h-[56px] transition-all duration-500 ease-out cursor-pointer relative select-none hover:brightness-[1.12] touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white`}
               >
                 <div className="w-full py-4 sm:py-6 md:py-9 lg:py-10 px-4 sm:px-6 md:px-[60px] lg:px-[80px] flex items-start justify-between gap-3 sm:gap-6 md:gap-8">
                   {/* Left Side: Number + Title & Content */}
@@ -185,12 +185,12 @@ export const FAQ: React.FC = () => {
                   </div>
 
                   {/* Right Side: Mobile Plus Indicator (rotates smoothly on open) */}
-                  <div aria-hidden="true" className="flex md:hidden shrink-0 items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white/90 self-start mt-0.5 transition-colors duration-500">
+                  <div aria-hidden="true" className="flex md:hidden shrink-0 items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white/90 self-start mt-0.5 transition-colors duration-500">
                     <motion.div
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.4, ease: LUXURY_EASE }}
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-4 h-4" />
                     </motion.div>
                   </div>
                 </div>

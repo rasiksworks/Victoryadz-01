@@ -41,15 +41,15 @@ export const BrandVisionSection: React.FC = () => {
         {/* Sticky Viewport Container (Left 3:4 Image Sticky + Right Content Scrolls) */}
         <div className="flex flex-col lg:flex-row items-start gap-6 relative">
           
-          {/* Left Column: 50% Width, Sticky 3:4 Image (Top Aligned Flush, 24px Top Padding) */}
-          <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex items-start justify-start pt-6 pb-6 shrink-0">
-            <ImageReveal className="relative w-full aspect-[3/4] max-h-[85vh] overflow-hidden bg-[#222] rounded-sm border border-white/5 shadow-2xl" duration={1.4}>
+          {/* Left Column: 50% Width, Sticky Image (Top Aligned Flush, 24px Top Padding) */}
+          <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex items-start justify-start pt-3 sm:pt-6 pb-4 sm:pb-6 shrink-0">
+            <ImageReveal className="relative w-full aspect-[4/3] sm:aspect-[3/4] max-h-[50vh] sm:max-h-[85vh] overflow-hidden bg-[#222] rounded-sm border border-white/5 shadow-2xl" duration={1.4}>
               <Image
                 src={siteData.brandVision.image1}
                 alt="Sculptural artwork"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-center"
               />
             </ImageReveal>

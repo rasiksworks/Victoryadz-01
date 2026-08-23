@@ -48,13 +48,20 @@ export const Navbar = () => {
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
     } else {
       document.body.style.overflow = "";
     }
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [mobileMenuOpen]);
 
@@ -194,8 +201,10 @@ export const Navbar = () => {
             {/* Mobile Hamburger Menu Button (visible on small screens < md) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-drawer"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-              className="flex md:hidden w-10 h-10 items-center justify-center rounded-lg bg-[#1c1c1c]/90 border border-white/15 text-white backdrop-blur-md hover:bg-[#2c2c2c] active:scale-95 transition-all cursor-pointer"
+              className="flex md:hidden w-11 h-11 min-w-[44px] min-h-[44px] items-center justify-center rounded-lg bg-[#1c1c1c]/90 border border-white/15 text-white backdrop-blur-md hover:bg-[#2c2c2c] active:scale-95 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-white"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -207,6 +216,10 @@ export const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-nav-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site Navigation"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -227,7 +240,7 @@ export const Navbar = () => {
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04 + 0.1, duration: 0.3 }}
-                  className="flex items-center justify-between py-3.5 border-b border-white/10 text-lg sm:text-xl font-bold tracking-tight text-white/90 hover:text-white active:text-emerald-400 transition-colors"
+                  className="flex items-center justify-between py-3.5 border-b border-white/10 text-lg sm:text-xl font-bold tracking-tight text-white/90 hover:text-white active:text-emerald-400 transition-colors focus-visible:outline-2 focus-visible:outline-white"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-mono text-white/40">{link.number}</span>
