@@ -26,9 +26,9 @@ export const BrandVisionSection: React.FC = () => {
             </p>
           </div>
 
-          {/* Right Big Headline (40% font size reduction) */}
+          {/* Right Big Headline */}
           <div className="flex items-start">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-[1.18]">
+            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-semibold tracking-tight text-white leading-[1.12]">
               Crafting frames that turn your memories into art
             </h2>
           </div>
