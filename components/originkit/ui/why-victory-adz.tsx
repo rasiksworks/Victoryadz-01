@@ -75,50 +75,46 @@ export const WhyVictoryAdz: React.FC = () => {
     if (!section || !trackWrapper || !track) return;
 
     const ctx = gsap.context(() => {
-      const getScrollAmount = () => {
+      const getCardStep = (stepIdx: number) => {
         const firstCard = track.querySelector(".why-card") as HTMLElement | null;
         const cardWidth = firstCard ? firstCard.offsetWidth : trackWrapper.clientWidth;
-        return Math.max(0, Math.min(track.scrollWidth - trackWrapper.clientWidth, (numCards - 1) * cardWidth));
+        const maxScroll = Math.max(0, track.scrollWidth - trackWrapper.clientWidth);
+        return Math.min(maxScroll, stepIdx * cardWidth);
       };
 
       const numCards = WHY_REASONS.length; // 6
       const stepDuration = 1.0;
+      const snapIncrement = 1 / (numCards - 1);
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${Math.max(2000, numCards * 450)}`,
+          end: () => `+=${numCards * 480}`,
           scrub: 0.5,
+          snap: {
+            snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
+            duration: { min: 0.25, max: 0.5 },
+            delay: 0.05,
+            ease: "power2.out",
+          },
           pinSpacing: true,
           invalidateOnRefresh: true,
           onLeave: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.2;
+              (window as any).lenis.velocity *= 0.15;
             }
           },
           onLeaveBack: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.2;
+              (window as any).lenis.velocity *= 0.15;
             }
           },
         },
       });
 
-      // Synchronized linear track glide so each step directly reveals its corresponding card
-      tl.fromTo(
-        track,
-        { x: 0 },
-        {
-          x: () => -getScrollAmount(),
-          ease: "none",
-          duration: (numCards - 1) * stepDuration,
-        },
-        0
-      );
-
-      // Card by card sequential reveal animation (Each card is 1 step)
+      // Card by card stepped reveal and track glide
       WHY_REASONS.forEach((_, idx) => {
         const textEl = cardTextRefs.current[idx];
         const lineEl = cardLineRefs.current[idx];
@@ -126,12 +122,25 @@ export const WhyVictoryAdz: React.FC = () => {
 
         const stepStart = idx * stepDuration;
 
+        // For steps after card 1, smoothly glide the track to bring card `idx` into view
+        if (idx > 0) {
+          tl.to(
+            track,
+            {
+              x: () => -getCardStep(idx),
+              ease: "power2.inOut",
+              duration: stepDuration * 0.5,
+            },
+            stepStart - stepDuration * 0.45
+          );
+        }
+
         // 1. Text reveals with smooth fade-in
         if (textEl) {
           tl.fromTo(
             textEl,
             { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: stepDuration * 0.4, ease: "power1.out" },
+            { opacity: 1, y: 0, duration: stepDuration * 0.35, ease: "power1.out" },
             stepStart
           );
         }
@@ -151,7 +160,7 @@ export const WhyVictoryAdz: React.FC = () => {
               left: "100%",
               rotation: 360,
               ease: "none",
-              duration: stepDuration * 0.85,
+              duration: stepDuration * 0.8,
             },
             stepStart + 0.05
           );
@@ -162,7 +171,7 @@ export const WhyVictoryAdz: React.FC = () => {
             {
               width: "100%",
               ease: "none",
-              duration: stepDuration * 0.85,
+              duration: stepDuration * 0.8,
             },
             stepStart + 0.05
           );
@@ -176,7 +185,7 @@ export const WhyVictoryAdz: React.FC = () => {
               duration: 0.08,
               ease: "power1.out",
             },
-            stepStart + stepDuration * 0.9
+            stepStart + stepDuration * 0.85
           );
         }
       });
