@@ -42,8 +42,8 @@ export const WeMostProudOf: React.FC = () => {
       .then((data) => {
         setIsLoading(false);
         if (data?.exploreGallery && Array.isArray(data.exploreGallery)) {
-          const mapped: WorkItem[] = data.exploreGallery.map((item: any) => ({
-            id: item.id || String(Math.random()),
+          const mapped: WorkItem[] = data.exploreGallery.map((item: any, idx: number) => ({
+            id: item.id || `work-${idx}`,
             image: item.image || item.src,
             number: item.number || "[ 00 ]",
             firstName: item.label || item.firstName || "",

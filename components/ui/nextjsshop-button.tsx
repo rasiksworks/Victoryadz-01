@@ -15,6 +15,10 @@ export interface Button01Props {
   style?: React.CSSProperties;
 }
 
+// Deterministic pixel indices to prevent SSR/client hydration mismatches from Math.random()
+const PIXEL_INDICES = [1, 3, 0, 2, 1, 0, 3, 2, 1, 3, 2, 0, 3, 1, 2, 0, 1, 2, 3, 0, 2, 1, 3, 0, 2];
+const OVERLAY_INDICES = [5, 7, 4, 6, 7, 5, 4, 6, 5, 7, 4];
+
 export const Button01: React.FC<Button01Props> = ({
   text = "Nextjsshop",
   children,
@@ -46,19 +50,19 @@ export const Button01: React.FC<Button01Props> = ({
       <span className="button01_bg" aria-hidden="true">
         <span className="button01_bg-mid"></span>
         <span className="button01_bg-right">
-          {[...Array(25)].map((_, index) => (
+          {PIXEL_INDICES.map((idx, index) => (
             <span
               key={`pixel-${index}`}
-              style={{ "--index": Math.floor(Math.random() * 4) } as React.CSSProperties}
+              style={{ "--index": idx } as React.CSSProperties}
               className="button01_bg-pixel"
             ></span>
           ))}
         </span>
         <span className="button01_bg-right-overlay">
-          {[...Array(11)].map((_, index) => (
+          {OVERLAY_INDICES.map((idx, index) => (
             <span
               key={`overlay-${index}`}
-              style={{ "--index": 4 + Math.floor(Math.random() * 4) } as React.CSSProperties}
+              style={{ "--index": idx } as React.CSSProperties}
               className="button01_bg-pixel"
             ></span>
           ))}
