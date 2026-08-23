@@ -16,12 +16,11 @@ function asset(file: string) {
 
 const MOBILE_NAV_LINKS = [
   { number: "01", label: "Home", href: "/" },
-  { number: "02", label: "Explore Gallery", href: "/works" },
-  { number: "03", label: "How It Works", href: "/#how-it-works" },
-  { number: "04", label: "Brand Vision", href: "/#about" },
-  { number: "05", label: "Recent Works", href: "/#recent-works" },
-  { number: "06", label: "Why Choose Us", href: "/#why-victory-adz" },
-  { number: "07", label: "FAQ", href: "/#faq" },
+  { number: "02", label: "About", href: "/#about" },
+  { number: "03", label: "Works", href: "/works" },
+  { number: "04", label: "Why Us", href: "/#why-victory-adz" },
+  { number: "05", label: "How It Works", href: "/#how-it-works" },
+  { number: "06", label: "FAQ", href: "/#faq" },
 ];
 
 export const Navbar = () => {
@@ -186,17 +185,21 @@ export const Navbar = () => {
 
           {/* Right Action Area */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Desktop Explore Button (hidden on mobile/tablet < md) */}
-            {pathname !== "/works" && (
-              <Button
-                variant="nav"
-                aria-label="Explore Gallery"
-                onClick={() => router.push("/works")}
-                className="hidden md:inline-flex shrink-0 text-xs sm:text-sm px-3.5 sm:px-5 py-2"
-              >
-                Explore Gallery
-              </Button>
-            )}
+            {/* Desktop Order Now Button (hidden on mobile/tablet < md) */}
+            <Button
+              variant="nav"
+              aria-label="Order Now"
+              onClick={() => {
+                window.open(
+                  "https://wa.me/919361312684?text=" +
+                    encodeURIComponent("Hi VictoryAdz! I'd like to get frame options & pricing for my photo."),
+                  "_blank"
+                );
+              }}
+              className="hidden md:inline-flex shrink-0 text-xs sm:text-sm px-3.5 sm:px-5 py-2 uppercase tracking-wider"
+            >
+              Order Now
+            </Button>
 
             {/* Mobile Hamburger Menu Button (visible on small screens < md) */}
             <button
