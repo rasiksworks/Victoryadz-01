@@ -8,6 +8,7 @@ export interface Button01Props {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   className?: string;
   variant?: "light" | "dark";
+  size?: "default" | "sm";
   ariaLabel?: string;
   target?: string;
   rel?: string;
@@ -21,6 +22,7 @@ export const Button01: React.FC<Button01Props> = ({
   onClick,
   className = "",
   variant = "light",
+  size = "default",
   ariaLabel,
   target,
   rel,
@@ -36,7 +38,8 @@ export const Button01: React.FC<Button01Props> = ({
   } as React.CSSProperties;
 
   const variantClass = variant === "dark" ? "button01-dark" : "button01-light";
-  const combinedClass = `button01 ${variantClass} ${className}`.trim();
+  const sizeClass = size === "sm" ? "button01-sm" : "";
+  const combinedClass = `button01 ${variantClass} ${sizeClass} ${className}`.trim();
 
   const innerMarkup = (
     <>

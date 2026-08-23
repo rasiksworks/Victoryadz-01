@@ -50,6 +50,20 @@
   border-radius: 0px !important;
 }
 
+/* Compact / Navbar size */
+.button01.button01-sm {
+  font-size: 0.75rem;
+}
+
+.button01.button01-sm .button01_inner {
+  padding: 0.52rem 2.8rem 0.52rem 1rem;
+}
+
+.button01.button01-sm .button01_bg-right,
+.button01.button01-sm .button01_bg-right-overlay {
+  width: 2.2rem;
+}
+
 .button01_bg {
   grid-area: 1/1;
   grid-template-columns: 1fr auto;

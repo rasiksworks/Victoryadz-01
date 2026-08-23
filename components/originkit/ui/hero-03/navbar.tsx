@@ -130,7 +130,7 @@ export const Navbar = () => {
         }}
         animate={modalOpen || hidden ? "hidden" : "visible"}
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-[60px] lg:px-[60px] py-3.5 sm:py-4 bg-[#141414]/90 backdrop-blur-md border-b border-white/10"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-[60px] lg:px-[60px] py-3.5 sm:py-4 bg-transparent"
       >
         <div className="w-full flex items-center justify-between max-w-[1520px] mx-auto">
           {/* Left Brand Logo */}
@@ -186,6 +186,7 @@ export const Navbar = () => {
                 text="Order on WhatsApp"
                 ariaLabel="Order on WhatsApp"
                 variant="light"
+                size="sm"
                 onClick={handleWhatsAppOrder}
               />
             </div>

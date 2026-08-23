@@ -250,7 +250,7 @@ export const Footer: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={scrollToTop}
                 title="Scroll to top"
-                className="hidden sm:flex items-center gap-1.5 rounded-none border border-white/20 bg-white/10 px-3 py-1 text-white/80 hover:bg-white hover:text-black transition-all cursor-pointer focus:outline-none"
+                className="hidden sm:flex items-center gap-1.5 rounded-none border border-white/20 bg-transparent px-3 py-1 text-white/80 hover:bg-white hover:text-black transition-all cursor-pointer focus:outline-none"
               >
                 <span>TOP</span>
                 <span>&uarr;</span>

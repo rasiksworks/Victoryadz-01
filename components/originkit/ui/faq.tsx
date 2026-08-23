@@ -75,10 +75,10 @@ export const FAQ: React.FC = () => {
         {/* Header Section */}
         <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px] flex flex-col items-start gap-3 max-w-2xl">
           <h2>
-            <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl font-semibold tracking-normal text-white leading-[1.05]">
-              Common
+            <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
+              Frequently Asked
             </span>
-            <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
+            <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
               Questions
             </span>
           </h2>
