@@ -15,26 +15,25 @@ export const BrandVisionSection: React.FC = () => {
       <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px]">
         
         {/* Top Header Row (Scrolls Up Past the Frame First, No Divider Line) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-14 pt-6 sm:pt-10 md:pt-16 pb-6 sm:pb-8 md:pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-14 pt-6 sm:pt-10 md:pt-16 pb-6 sm:pb-8 md:pb-12 items-start">
           {/* Left Description */}
           <div className="flex flex-col justify-start">
             <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block mb-3">
               [ THE VICTORY ADZ PROMISE ]
             </span>
-            <ScrollHighlight className="text-xs md:text-sm leading-relaxed max-w-lg font-light block">
-              For 8+ years, we&apos;ve transformed cherished moments — wedding vows, newborn smiles, and family milestones — into heirloom-grade wall art. Using 12-color archival pigment printing, scratch-resistant lamination, and moisture-proof mouldings, we craft frames built to outlast generations.
-            </ScrollHighlight>
+            <p
+              className="text-[13px] sm:text-[14px] md:text-[15px] font-inter-display font-medium leading-relaxed text-[#DCDCDC] max-w-lg block"
+              style={{ letterSpacing: "0.5px" }}
+            >
+              For 8+ years, we&apos;ve transformed cherished moments including wedding vows, newborn smiles, and family milestones into heirloom-grade wall art. Using 12-color archival pigment printing, scratch-resistant lamination, and moisture-proof mouldings, we craft frames built to outlast generations.
+            </p>
           </div>
 
-          {/* Right Big Headline */}
-          <div className="flex items-center">
-            <MaskTextReveal
-              tag="h2"
-              direction="center-horizontal"
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08]"
-            >
+          {/* Right Big Headline (40% font size reduction) */}
+          <div className="flex items-start">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-[1.18]">
               Photos trapped on screens get forgotten. Framed on your wall, they live forever.
-            </MaskTextReveal>
+            </h2>
           </div>
         </div>
 
