@@ -33,7 +33,7 @@ export const Testimonials: React.FC = () => {
   return (
     <section
       id="testimonials"
-      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 overflow-hidden border-t border-white/5"
+      className="relative z-30 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden border-t border-white/10"
       style={{ backgroundColor: "#2C2C2C" }}
     >
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-10 sm:gap-14">
@@ -53,20 +53,20 @@ export const Testimonials: React.FC = () => {
         </div>
 
         {/* Responsive Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
           {items.map((t) => {
-            const initials = t.initials || t.name.slice(0, 2).toUpperCase();
+            const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
             return (
               <div
                 key={t.id}
                 className={`${
                   t.featured
                     ? "md:col-span-2 lg:col-span-2 bg-[#1b1b1b] border-amber-500/40"
-                    : "bg-[#181818] border-white/10"
-                } rounded-xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-white/20`}
+                    : "bg-[#181818] border-white/15"
+                } rounded-xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-white/30`}
                 style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
               >
-                <div className="flex flex-col justify-between h-full gap-6">
+                <div className="flex flex-col justify-between h-full gap-5">
                   {/* Top Bar: Stars + Badge */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
@@ -76,7 +76,7 @@ export const Testimonials: React.FC = () => {
                       <span>★</span>
                       <span>★</span>
                     </div>
-                    <span className="text-[10px] sm:text-xs font-mono text-white/40 uppercase tracking-widest px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                    <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
                       Verified Order
                     </span>
                   </div>
@@ -92,14 +92,10 @@ export const Testimonials: React.FC = () => {
                       {t.avatar ? (
                         <Image
                           src={t.avatar}
-                          alt={t.name}
+                          alt={t.name || "Customer"}
                           fill
                           sizes="44px"
                           className="object-cover"
-                          onError={(e) => {
-                            // Fallback to initials if image fails
-                            (e.currentTarget as HTMLElement).style.display = "none";
-                          }}
                         />
                       ) : (
                         <span className="font-mono text-xs font-bold text-white/80">{initials}</span>

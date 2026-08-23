@@ -105,8 +105,9 @@ export const WhyVictoryAdz: React.FC = () => {
           snap: {
             snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
             duration: { min: 0.2, max: 0.45 },
-            delay: 0.05,
+            delay: 0.15,
             ease: "power2.out",
+            inertia: false,
           },
           pinSpacing: true,
           invalidateOnRefresh: true,
