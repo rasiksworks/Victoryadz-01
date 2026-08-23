@@ -60,62 +60,27 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        {/* 4-Card Responsive Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-rows-2">
-          {featured && (
-            <Card className="grid grid-rows-[auto_1fr] gap-6 sm:col-span-2 sm:p-7 lg:row-span-2 bg-[#1a1a1c]/90 border-white/10 text-white shadow-2xl backdrop-blur-md">
-              <CardHeader className="p-0">
+        {/* Responsive Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {items.map((t) => (
+            <Card
+              key={t.id}
+              className={`${
+                t.featured ? "md:col-span-2 lg:col-span-2 bg-[#1a1a1c] border-amber-500/30" : "bg-[#1a1a1c]/90 border-white/10"
+              } text-white shadow-2xl backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between`}
+            >
+              <CardContent className="h-full p-0 flex flex-col justify-between gap-5">
                 <div className="flex items-center gap-2">
                   <span className="text-amber-400 text-sm tracking-widest">★★★★★</span>
                   <span className="text-xs font-mono text-white/40 uppercase">Verified Order</span>
                 </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                <blockquote className="grid h-full grid-rows-[1fr_auto] gap-6">
-                  <p className="text-lg md:text-xl font-medium leading-relaxed text-white/95">
-                    &ldquo;{featured.quote}&rdquo;
-                  </p>
-
-                  <div className="grid grid-cols-[auto_1fr] items-center gap-3.5 pt-4 border-t border-white/10">
-                    <Avatar className="size-12 border border-white/15">
-                      <AvatarImage
-                        src={featured.avatar}
-                        alt={featured.name}
-                        height="400"
-                        width="400"
-                        loading="lazy"
-                        className="object-cover"
-                      />
-                      <AvatarFallback className="bg-white/10 text-white font-bold">
-                        {featured.initials || featured.name.slice(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-
-                    <div>
-                      <cite className="text-sm font-semibold not-italic text-white">{featured.name}</cite>
-                      <span className="text-white/50 block text-xs">{featured.role}</span>
-                    </div>
-                  </div>
-                </blockquote>
-              </CardContent>
-            </Card>
-          )}
-
-          {others.map((t, idx) => (
-            <Card
-              key={t.id}
-              className={`${
-                idx === 0 ? "md:col-span-2" : ""
-              } bg-[#1a1a1c]/90 border-white/10 text-white shadow-2xl backdrop-blur-md p-6 flex flex-col justify-between`}
-            >
-              <CardContent className="h-full p-0 flex flex-col justify-between">
-                <blockquote className="grid h-full grid-rows-[1fr_auto] gap-4">
-                  <p className="text-sm sm:text-base text-white/85 leading-relaxed font-normal">
+                <blockquote className="flex flex-col justify-between flex-1 gap-5">
+                  <p className="text-sm sm:text-base md:text-lg text-white/90 leading-relaxed font-normal">
                     &ldquo;{t.quote}&rdquo;
                   </p>
 
-                  <div className="grid grid-cols-[auto_1fr] items-center gap-3 pt-3 border-t border-white/10">
-                    <Avatar className="size-10 border border-white/15">
+                  <div className="flex items-center gap-3 pt-3 border-t border-white/10">
+                    <Avatar className="size-10 sm:size-11 border border-white/15">
                       <AvatarImage
                         src={t.avatar}
                         alt={t.name}
@@ -129,7 +94,7 @@ export const Testimonials: React.FC = () => {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <cite className="text-sm font-medium not-italic text-white">{t.name}</cite>
+                      <cite className="text-sm font-semibold not-italic text-white">{t.name}</cite>
                       <span className="text-white/50 block text-xs">{t.role}</span>
                     </div>
                   </div>
