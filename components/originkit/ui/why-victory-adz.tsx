@@ -95,20 +95,26 @@ export const WhyVictoryAdz: React.FC = () => {
         return Math.min(maxScroll, shiftCards * cardWidth);
       };
 
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
       // Clean timeline driven by the container scroll (No GSAP pin manipulation)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.5,
-          snap: {
-            snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
-            duration: { min: 0.2, max: 0.45 },
-            delay: 0.1,
-            ease: "power2.out",
-            inertia: false,
-          },
+          scrub: isMobile ? 0.7 : 0.5,
+          ...(isMobile
+            ? {}
+            : {
+                snap: {
+                  snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
+                  duration: { min: 0.2, max: 0.45 },
+                  delay: 0.1,
+                  ease: "power2.out",
+                  inertia: false,
+                },
+              }),
           invalidateOnRefresh: true,
           onLeave: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
