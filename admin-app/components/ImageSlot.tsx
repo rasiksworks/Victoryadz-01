@@ -1,4 +1,5 @@
 "use client";
+
 import { useRef, useState } from "react";
 import type { GalleryItem } from "@/lib/types";
 
@@ -53,22 +54,27 @@ export function ImageSlot({
   };
 
   const displayUrl = url || "";
-  const previewSrc = displayUrl.startsWith("http") ? displayUrl : "http://localhost:3000" + displayUrl;
+  const previewSrc = displayUrl.startsWith("http")
+    ? displayUrl
+    : displayUrl.startsWith("/")
+    ? displayUrl
+    : "/" + displayUrl;
 
   const itemLabel = galleryData?.label || galleryData?.firstName || "";
   const itemTitle = galleryData?.title || galleryData?.lastName || "";
 
   return (
     <div
+      className="card-hover animate-fade-in"
       style={{
         background: "var(--surface)",
-        border: isFavorite ? "1px solid rgba(234, 179, 8, 0.45)" : "1px solid var(--border)",
-        borderRadius: 10,
+        border: isFavorite ? "1px solid rgba(234, 179, 8, 0.4)" : "1px solid var(--border)",
+        borderRadius: 12,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        transition: "all 0.2s",
         position: "relative",
+        boxShadow: isFavorite ? "0 4px 20px rgba(234, 179, 8, 0.08)" : "none",
       }}
     >
       {/* Image Preview Zone */}
@@ -86,8 +92,8 @@ export function ImageSlot({
           overflow: "hidden",
           cursor: "pointer",
           background: "var(--surface2)",
-          border: dragging ? "2px dashed rgba(255,255,255,0.4)" : "2px dashed transparent",
-          transition: "border-color 0.15s",
+          border: dragging ? "2px dashed #fff" : "2px dashed transparent",
+          transition: "all 0.15s ease",
         }}
       >
         {displayUrl && !imgError ? (
@@ -96,7 +102,12 @@ export function ImageSlot({
             src={previewSrc}
             alt={label}
             onError={() => setImgError(true)}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              transition: "transform 0.3s ease",
+            }}
           />
         ) : (
           <div
@@ -107,22 +118,37 @@ export function ImageSlot({
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: 6,
-              color: "var(--text-dim)",
-              padding: 16,
+              gap: 8,
+              padding: 20,
               textAlign: "center",
+              background: "radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%)",
             }}
           >
-            <span style={{ fontSize: 28 }}>⊕</span>
-            <span style={{ fontSize: 11, fontWeight: 600, color: "#fff" }}>Drop image or click</span>
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: "50%",
+                background: "var(--surface3)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--text-muted)",
+                fontSize: 16,
+              }}
+            >
+              ⊕
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>Upload Image</span>
             <span
               style={{
                 fontSize: 10,
                 color: "var(--text-dim)",
-                background: "rgba(255,255,255,0.06)",
-                padding: "2px 8px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid var(--border)",
+                padding: "3px 8px",
                 borderRadius: 4,
-                fontFamily: "monospace",
+                fontFamily: "JetBrains Mono",
               }}
             >
               {ratioSpec} · {pixelSpec}
@@ -130,17 +156,18 @@ export function ImageSlot({
           </div>
         )}
 
-        {/* Top Badges */}
+        {/* Top Floating Badges */}
         <div
           style={{
             position: "absolute",
-            top: 8,
-            left: 8,
-            right: 8,
+            top: 10,
+            left: 10,
+            right: 10,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             zIndex: 10,
+            pointerEvents: "none",
           }}
         >
           {galleryData?.number ? (
@@ -148,12 +175,13 @@ export function ImageSlot({
               style={{
                 fontSize: 10,
                 fontWeight: 700,
-                padding: "3px 7px",
+                padding: "3px 8px",
                 background: "rgba(0,0,0,0.75)",
                 color: "#fff",
-                borderRadius: 4,
-                fontFamily: "monospace",
-                backdropFilter: "blur(4px)",
+                borderRadius: 5,
+                fontFamily: "JetBrains Mono",
+                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.1)",
               }}
             >
               {galleryData.number}
@@ -163,107 +191,137 @@ export function ImageSlot({
               style={{
                 fontSize: 9,
                 fontWeight: 600,
-                padding: "2px 6px",
-                background: "rgba(0,0,0,0.65)",
+                padding: "3px 7px",
+                background: "rgba(0,0,0,0.75)",
                 color: "var(--text-dim)",
-                borderRadius: 4,
-                fontFamily: "monospace",
+                borderRadius: 5,
+                fontFamily: "JetBrains Mono",
+                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.08)",
               }}
             >
-              {ratioSpec}
+              #{index + 1}
             </span>
           )}
 
-          {/* Star / Favorite Badge on top-right */}
+          {/* Star / Favorite Toggle Button */}
           {showFavoriteToggle && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 if (onToggleFavorite) onToggleFavorite(index);
               }}
-              title={isFavorite ? "Remove from Recent Works" : "Add to Recent Works (Max 15)"}
+              title={isFavorite ? "Remove from Recent Works" : "Pin to Recent Works (Max 15)"}
               style={{
+                pointerEvents: "auto",
                 display: "flex",
                 alignItems: "center",
                 gap: 4,
-                padding: "4px 8px",
+                padding: "4px 9px",
                 borderRadius: 99,
                 cursor: "pointer",
-                border: "none",
+                border: isFavorite ? "1px solid rgba(234,179,8,0.5)" : "1px solid rgba(255,255,255,0.12)",
                 background: isFavorite ? "#eab308" : "rgba(0,0,0,0.75)",
-                color: isFavorite ? "#000" : "rgba(255,255,255,0.7)",
+                color: isFavorite ? "#000" : "rgba(255,255,255,0.75)",
                 fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.05em",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-                transition: "all 0.15s",
-                backdropFilter: "blur(4px)",
+                fontWeight: 800,
+                letterSpacing: "0.04em",
+                boxShadow: isFavorite ? "0 2px 10px rgba(234,179,8,0.3)" : "0 2px 6px rgba(0,0,0,0.4)",
+                transition: "all 0.15s ease",
+                backdropFilter: "blur(6px)",
               }}
             >
               <span>{isFavorite ? "⭐" : "☆"}</span>
-              <span>{isFavorite ? "RECENT WORK" : "FAVORITE"}</span>
+              <span>{isFavorite ? "RECENT WORK" : "PIN"}</span>
             </button>
           )}
         </div>
 
+        {/* Dragging Overlay */}
         {dragging && (
           <div
             style={{
               position: "absolute",
               inset: 0,
-              background: "rgba(255,255,255,0.08)",
+              background: "rgba(0,0,0,0.75)",
+              backdropFilter: "blur(4px)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: 4,
+              gap: 6,
+              zIndex: 20,
             }}
           >
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#fff" }}>Drop to upload</span>
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.7)" }}>Ratio: {ratioSpec} ({pixelSpec})</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Drop to upload WebP</span>
+            <span style={{ fontSize: 10, color: "var(--text-muted)" }}>Auto converts to optimized WebP</span>
           </div>
         )}
 
+        {/* Uploading Spinner Overlay */}
         {uploading && (
           <div
             style={{
               position: "absolute",
               inset: 0,
-              background: "rgba(0,0,0,0.65)",
+              background: "rgba(0,0,0,0.75)",
+              backdropFilter: "blur(6px)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              zIndex: 20,
             }}
           >
             <div
               style={{
-                width: 28,
-                height: 28,
+                width: 32,
+                height: 32,
                 border: "2px solid rgba(255,255,255,0.15)",
                 borderTopColor: "#fff",
                 borderRadius: "50%",
-                animation: "spin 0.7s linear infinite",
+                animation: "spin 0.6s linear infinite",
               }}
             />
           </div>
         )}
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
 
-      {/* Content & Metadata */}
-      <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+      {/* Content Info & Actions */}
+      <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
         {galleryData ? (
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 6 }}>
-              <div>
-                <div style={{ fontSize: 10, textTransform: "uppercase", color: "var(--text-dim)", fontWeight: 600, letterSpacing: "0.05em" }}>
-                  {itemLabel || "Untitled"}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div
+                  style={{
+                    fontSize: 10,
+                    textTransform: "uppercase",
+                    color: "var(--text-dim)",
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {itemLabel || "UNTITLED"}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", lineHeight: 1.2, marginTop: 1 }}>
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: "#fff",
+                    lineHeight: 1.25,
+                    marginTop: 2,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {itemTitle || "NO TITLE"}
                 </div>
                 <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>
-                  {galleryData.date}
+                  {galleryData.date || "VictoryAdz Studio"}
                 </div>
               </div>
 
@@ -271,20 +329,21 @@ export function ImageSlot({
                 <button
                   onClick={onEditDetails}
                   style={{
-                    padding: "5px 9px",
-                    background: "var(--accent-dim)",
+                    padding: "6px 10px",
+                    background: "var(--surface2)",
                     color: "#fff",
-                    border: "1px solid var(--border-hover)",
-                    borderRadius: 4,
+                    border: "1px solid var(--border)",
+                    borderRadius: 6,
                     fontSize: 10,
-                    fontWeight: 600,
+                    fontWeight: 700,
                     cursor: "pointer",
                     textTransform: "uppercase",
-                    letterSpacing: "0.05em",
+                    letterSpacing: "0.04em",
                     whiteSpace: "nowrap",
+                    transition: "all 0.15s ease",
                   }}
                 >
-                  ✎ Edit Content
+                  ✎ Edit
                 </button>
               )}
             </div>
@@ -294,7 +353,7 @@ export function ImageSlot({
                 style={{
                   fontSize: 10,
                   color: "var(--text-dim)",
-                  marginTop: 4,
+                  marginTop: 6,
                   textTransform: "uppercase",
                   letterSpacing: "0.04em",
                   overflow: "hidden",
@@ -308,20 +367,28 @@ export function ImageSlot({
           </div>
         ) : (
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", color: "var(--text-dim)", textTransform: "uppercase" }}>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                color: "var(--text-dim)",
+                textTransform: "uppercase",
+              }}
+            >
               {label}
             </span>
             <button
               onClick={() => fileRef.current?.click()}
               style={{
                 fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                padding: "4px 10px",
-                background: "var(--accent-dim)",
-                color: "var(--text-muted)",
+                fontWeight: 700,
+                letterSpacing: "0.05em",
+                padding: "5px 10px",
+                background: "var(--surface2)",
+                color: "var(--text)",
                 border: "1px solid var(--border)",
-                borderRadius: 4,
+                borderRadius: 6,
                 cursor: "pointer",
                 textTransform: "uppercase",
               }}
@@ -331,8 +398,8 @@ export function ImageSlot({
           </div>
         )}
 
-        {/* URL Input */}
-        <div style={{ display: "flex", gap: 6 }}>
+        {/* URL Input & Delete Action */}
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <input
             type="text"
             value={displayUrl}
@@ -345,12 +412,13 @@ export function ImageSlot({
               flex: 1,
               background: "var(--surface2)",
               border: "1px solid var(--border)",
-              borderRadius: 5,
+              borderRadius: 6,
               padding: "7px 10px",
               fontSize: 11,
               color: "var(--text-muted)",
               outline: "none",
-              fontFamily: "inherit",
+              fontFamily: "JetBrains Mono",
+              transition: "border-color 0.15s",
             }}
           />
 
@@ -359,13 +427,14 @@ export function ImageSlot({
               onClick={onDelete}
               title="Delete this work"
               style={{
-                padding: "0 8px",
-                background: "rgba(239, 68, 68, 0.12)",
-                color: "#ef4444",
-                border: "1px solid rgba(239, 68, 68, 0.3)",
-                borderRadius: 5,
+                padding: "6px 9px",
+                background: "rgba(239, 68, 68, 0.1)",
+                color: "var(--red)",
+                border: "1px solid rgba(239, 68, 68, 0.25)",
+                borderRadius: 6,
                 cursor: "pointer",
                 fontSize: 12,
+                transition: "all 0.15s",
               }}
             >
               🗑

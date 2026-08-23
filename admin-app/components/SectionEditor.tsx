@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { ImageSlot } from "./ImageSlot";
 import { Toast } from "./Toast";
 import type { SectionKey, SiteImages, GalleryItem } from "@/lib/types";
@@ -64,21 +64,33 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
   const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
   const [dirty, setDirty] = useState(false);
-  const [galleryFilter, setGalleryFilter] = useState<"all" | "favorites">("all");
+  
+  // Search & Filter States
+  const [searchQuery, setSearchQuery] = useState("");
+  const [galleryFilter, setGalleryFilter] = useState<"all" | "favorites" | "uploads">("all");
   
   // Work Item Editing Modal State
   const [editingItemIndex, setEditingItemIndex] = useState<number | null>(null);
   const [editingItemData, setEditingItemData] = useState<GalleryItem | null>(null);
+  const [modalUploading, setModalUploading] = useState(false);
 
   const config = SECTIONS.find((s) => s.key === sectionKey)!;
 
   useEffect(() => {
     setData(null);
     setDirty(false);
+    setSearchQuery("");
     setGalleryFilter("all");
     setEditingItemIndex(null);
     setEditingItemData(null);
-    fetch("/api/images").then((r) => r.json()).then(setData);
+    fetch("/api/images")
+      .then((r) => r.json())
+      .then((d) => {
+        setData(d);
+      })
+      .catch(() => {
+        setToast({ msg: "Failed to load site data", type: "error" });
+      });
   }, [sectionKey]);
 
   const handleUrlChange = (originalIndex: number, newUrl: string) => {
@@ -100,7 +112,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setData(d);
     setDirty(true);
     const newCount = d.exploreGallery.filter((i) => i.isFavorite).length;
-    setToast({ msg: newCount + " / 15 Recent Works selected.", type: "success" });
+    setToast({ msg: `${newCount} / 15 Recent Works selected.`, type: "success" });
   };
 
   const handleUpload = useCallback(async (originalIndex: number, file: File) => {
@@ -113,7 +125,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
       if (result.url && data) {
         setData(applyImageUrlChange(data, sectionKey, originalIndex, result.url));
         setDirty(true);
-        setToast({ msg: "Image uploaded! Hit Save to apply.", type: "success" });
+        setToast({ msg: "Image uploaded as WebP! Hit Save to apply live.", type: "success" });
       } else {
         setToast({ msg: "Upload failed: " + (result.error || "Unknown"), type: "error" });
       }
@@ -199,6 +211,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
   // Upload directly from within the modal
   const handleModalImageUpload = async (file: File) => {
     if (!editingItemData) return;
+    setModalUploading(true);
     try {
       const form = new FormData();
       form.append("file", file);
@@ -206,11 +219,14 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
       const result = await res.json();
       if (result.url) {
         setEditingItemData({ ...editingItemData, image: result.url });
-        setToast({ msg: "Image uploaded for this work!", type: "success" });
+        setToast({ msg: "Image uploaded and converted to WebP!", type: "success" });
+      } else {
+        setToast({ msg: "Upload failed: " + (result.error || "Unknown"), type: "error" });
       }
     } catch {
       setToast({ msg: "Upload failed.", type: "error" });
     }
+    setModalUploading(false);
   };
 
   const handleSave = async () => {
@@ -223,10 +239,10 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
         body: JSON.stringify(data),
       });
       if (res.ok) {
-        setToast({ msg: "Saved! Live site updated.", type: "success" });
+        setToast({ msg: "✓ Saved! Live website updated instantly.", type: "success" });
         setDirty(false);
       } else {
-        setToast({ msg: "Save failed.", type: "error" });
+        setToast({ msg: "Save failed. Check server logs.", type: "error" });
       }
     } catch {
       setToast({ msg: "Network error.", type: "error" });
@@ -234,107 +250,131 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setSaving(false);
   };
 
-  const allItems = data ? extractItems(data, sectionKey) : [];
-  const favoritesCount =
-    sectionKey === "exploreGallery" && data?.exploreGallery
+  const allItems = useMemo(() => (data ? extractItems(data, sectionKey) : []), [data, sectionKey]);
+  
+  const favoritesCount = useMemo(() => {
+    return sectionKey === "exploreGallery" && data?.exploreGallery
       ? data.exploreGallery.filter((i) => i.isFavorite).length
       : 0;
+  }, [sectionKey, data]);
 
-  const visibleItems =
-    sectionKey === "exploreGallery" && galleryFilter === "favorites"
-      ? allItems.filter((i) => i.isFavorite)
-      : allItems;
+  // Filter & Search
+  const visibleItems = useMemo(() => {
+    let items = allItems;
+    if (sectionKey === "exploreGallery") {
+      if (galleryFilter === "favorites") {
+        items = items.filter((i) => i.isFavorite);
+      } else if (galleryFilter === "uploads") {
+        items = items.filter((i) => i.url.startsWith("/uploads/"));
+      }
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        items = items.filter(
+          (i) =>
+            i.label.toLowerCase().includes(q) ||
+            i.url.toLowerCase().includes(q) ||
+            i.galleryData?.number?.toLowerCase().includes(q) ||
+            i.galleryData?.date?.toLowerCase().includes(q) ||
+            i.galleryData?.credits?.toLowerCase().includes(q)
+        );
+      }
+    }
+    return items;
+  }, [allItems, sectionKey, galleryFilter, searchQuery]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
-      {/* Header */}
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "var(--bg)" }}>
+      {/* Top Header Bar */}
       <div
         style={{
-          padding: "18px 32px",
+          padding: "16px 28px",
           borderBottom: "1px solid var(--border)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           background: "var(--surface)",
           flexShrink: 0,
+          gap: 16,
         }}
       >
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 20, color: "var(--text-muted)" }}>{config.icon}</span>
-            <h1 style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.01em" }}>{config.label}</h1>
+            <h1 style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.02em", color: "#fff" }}>{config.label}</h1>
+          </div>
+
+          <span
+            style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              padding: "3px 8px",
+              background: "var(--surface2)",
+              border: "1px solid var(--border)",
+              borderRadius: 99,
+              color: "var(--text-muted)",
+              fontFamily: "JetBrains Mono",
+            }}
+          >
+            {allItems.length} ITEMS
+          </span>
+
+          {/* Specifications Badge */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "4px 10px",
+              background: "rgba(59, 130, 246, 0.1)",
+              border: "1px solid rgba(59, 130, 246, 0.25)",
+              borderRadius: 6,
+              fontSize: 11,
+              fontWeight: 600,
+              color: "#93c5fd",
+            }}
+          >
+            <span>📐 Ratio: <strong>{config.ratio}</strong></span>
+            <span style={{ opacity: 0.3 }}>|</span>
+            <span>📏 Optimal: <strong>{config.resolution}</strong></span>
+            <span style={{ opacity: 0.3 }}>|</span>
+            <span style={{ fontSize: 10, color: "rgba(147, 197, 253, 0.75)" }}>Min: {config.minResolution}</span>
+          </div>
+
+          {sectionKey === "exploreGallery" && (
             <span
               style={{
-                fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                padding: "3px 8px",
-                background: "var(--accent-dim)",
-                border: "1px solid var(--border)",
-                borderRadius: 99,
-                color: "var(--text-muted)",
-              }}
-            >
-              {allItems.length} ITEMS
-            </span>
-
-            {/* Permanent Ratio & Pixel Specifications Badge */}
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "3px 10px",
-                background: "rgba(59, 130, 246, 0.12)",
-                border: "1px solid rgba(59, 130, 246, 0.35)",
-                borderRadius: 6,
                 fontSize: 11,
-                fontWeight: 600,
-                color: "#60a5fa",
+                fontWeight: 700,
+                padding: "3px 10px",
+                borderRadius: 99,
+                background: favoritesCount === 15 ? "rgba(234, 179, 8, 0.15)" : "var(--surface2)",
+                color: favoritesCount === 15 ? "#eab308" : "var(--text)",
+                border: favoritesCount === 15 ? "1px solid rgba(234, 179, 8, 0.4)" : "1px solid var(--border)",
               }}
             >
-              <span>📐 Ratio: <strong>{config.ratio}</strong></span>
-              <span style={{ opacity: 0.5 }}>|</span>
-              <span>📏 Ideal: <strong>{config.resolution}</strong></span>
-              <span style={{ opacity: 0.5 }}>|</span>
-              <span style={{ fontSize: 10, color: "rgba(96, 165, 250, 0.8)" }}>Min: {config.minResolution}</span>
-            </div>
-
-            {sectionKey === "exploreGallery" && (
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  padding: "3px 10px",
-                  borderRadius: 99,
-                  background: favoritesCount === 15 ? "rgba(234, 179, 8, 0.2)" : "rgba(255,255,255,0.08)",
-                  color: favoritesCount === 15 ? "#eab308" : "var(--text)",
-                  border: favoritesCount === 15 ? "1px solid rgba(234, 179, 8, 0.5)" : "1px solid var(--border)",
-                }}
-              >
-                ⭐ {favoritesCount} / 15 Selected for Recent Works
-              </span>
-            )}
-          </div>
-          <p style={{ fontSize: 12, color: "var(--text-muted)" }}>{config.description}</p>
+              ⭐ {favoritesCount} / 15 Recent Works
+            </span>
+          )}
         </div>
 
-        {/* Header Right Actions */}
+        {/* Action Buttons */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {sectionKey === "exploreGallery" && (
             <button
               onClick={handleAddNewWork}
               style={{
-                padding: "9px 18px",
-                background: "rgba(34, 197, 94, 0.15)",
-                color: "#4ade80",
-                border: "1px solid rgba(34, 197, 94, 0.4)",
+                padding: "8px 14px",
+                background: "rgba(34, 197, 94, 0.12)",
+                color: "var(--green)",
+                border: "1px solid rgba(34, 197, 94, 0.3)",
                 borderRadius: 6,
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: 700,
-                letterSpacing: "0.05em",
+                letterSpacing: "0.04em",
                 cursor: "pointer",
-                transition: "all 0.15s",
+                transition: "all 0.15s ease",
               }}
             >
               + ADD NEW WORK
@@ -342,8 +382,9 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
           )}
 
           {dirty && (
-            <span style={{ fontSize: 11, color: "rgba(250,200,80,0.9)", fontWeight: 500 }}>
-              ● Unsaved changes
+            <span style={{ fontSize: 11, color: "#fbbf24", fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fbbf24", display: "inline-block" }} />
+              Unsaved changes
             </span>
           )}
 
@@ -351,18 +392,18 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
             onClick={handleSave}
             disabled={saving || !dirty}
             style={{
-              padding: "10px 24px",
-              background: dirty ? "#fff" : "var(--surface2)",
-              color: dirty ? "#000" : "var(--text-dim)",
-              border: "1px solid " + (dirty ? "#fff" : "var(--border)"),
+              padding: "9px 20px",
+              background: dirty ? "#ffffff" : "var(--surface2)",
+              color: dirty ? "#000000" : "var(--text-dim)",
+              border: "1px solid " + (dirty ? "#ffffff" : "var(--border)"),
               borderRadius: 6,
               fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: "0.08em",
+              fontWeight: 800,
+              letterSpacing: "0.05em",
               cursor: dirty ? "pointer" : "default",
-              transition: "all 0.15s",
-              fontFamily: "inherit",
+              transition: "all 0.15s ease",
               opacity: saving ? 0.6 : 1,
+              boxShadow: dirty ? "0 2px 12px rgba(255,255,255,0.2)" : "none",
             }}
           >
             {saving ? "SAVING…" : "SAVE CHANGES"}
@@ -370,23 +411,26 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
         </div>
       </div>
 
-      {/* Explore Gallery Filter Tabs & Helper */}
+      {/* Explore Gallery Filter & Search Toolbar */}
       {sectionKey === "exploreGallery" && (
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "10px 32px",
+            padding: "10px 28px",
             borderBottom: "1px solid var(--border)",
             background: "var(--surface2)",
+            gap: 16,
+            flexWrap: "wrap",
           }}
         >
-          <div style={{ display: "flex", gap: 8 }}>
+          {/* Filter Tabs */}
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
             <button
               onClick={() => setGalleryFilter("all")}
               style={{
-                padding: "6px 14px",
+                padding: "6px 12px",
                 borderRadius: 6,
                 fontSize: 11,
                 fontWeight: 600,
@@ -394,6 +438,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                 border: "none",
                 background: galleryFilter === "all" ? "#fff" : "transparent",
                 color: galleryFilter === "all" ? "#000" : "var(--text-muted)",
+                transition: "all 0.15s",
               }}
             >
               All Works ({allItems.length})
@@ -401,7 +446,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
             <button
               onClick={() => setGalleryFilter("favorites")}
               style={{
-                padding: "6px 14px",
+                padding: "6px 12px",
                 borderRadius: 6,
                 fontSize: 11,
                 fontWeight: 600,
@@ -409,20 +454,68 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                 border: "none",
                 background: galleryFilter === "favorites" ? "#fff" : "transparent",
                 color: galleryFilter === "favorites" ? "#000" : "var(--text-muted)",
+                transition: "all 0.15s",
               }}
             >
               ⭐ Recent Works ({favoritesCount} / 15)
             </button>
+            <button
+              onClick={() => setGalleryFilter("uploads")}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 6,
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: "pointer",
+                border: "none",
+                background: galleryFilter === "uploads" ? "#fff" : "transparent",
+                color: galleryFilter === "uploads" ? "#000" : "var(--text-muted)",
+                transition: "all 0.15s",
+              }}
+            >
+              📁 Local Uploads ({allItems.filter((i) => i.url.startsWith("/uploads/")).length})
+            </button>
           </div>
 
-          <span style={{ fontSize: 11, color: "var(--text-dim)" }}>
-            Tip: Click <strong>✎ Edit Content</strong> to edit Label, Title, Date, Photo & Description.
-          </span>
+          {/* Search Bar */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search works by title, number, date..."
+              style={{
+                width: 260,
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 6,
+                padding: "6px 12px",
+                fontSize: 11,
+                color: "#fff",
+                outline: "none",
+                fontFamily: "inherit",
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-dim)",
+                  cursor: "pointer",
+                  fontSize: 12,
+                }}
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Grid */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "28px 32px" }}>
+      {/* Grid Content */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
         {!data ? (
           <div
             style={{
@@ -437,16 +530,47 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
           >
             <div
               style={{
-                width: 36,
-                height: 36,
+                width: 32,
+                height: 32,
                 border: "2px solid var(--border)",
-                borderTopColor: "rgba(255,255,255,0.3)",
+                borderTopColor: "#fff",
                 borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
+                animation: "spin 0.6s linear infinite",
               }}
             />
-            <span style={{ fontSize: 13 }}>Loading items…</span>
-            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            <span style={{ fontSize: 12, fontWeight: 500 }}>Loading image data…</span>
+          </div>
+        ) : visibleItems.length === 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "50%",
+              gap: 10,
+              color: "var(--text-dim)",
+            }}
+          >
+            <span style={{ fontSize: 24 }}>🔍</span>
+            <span style={{ fontSize: 13, fontWeight: 600 }}>No items match your filter or search</span>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setGalleryFilter("all");
+              }}
+              style={{
+                padding: "6px 12px",
+                background: "var(--surface2)",
+                border: "1px solid var(--border)",
+                borderRadius: 6,
+                color: "#fff",
+                fontSize: 11,
+                cursor: "pointer",
+              }}
+            >
+              Reset Filters
+            </button>
           </div>
         ) : (
           <div
@@ -486,8 +610,8 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
             position: "fixed",
             inset: 0,
             zIndex: 9990,
-            background: "rgba(0,0,0,0.8)",
-            backdropFilter: "blur(8px)",
+            background: "rgba(0,0,0,0.85)",
+            backdropFilter: "blur(10px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -500,38 +624,49 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
+            className="animate-fade-in"
             style={{
               background: "var(--surface)",
               border: "1px solid var(--border-hover)",
-              borderRadius: 12,
+              borderRadius: 14,
               width: "100%",
               maxWidth: 680,
-              maxHeight: "90vh",
+              maxHeight: "92vh",
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              boxShadow: "0 24px 60px rgba(0,0,0,0.8)",
+              boxShadow: "0 24px 60px rgba(0,0,0,0.9)",
             }}
           >
             {/* Modal Header */}
             <div
               style={{
-                padding: "20px 24px",
+                padding: "18px 24px",
                 borderBottom: "1px solid var(--border)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                background: "var(--surface2)",
               }}
             >
               <div>
-                <h2 style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>
-                  Edit Work Details (Detailed Page Content)
+                <h2 style={{ fontSize: 16, fontWeight: 800, color: "#fff", letterSpacing: "-0.01em" }}>
+                  Edit Work Details & Metadata
                 </h2>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 3 }}>
-                  <span style={{ fontSize: 11, color: "var(--text-dim)" }}>
-                    Item ID: {editingItemData.id}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                  <span style={{ fontSize: 11, color: "var(--text-dim)", fontFamily: "JetBrains Mono" }}>
+                    ID: {editingItemData.id}
                   </span>
-                  <span style={{ fontSize: 10, background: "rgba(59,130,246,0.15)", color: "#60a5fa", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>
+                  <span
+                    style={{
+                      fontSize: 10,
+                      background: "rgba(59,130,246,0.15)",
+                      color: "#60a5fa",
+                      padding: "2px 6px",
+                      borderRadius: 4,
+                      fontWeight: 600,
+                    }}
+                  >
                     📐 {config.ratio} · {config.resolution}
                   </span>
                 </div>
@@ -547,6 +682,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                   color: "var(--text-muted)",
                   fontSize: 18,
                   cursor: "pointer",
+                  padding: 4,
                 }}
               >
                 ✕
@@ -556,32 +692,24 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
             {/* Modal Form Body */}
             <div style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
               
-              {/* Specification Notice Box */}
+              {/* Image Preview & URL Zone */}
               <div
                 style={{
-                  padding: "10px 14px",
-                  background: "rgba(59, 130, 246, 0.08)",
-                  border: "1px solid rgba(59, 130, 246, 0.25)",
-                  borderRadius: 8,
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  fontSize: 11,
-                  color: "#93c5fd",
+                  gap: 16,
+                  alignItems: "flex-start",
+                  padding: 14,
+                  background: "var(--surface2)",
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
                 }}
               >
-                <span>📐 <strong>Image Format:</strong> {config.ratio} ({config.resolution})</span>
-                <span style={{ fontSize: 10, color: "rgba(147, 197, 253, 0.7)" }}>Supported: .webp, .jpg, .png (Max 2MB)</span>
-              </div>
-
-              {/* Image Preview & URL */}
-              <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
                 <div
                   style={{
-                    width: 110,
+                    width: 100,
                     aspectRatio: "3/4",
-                    background: "var(--surface2)",
-                    borderRadius: 6,
+                    background: "var(--surface3)",
+                    borderRadius: 8,
                     overflow: "hidden",
                     border: "1px solid var(--border)",
                     flexShrink: 0,
@@ -593,16 +721,18 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                     src={
                       editingItemData.image?.startsWith("http")
                         ? editingItemData.image
-                        : "http://localhost:3000" + editingItemData.image
+                        : editingItemData.image?.startsWith("/")
+                        ? editingItemData.image
+                        : "/" + (editingItemData.image || "")
                     }
-                    alt={editingItemData.title || editingItemData.lastName || ""}
+                    alt={editingItemData.title || ""}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>
 
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10 }}>
-                  <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                    Image URL ({config.ratio} · {config.resolution})
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                    Image Path or URL ({config.ratio})
                   </label>
                   <input
                     type="text"
@@ -611,33 +741,38 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                     placeholder="https://... or /uploads/..."
                     style={{
                       width: "100%",
-                      background: "var(--surface2)",
+                      background: "var(--surface)",
                       border: "1px solid var(--border)",
                       borderRadius: 6,
                       padding: "8px 12px",
-                      fontSize: 12,
+                      fontSize: 11,
                       color: "#fff",
                       outline: "none",
+                      fontFamily: "JetBrains Mono",
                     }}
                   />
                   <div>
                     <label
                       style={{
-                        display: "inline-block",
-                        padding: "6px 12px",
-                        background: "var(--accent-dim)",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        padding: "7px 14px",
+                        background: "var(--surface3)",
                         border: "1px solid var(--border)",
-                        borderRadius: 4,
+                        borderRadius: 6,
                         fontSize: 11,
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: "#fff",
-                        cursor: "pointer",
+                        cursor: modalUploading ? "default" : "pointer",
+                        opacity: modalUploading ? 0.6 : 1,
                       }}
                     >
-                      📁 Upload New File ({config.resolution})
+                      <span>📁 {modalUploading ? "Uploading & Converting…" : "Upload New File (WebP Auto)"}</span>
                       <input
                         type="file"
                         accept="image/*"
+                        disabled={modalUploading}
                         style={{ display: "none" }}
                         onChange={(e) => {
                           const f = e.target.files?.[0];
@@ -652,7 +787,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 {/* Label */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
                     Label (Category / Subtitle)
                   </label>
                   <input
@@ -674,13 +809,14 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                       fontSize: 13,
                       color: "#fff",
                       outline: "none",
+                      fontFamily: "inherit",
                     }}
                   />
                 </div>
 
                 {/* Title */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
                     Title (Main Heading)
                   </label>
                   <input
@@ -702,13 +838,14 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                       fontSize: 13,
                       color: "#fff",
                       outline: "none",
+                      fontFamily: "inherit",
                     }}
                   />
                 </div>
 
                 {/* Number Badge */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
                     Number / Index Badge
                   </label>
                   <input
@@ -724,13 +861,14 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                       fontSize: 13,
                       color: "#fff",
                       outline: "none",
+                      fontFamily: "JetBrains Mono",
                     }}
                   />
                 </div>
 
                 {/* Date */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
                     Date / Year
                   </label>
                   <input
@@ -746,6 +884,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                       fontSize: 13,
                       color: "#fff",
                       outline: "none",
+                      fontFamily: "inherit",
                     }}
                   />
                 </div>
@@ -753,7 +892,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
 
               {/* Credits */}
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase" }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
                   Credits / Frame Description
                 </label>
                 <input
@@ -769,6 +908,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                     fontSize: 13,
                     color: "#fff",
                     outline: "none",
+                    fontFamily: "inherit",
                   }}
                 />
               </div>
@@ -778,9 +918,9 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 10,
-                  padding: "12px 16px",
-                  background: editingItemData.isFavorite ? "rgba(234, 179, 8, 0.12)" : "var(--surface2)",
+                  gap: 12,
+                  padding: "14px 16px",
+                  background: editingItemData.isFavorite ? "rgba(234, 179, 8, 0.1)" : "var(--surface2)",
                   border: editingItemData.isFavorite ? "1px solid rgba(234, 179, 8, 0.4)" : "1px solid var(--border)",
                   borderRadius: 8,
                   cursor: "pointer",
@@ -791,14 +931,14 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                   type="checkbox"
                   checked={!!editingItemData.isFavorite}
                   onChange={(e) => setEditingItemData({ ...editingItemData, isFavorite: e.target.checked })}
-                  style={{ width: 16, height: 16, cursor: "pointer" }}
+                  style={{ width: 18, height: 18, cursor: "pointer" }}
                 />
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: editingItemData.isFavorite ? "#eab308" : "#fff" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: editingItemData.isFavorite ? "#eab308" : "#fff" }}>
                     ⭐ Pin to 15 Recent Works on Homepage
                   </div>
-                  <div style={{ fontSize: 10, color: "var(--text-dim)" }}>
-                    If checked, this item will appear in the "We Most Proud Of" showcase on the home page.
+                  <div style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 1 }}>
+                    If checked, this item will appear in the "We Most Proud Of" showcase grid on the home page.
                   </div>
                 </div>
               </div>
@@ -812,7 +952,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-end",
-                gap: 12,
+                gap: 10,
                 background: "var(--surface2)",
               }}
             >
@@ -837,13 +977,13 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
               <button
                 onClick={handleSaveModalChanges}
                 style={{
-                  padding: "8px 20px",
+                  padding: "8px 22px",
                   background: "#fff",
                   color: "#000",
                   border: "none",
                   borderRadius: 6,
                   fontSize: 12,
-                  fontWeight: 700,
+                  fontWeight: 800,
                   cursor: "pointer",
                 }}
               >
