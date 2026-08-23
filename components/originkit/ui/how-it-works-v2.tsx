@@ -415,22 +415,37 @@ export const HowItWorksV2: React.FC = () => {
                 top: step.cellPosDesktop.top,
                 width: "25%",
                 height: "50%",
+                backgroundColor: "rgba(0, 0, 0, 0.24)",
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
+                visibility: "hidden",
+                opacity: 0,
+                willChange: "transform, opacity",
               }}
-              className="flex flex-col justify-end p-6 xl:p-8 2xl:p-10 border border-white/5 bg-transparent opacity-0 transform-gpu overflow-hidden pointer-events-auto"
+              className="pointer-events-auto border border-white/50 backdrop-blur-[4px] p-6 lg:p-8 xl:p-10 flex flex-col justify-between"
             >
-              <div className="flex flex-col gap-2 max-w-[280px]">
-                <span className="font-mono text-sm xl:text-base font-bold text-white/40 tracking-wider">
+              {/* 4 Corner 7x7px White Dots */}
+              <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
+              <span className="absolute -top-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
+              <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
+              <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
+
+              <div className="w-full h-full flex flex-col justify-between">
+                <div className="text-[32px] xl:text-[40px] font-semibold text-white tracking-tight leading-none">
                   {step.number}
-                </span>
-                <h3 className="text-lg xl:text-xl font-bold text-white tracking-tight leading-tight">
-                  {step.title}
-                </h3>
-                <p
-                  className="font-inter-display text-xs xl:text-sm font-medium text-white/70 leading-relaxed"
-                  style={{ letterSpacing: "0.5px" }}
-                >
-                  {step.body}
-                </p>
+                </div>
+
+                <div className="w-full flex flex-col gap-3 xl:gap-[18px]">
+                  <h3 className="text-[26px] lg:text-[30px] xl:text-[38px] font-semibold text-white tracking-tight leading-[1.08]">
+                    {step.title}
+                  </h3>
+                  <p
+                    className="text-[15px] lg:text-[16px] xl:text-[19px] font-inter-display font-medium text-white/95 leading-[1.3] text-pretty"
+                    style={{ letterSpacing: "0.5px" }}
+                  >
+                    {step.body}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
