@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import siteData from "@/data/site-images.json";
 
 export interface TestimonialItem {
@@ -17,7 +16,7 @@ export interface TestimonialItem {
 
 export const Testimonials: React.FC = () => {
   const [items, setItems] = useState<TestimonialItem[]>(
-    ((siteData as any).testimonials as TestimonialItem[]) || []
+    () => ((siteData as any).testimonials as TestimonialItem[]) || []
   );
 
   useEffect(() => {
@@ -26,23 +25,16 @@ export const Testimonials: React.FC = () => {
       .then((data) => {
         if (data?.testimonials && Array.isArray(data.testimonials) && data.testimonials.length > 0) {
           setItems(data.testimonials);
-          setTimeout(() => {
-            if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
-              (window as any).ScrollTrigger.refresh();
-            }
-          }, 80);
         }
       })
       .catch(() => {});
   }, []);
 
-  const featured = items.find((t) => t.featured) || items[0];
-  const others = items.filter((t) => t.id !== featured?.id);
-
   return (
     <section
       id="testimonials"
-      className="relative w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 overflow-hidden border-t border-white/5"
+      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 overflow-hidden border-t border-white/5"
+      style={{ backgroundColor: "#2C2C2C" }}
     >
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-10 sm:gap-14">
         {/* Header */}
@@ -61,47 +53,71 @@ export const Testimonials: React.FC = () => {
         </div>
 
         {/* Responsive Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {items.map((t) => (
-            <Card
-              key={t.id}
-              className={`${
-                t.featured ? "md:col-span-2 lg:col-span-2 bg-[#1a1a1c] border-amber-500/30" : "bg-[#1a1a1c]/90 border-white/10"
-              } text-white shadow-2xl backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between`}
-            >
-              <CardContent className="h-full p-0 flex flex-col justify-between gap-5">
-                <div className="flex items-center gap-2">
-                  <span className="text-amber-400 text-sm tracking-widest">★★★★★</span>
-                  <span className="text-xs font-mono text-white/40 uppercase">Verified Order</span>
-                </div>
-                <blockquote className="flex flex-col justify-between flex-1 gap-5">
-                  <p className="text-sm sm:text-base md:text-lg text-white/90 leading-relaxed font-normal">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full">
+          {items.map((t) => {
+            const initials = t.initials || t.name.slice(0, 2).toUpperCase();
+            return (
+              <div
+                key={t.id}
+                className={`${
+                  t.featured
+                    ? "md:col-span-2 lg:col-span-2 bg-[#1b1b1b] border-amber-500/40"
+                    : "bg-[#181818] border-white/10"
+                } rounded-xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-white/20`}
+                style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
+              >
+                <div className="flex flex-col justify-between h-full gap-6">
+                  {/* Top Bar: Stars + Badge */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                    </div>
+                    <span className="text-[10px] sm:text-xs font-mono text-white/40 uppercase tracking-widest px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                      Verified Order
+                    </span>
+                  </div>
+
+                  {/* Review Quote */}
+                  <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal flex-1">
                     &ldquo;{t.quote}&rdquo;
                   </p>
 
-                  <div className="flex items-center gap-3 pt-3 border-t border-white/10">
-                    <Avatar className="size-10 sm:size-11 border border-white/15">
-                      <AvatarImage
-                        src={t.avatar}
-                        alt={t.name}
-                        height="400"
-                        width="400"
-                        loading="lazy"
-                        className="object-cover"
-                      />
-                      <AvatarFallback className="bg-white/10 text-white text-xs font-bold">
-                        {t.initials || t.name.slice(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <cite className="text-sm font-semibold not-italic text-white">{t.name}</cite>
-                      <span className="text-white/50 block text-xs">{t.role}</span>
+                  {/* Customer Footer */}
+                  <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
+                    <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
+                      {t.avatar ? (
+                        <Image
+                          src={t.avatar}
+                          alt={t.name}
+                          fill
+                          sizes="44px"
+                          className="object-cover"
+                          onError={(e) => {
+                            // Fallback to initials if image fails
+                            (e.currentTarget as HTMLElement).style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
+                      )}
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
+                        {t.name}
+                      </span>
+                      <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                        {t.role}
+                      </span>
                     </div>
                   </div>
-                </blockquote>
-              </CardContent>
-            </Card>
-          ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

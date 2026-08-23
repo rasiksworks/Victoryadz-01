@@ -1,5 +1,7 @@
 @import "tailwindcss";
+@source "../components";
 @source "../components/originkit";
+@source "../app";
 @import "./originkit-section-theme.css";
 @import "./originkit-section-themes.css";
 
