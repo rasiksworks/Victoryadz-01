@@ -445,7 +445,10 @@ export const WeMostProudOf: React.FC = () => {
                     {selectedItem.title || selectedItem.lastName}
                   </motion.h2>
                   <div className="pt-6">
-                    <SocialButton />
+                    <SocialButton
+                      shareTitle={`${selectedItem.label || selectedItem.firstName || ""} ${selectedItem.title || selectedItem.lastName || ""}`.trim()}
+                      shareText={`Check out this handcrafted frame "${selectedItem.label || selectedItem.firstName || ""} ${selectedItem.title || selectedItem.lastName || ""}" by VictoryAdz!`}
+                    />
                   </div>
                 </div>
               </motion.div>
@@ -464,13 +467,19 @@ export const WeMostProudOf: React.FC = () => {
                   <span className="text-xs text-white/80 tracking-wide font-normal">{selectedItem.date}</span>
                   <span className="text-[11px] text-white/60 font-normal uppercase tracking-wider">{selectedItem.credits}</span>
                 </div>
-                <button
-                  onClick={handleCloseModal}
-                  aria-label="Close"
-                  className="w-11 h-11 min-w-[44px] min-h-[44px] bg-white/15 active:bg-white/30 text-white flex items-center justify-center text-sm font-mono transition-colors cursor-pointer rounded-none touch-manipulation"
-                >
-                  ✕
-                </button>
+                <div className="flex items-center gap-2">
+                  <SocialButton
+                    shareTitle={`${selectedItem.label || selectedItem.firstName || ""} ${selectedItem.title || selectedItem.lastName || ""}`.trim()}
+                    shareText={`Check out this handcrafted frame "${selectedItem.label || selectedItem.firstName || ""} ${selectedItem.title || selectedItem.lastName || ""}" by VictoryAdz!`}
+                  />
+                  <button
+                    onClick={handleCloseModal}
+                    aria-label="Close"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] bg-white/15 active:bg-white/30 text-white flex items-center justify-center text-sm font-mono transition-colors cursor-pointer rounded-none touch-manipulation"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
               <h2 className="font-serif text-2xl sm:text-4xl font-bold tracking-tight text-white uppercase mt-2 leading-none">{selectedItem.title || selectedItem.lastName}</h2>
             </motion.div>

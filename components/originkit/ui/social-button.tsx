@@ -1,8 +1,8 @@
 "use client";
 
-import { Link, MessageCircle } from "lucide-react";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link as LinkIcon, MessageCircle, Share2, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Instagram = ({ className }: { className?: string }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
@@ -18,13 +18,16 @@ const Linkedin = ({ className }: { className?: string }) => (
   </svg>
 );
 
-interface ShareItem {
+export interface ShareItem {
   icon: React.ElementType;
   label: string;
 }
 
 interface SocialButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
+  shareTitle?: string;
+  shareText?: string;
+  shareUrl?: string;
   items?: ShareItem[];
   onShare?: (index: number, item: ShareItem) => void;
   className?: string;
@@ -34,11 +37,14 @@ const DEFAULT_SHARE_ITEMS: ShareItem[] = [
   { icon: MessageCircle, label: "Share on WhatsApp" },
   { icon: Instagram, label: "Share on Instagram" },
   { icon: Linkedin, label: "Share on LinkedIn" },
-  { icon: Link, label: "Copy link" },
+  { icon: LinkIcon, label: "Copy link" },
 ];
 
 export default function SocialButton({
   label = "Share",
+  shareTitle = "VictoryAdz Handcrafted Frame",
+  shareText = "Check out this handcrafted frame by VictoryAdz!",
+  shareUrl,
   items = DEFAULT_SHARE_ITEMS,
   onShare,
   className = "",
@@ -46,51 +52,68 @@ export default function SocialButton({
 }: SocialButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
   const [copied, setCopied] = useState(false);
 
-  const handleShare = (index: number) => {
+  const getTargetUrl = () => {
+    if (shareUrl) return shareUrl;
+    if (typeof window !== "undefined") return window.location.href;
+    return "https://victoryadz.com";
+  };
+
+  const handleShare = async (index: number) => {
     setActiveIndex(index);
     onShare?.(index, items[index]);
     setTimeout(() => {
       setActiveIndex(null);
     }, 300);
-    
+
     const item = items[index];
-    const url = window.location.href;
-    const text = "Check out this amazing frame by VictoryAdz!";
+    const url = getTargetUrl();
+    const formattedText = `${shareTitle} — ${shareText}`;
 
     if (item.label === "Copy link") {
-      navigator.clipboard.writeText(url).then(() => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(url);
+        } else {
+          const textArea = document.createElement("textarea");
+          textArea.value = url;
+          textArea.style.position = "fixed";
+          textArea.style.opacity = "0";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textArea);
+        }
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
+        setTimeout(() => setCopied(false), 2400);
+      } catch {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2400);
+      }
     } else if (item.label === "Share on WhatsApp") {
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, "_blank");
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${formattedText} ${url}`)}`;
+      window.open(waUrl, "_blank", "noopener,noreferrer");
     } else if (item.label === "Share on Instagram") {
-      // Instagram doesn't support direct URL sharing; open the profile page instead
-      window.open("https://www.instagram.com/victory__adz/", "_blank");
+      window.open("https://www.instagram.com/victory__adz/", "_blank", "noopener,noreferrer");
     } else if (item.label === "Share on LinkedIn") {
-      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, "_blank");
+      const liUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+      window.open(liUrl, "_blank", "noopener,noreferrer");
     }
   };
 
   return (
     <div
-      className={`relative w-40 ${className}`}
+      className={`relative inline-block select-none ${className}`}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
-      onFocus={() => setIsVisible(true)}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          setIsVisible(false);
-        }
-      }}
     >
-      {/* Default Button */}
+      {/* Default Collapsed Share Trigger Button */}
       <motion.div
         animate={{
           opacity: isVisible ? 0 : 1,
+          pointerEvents: isVisible ? "none" : "auto",
         }}
         transition={{
           duration: 0.2,
@@ -98,11 +121,13 @@ export default function SocialButton({
         }}
       >
         <button
-          className="relative w-40 h-10 bg-white hover:bg-neutral-50 text-black border border-black/10 transition-colors duration-200 px-4 py-2 text-xs font-mono uppercase tracking-widest shadow-sm rounded-sm cursor-pointer flex items-center justify-center"
+          type="button"
+          onClick={() => setIsVisible(!isVisible)}
+          className="relative w-36 sm:w-40 h-10 bg-white hover:bg-neutral-100 text-black border border-black/15 transition-all duration-200 px-4 py-2 text-xs font-mono uppercase tracking-widest shadow-sm rounded-none cursor-pointer flex items-center justify-center active:scale-98 touch-manipulation"
           {...props}
         >
-          <span className="flex items-center gap-2 justify-center font-medium">
-            <Link className="h-4 w-4" />
+          <span className="flex items-center gap-2 justify-center font-bold">
+            <Share2 className="h-3.5 w-3.5" />
             {label}
           </span>
         </button>
@@ -111,9 +136,9 @@ export default function SocialButton({
       {/* Kokonut UI Expanding Drawer Menu */}
       <motion.div
         animate={{
-          width: isVisible ? "160px" : 0,
+          width: isVisible ? (items.length === 4 ? "160px" : `${items.length * 40}px`) : 0,
         }}
-        className="absolute top-0 left-0 flex h-10 overflow-hidden rounded-sm"
+        className="absolute top-0 left-0 flex h-10 overflow-hidden rounded-none shadow-md z-30"
         transition={{
           duration: 0.3,
           ease: [0.23, 1, 0.32, 1],
@@ -129,16 +154,13 @@ export default function SocialButton({
                 x: isVisible ? 0 : -20,
               }}
               transition={{
-                duration: 0.3,
+                duration: 0.25,
                 ease: [0.23, 1, 0.32, 1],
-                delay: isVisible ? i * 0.05 : 0,
+                delay: isVisible ? i * 0.04 : 0,
               }}
               aria-label={button.label}
-              className={`h-10 w-10 shrink-0 flex items-center justify-center bg-black text-white ${
-                i === 0 ? "rounded-l-sm" : ""
-              } ${
-                i === items.length - 1 ? "rounded-r-sm" : ""
-              } border-r border-white/20 last:border-r-0 hover:bg-neutral-900 outline-none relative overflow-hidden transition-colors duration-200 cursor-pointer`}
+              title={button.label}
+              className={`h-10 w-10 shrink-0 flex items-center justify-center bg-black text-white border-r border-white/20 last:border-r-0 hover:bg-neutral-800 outline-none relative overflow-hidden transition-colors duration-200 cursor-pointer active:scale-95 touch-manipulation`}
               onClick={() => handleShare(i)}
               type="button"
             >
@@ -148,7 +170,7 @@ export default function SocialButton({
                 }}
                 className="relative z-10"
                 transition={{
-                  duration: 0.2,
+                  duration: 0.15,
                   ease: "easeInOut",
                 }}
               >
@@ -156,12 +178,12 @@ export default function SocialButton({
               </motion.div>
               <motion.div
                 animate={{
-                  opacity: activeIndex === i ? 0.15 : 0,
+                  opacity: activeIndex === i ? 0.2 : 0,
                 }}
                 className="absolute inset-0 bg-white pointer-events-none"
                 initial={{ opacity: 0 }}
                 transition={{
-                  duration: 0.2,
+                  duration: 0.15,
                   ease: "easeInOut",
                 }}
               />
@@ -170,17 +192,21 @@ export default function SocialButton({
         })}
       </motion.div>
 
-      {/* Copied toast */}
-      {copied && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-mono tracking-wider text-green-600 bg-green-50 border border-green-200 px-3 py-0.5 rounded-full whitespace-nowrap shadow-sm"
-        >
-          Link copied!
-        </motion.div>
-      )}
+      {/* Copied Link Toast */}
+      <AnimatePresence>
+        {copied && (
+          <motion.div
+            initial={{ opacity: 0, y: 6, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-mono font-bold tracking-wider text-emerald-400 bg-black/90 border border-emerald-500/40 px-3 py-1 rounded-full whitespace-nowrap shadow-lg z-40 backdrop-blur-md"
+          >
+            <Check size={12} className="text-emerald-400" />
+            <span>LINK COPIED!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
