@@ -165,7 +165,7 @@ export const WhyVictoryAdz: React.FC = () => {
 
           tl.fromTo(
             plusEl,
-            { opacity: 0, left: "0%", rotation: 0 },
+            { opacity: 0, left: "12px", rotation: 0 },
             { opacity: 1, duration: 0.08, ease: "power1.out" },
             animStart
           );
@@ -173,7 +173,7 @@ export const WhyVictoryAdz: React.FC = () => {
           tl.to(
             plusEl,
             {
-              left: "100%",
+              left: "calc(100% - 12px)",
               rotation: 360,
               ease: "none",
               duration: stepDuration * 0.7,
@@ -286,25 +286,29 @@ export const WhyVictoryAdz: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* Individual Bottom Line Segment with Spinning Plus */}
-                    <div className="relative w-full py-5 mt-auto select-none overflow-visible">
-                      <div
-                        ref={(el) => {
-                          cardLineRefs.current[index] = el;
-                        }}
-                        className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/45 will-change-[width]"
-                        style={{ width: "0%" }}
-                      />
-                      <div
-                        ref={(el) => {
-                          cardPlusRefs.current[index] = el;
-                        }}
-                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-10 overflow-visible"
-                        style={{ left: "0%" }}
-                      >
-                        <span className="text-white font-mono text-base sm:text-lg font-bold select-none leading-none drop-shadow-[0_0_6px_rgba(255,255,255,1)] flex items-center justify-center w-full h-full text-center">
-                          +
-                        </span>
+                    {/* Individual Bottom Line Segment with Spinning Plus (Aligned with Card Text) */}
+                    <div className="relative w-full pr-6 sm:pr-10 lg:pr-12 py-5 mt-auto select-none overflow-visible">
+                      <div className="relative w-full h-[1.5px] bg-white/20 overflow-visible">
+                        {/* Active Revealed Line */}
+                        <div
+                          ref={(el) => {
+                            cardLineRefs.current[index] = el;
+                          }}
+                          className="absolute top-0 left-0 h-full bg-white/75 will-change-[width]"
+                          style={{ width: "0%" }}
+                        />
+                        {/* Spinning Plus Marker (Safe 12px bounds, Zero clipping) */}
+                        <div
+                          ref={(el) => {
+                            cardPlusRefs.current[index] = el;
+                          }}
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-20"
+                          style={{ left: "12px" }}
+                        >
+                          <span className="text-white font-mono text-base font-bold select-none leading-none drop-shadow-[0_0_6px_rgba(255,255,255,1)] flex items-center justify-center">
+                            +
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
