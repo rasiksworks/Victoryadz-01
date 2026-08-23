@@ -135,8 +135,8 @@ export const BrandVisionSection: React.FC = () => {
             </div>
 
             {/* Bottom Pull Quote */}
-            <div className="text-center max-w-md mx-auto pt-4 pb-6 sm:pb-10">
-              <ScrollHighlight className="text-xl md:text-2xl font-bold tracking-tight text-center leading-snug block">
+            <div className="w-full text-center max-w-xl mx-auto pt-6 pb-6 sm:pb-10 px-2 sm:px-4">
+              <ScrollHighlight className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-center leading-snug w-full block">
                 &quot;A photo fades on a screen. On your wall, in a VictoryAdz frame, it becomes something you never stop noticing.&quot;
               </ScrollHighlight>
             </div>

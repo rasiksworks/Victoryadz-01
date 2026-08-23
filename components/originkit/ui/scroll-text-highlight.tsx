@@ -45,7 +45,7 @@ const Word: React.FC<{
   const color = useTransform(progress, range, [dimColor, highlightColor]);
 
   return (
-    <span className="relative inline-block mr-[0.28em] last:mr-0">
+    <span className="inline-block">
       <motion.span
         style={{ opacity, color }}
         className="inline-block"
@@ -68,7 +68,7 @@ const Char: React.FC<{
   const color = useTransform(progress, range, [dimColor, highlightColor]);
 
   return (
-    <span className="relative inline-block">
+    <span className="inline-block">
       <motion.span
         style={{ opacity, color }}
         className="inline-block"
@@ -135,15 +135,17 @@ export default function ScrollHighlight({
         }
 
         return (
-          <Word
-            key={`${item}-${i}`}
-            range={[start, end]}
-            progress={scrollYProgress}
-            dimColor={dimColor}
-            highlightColor={highlightColor}
-          >
-            {item}
-          </Word>
+          <React.Fragment key={`${item}-${i}`}>
+            <Word
+              range={[start, end]}
+              progress={scrollYProgress}
+              dimColor={dimColor}
+              highlightColor={highlightColor}
+            >
+              {item}
+            </Word>
+            {i < items.length - 1 ? " " : ""}
+          </React.Fragment>
         );
       })}
     </p>
