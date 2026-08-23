@@ -223,24 +223,24 @@ export const WhyVictoryAdz: React.FC = () => {
         </div>
 
         {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
-        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-8 sm:pb-12 pt-2 -mx-4 sm:-mx-6 px-4 sm:px-6">
+        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-8 sm:pb-12 pt-2 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
           <div
             ref={trackRef}
             className="flex flex-col w-max will-change-transform overflow-visible"
           >
             {/* The Cards Row */}
-            <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-6">
+            <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-8 sm:pr-12">
               {WHY_REASONS.map((reason, index) => (
                 <div
                   key={reason.id}
-                  className="flex flex-col justify-between w-[280px] sm:w-[320px] md:w-[360px] lg:w-[400px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                  className="flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[440px] lg:w-[400px] xl:w-[420px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
                 >
                   {/* Card Text Content (Fades in smoothly when active) */}
                   <div
                     ref={(el) => {
                       cardTextRefs.current[index] = el;
                     }}
-                    className="flex flex-col opacity-0 will-change-[opacity,transform] pr-8 sm:pr-10 lg:pr-12"
+                    className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
                   >
                     {/* Eyebrow Label */}
                     <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-3 sm:mb-4">
@@ -248,12 +248,12 @@ export const WhyVictoryAdz: React.FC = () => {
                     </span>
 
                     {/* Title */}
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug mb-3 sm:mb-4">
+                    <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-3 sm:mb-4">
                       {reason.title}
                     </h3>
 
                     {/* Content Description */}
-                    <p className="text-sm sm:text-base text-white/70 font-light leading-relaxed">
+                    <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
                       {reason.content}
                     </p>
                   </div>
