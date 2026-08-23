@@ -36,7 +36,7 @@ export default function Testimonials() {
 
   return (
     <section className="py-16 md:py-32 bg-[#2C2C2C] text-white">
-      <div className="mx-auto max-w-6xl space-y-8 px-6 md:space-y-16">
+      <div className="mx-auto max-w-[1520px] space-y-8 px-4 sm:px-6 md:px-8 lg:px-12 md:space-y-16">
         <div className="relative z-10 mx-auto max-w-xl space-y-4 text-center md:space-y-6">
           <h2 className="flex flex-col items-center">
             <span className="font-cal-sans text-3xl sm:text-4xl md:text-5xl font-semibold tracking-normal text-white">

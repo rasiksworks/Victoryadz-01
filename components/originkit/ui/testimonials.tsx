@@ -39,7 +39,7 @@ export const Testimonials: React.FC = () => {
       id="testimonials"
       className="relative w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 overflow-hidden border-t border-white/5"
     >
-      <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px] max-w-6xl mx-auto flex flex-col gap-10 sm:gap-14">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-10 sm:gap-14">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-2">
           <h2>
