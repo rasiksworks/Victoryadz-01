@@ -713,13 +713,31 @@
   ],
   "testimonials": [
     {
+      "id": "1787509182187",
+      "quote": "VictoryAdz provided outstanding handcrafted frame quality and safe delivery. Highly recommended!",
+      "name": "Customer Name",
+      "role": "Chennai, Tamil Nadu",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+      "initials": "CN",
+      "featured": true
+    },
+    {
+      "id": "1787509134010",
+      "quote": "VictoryAdz provided outstanding handcrafted frame quality and safe delivery. Highly recommended!",
+      "name": "Customer Name",
+      "role": "Chennai, Tamil Nadu",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+      "initials": "CN",
+      "featured": false
+    },
+    {
       "id": "1",
       "quote": "VictoryAdz transformed our 30-year-old wedding portrait into a masterpiece. The sparkle lamination finish brings out vivid details without any glare. The WhatsApp consultation made choosing the frame size completely effortless.",
       "name": "Karthik Raja",
       "role": "Chennai, Tamil Nadu",
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
       "initials": "KR",
-      "featured": true
+      "featured": false
     },
     {
       "id": "2",
@@ -728,24 +746,6 @@
       "role": "Coimbatore",
       "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
       "initials": "PS",
-      "featured": false
-    },
-    {
-      "id": "3",
-      "quote": "The photo restoration they did on my grandfather's old black-and-white picture was unbelievable. Pristine matte finish and solid frame build.",
-      "name": "Arun Prakash",
-      "role": "Madurai",
-      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-      "initials": "AP",
-      "featured": false
-    },
-    {
-      "id": "4",
-      "quote": "Fast WhatsApp reply, live previews before printing, and lightning-fast safe delivery. The best custom framing service in south India!",
-      "name": "Meera Krishnan",
-      "role": "Bangalore",
-      "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80",
-      "initials": "MK",
       "featured": false
     }
   ]
