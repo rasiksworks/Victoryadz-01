@@ -23,13 +23,13 @@ const STEPS: StepData[] = [
   {
     number: "01",
     title: "Send on WhatsApp",
-    body: "Drop your photo on WhatsApp. Any resolution — our team enhances and upscales it for crystal-clear printing.",
+    body: "Drop your photo on WhatsApp. Any resolution — our team checks quality and enhances it for crystal-clear printing.",
     cellPosDesktop: { left: "0%", top: "0%" },
   },
   {
     number: "02",
-    title: "Free Digital Mockup",
-    body: "See exact frame styles, border matting, and size previews on WhatsApp before you pay a single rupee.",
+    title: "1-on-1 Frame Advice",
+    body: "We guide you directly on WhatsApp through custom sizes, frame styles, and matte or gloss lamination options.",
     cellPosDesktop: { left: "25%", top: "0%" },
   },
   {
@@ -330,7 +330,7 @@ export const HowItWorksV2: React.FC = () => {
 
   const handleWhatsAppOrder = () => {
     const message = encodeURIComponent(
-      "Hi VictoryAdz! I'd like to get a free digital mockup for my photo frame."
+      "Hi VictoryAdz! I'd like to get frame options and pricing for my photo."
     );
     window.open(`https://wa.me/919361312684?text=${message}`, "_blank");
   };
@@ -392,9 +392,9 @@ export const HowItWorksV2: React.FC = () => {
           {/* CTA Button */}
           <div className="pt-2 flex items-center justify-end">
             <Button01
-              text="Get Free Digital Mockup"
+              text="Order on WhatsApp"
               onClick={handleWhatsAppOrder}
-              ariaLabel="Get Free Digital Mockup on WhatsApp"
+              ariaLabel="Order on WhatsApp"
               className="pointer-events-auto"
             />
           </div>
@@ -481,9 +481,9 @@ export const HowItWorksV2: React.FC = () => {
           </p>
           <div className="pt-1 flex items-center justify-center w-full">
             <Button01
-              text="Get Free Digital Mockup"
+              text="Order on WhatsApp"
               onClick={handleWhatsAppOrder}
-              ariaLabel="Get Free Digital Mockup on WhatsApp"
+              ariaLabel="Order on WhatsApp"
               className="pointer-events-auto"
             />
           </div>

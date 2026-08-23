@@ -18,8 +18,8 @@ const FAQS: FAQItem[] = [
   {
     id: "q1",
     number: "01",
-    question: "Can I see how my photo looks in a frame before I pay?",
-    answer: "Yes, 100%! Simply send your photo on WhatsApp. Our design team creates a free digital mockup showing different frame styles, border matting, and proportional wall sizing. You only confirm and pay once you are completely thrilled with the preview.",
+    question: "How do I choose the right frame and size before ordering?",
+    answer: "Simply send your photo on WhatsApp! Our framing experts review your image quality, recommend proportional dimensions for your wall, and share real photos of available frame styles, wood mouldings, and lamination finishes before you confirm.",
     shade: "bg-[#181818]",
   },
   {
@@ -47,7 +47,7 @@ const FAQS: FAQItem[] = [
     id: "q5",
     number: "05",
     question: "How long does crafting and delivery take?",
-    answer: "Standard handcrafting takes 2-3 business days once your mockup is approved. Tracked courier delivery takes 2-4 days across Tamil Nadu and all major Indian cities, with live WhatsApp dispatch updates.",
+    answer: "Standard handcrafting takes 2-3 business days once your frame style and size are confirmed. Tracked courier delivery takes 2-4 days across Tamil Nadu and all major Indian cities, with live WhatsApp dispatch updates.",
     shade: "bg-[#3f3f3f]",
   },
   {

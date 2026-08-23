@@ -15,13 +15,13 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     id: "t1",
-    quote: "I sent an old, blurry phone photo of my parents' 50th anniversary. They upscaled the resolution, sent a digital mockup, and framed it in teak wood. Arrived in Chennai in 4 days with zero damage.",
+    quote: "I sent an old, blurry phone photo of my parents' 50th anniversary. They checked the resolution, recommended the perfect size, and framed it in teak wood. Arrived in Chennai in 4 days with zero damage.",
     name: "Priya Sundaram",
     location: "Chennai",
   },
   {
     id: "t2",
-    quote: "The WhatsApp preview helped us choose the exact size for our living room wall. The anti-glare matte lamination has zero reflection even under direct sunlight. True craftsmanship.",
+    quote: "The WhatsApp consultation helped us choose the exact frame size for our living room wall. The anti-glare matte lamination has zero reflection even under direct sunlight. True craftsmanship.",
     name: "Arun Kumar",
     location: "Coimbatore",
   },

@@ -56,7 +56,7 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
 
           <motion.div {...reveal(0.22)}>
             <ScrollHighlight className="w-full max-w-[348px] text-center font-tight text-[13px] sm:text-[14px] leading-relaxed tracking-[-0.28px] text-pretty ipad:max-w-[448px] ipad:text-[17px] ipad:tracking-[-0.36px] desktop-sm:max-w-[340px] desktop-sm:text-[16px] desktop-sm:leading-[24px] desktop-sm:tracking-[-0.34px] block px-2">
-              Studio-grade framing &amp; archival lamination, trusted by 15,000+ homes across India. Send your photo on WhatsApp — get a free preview in minutes.
+              Studio-grade framing &amp; archival lamination, trusted by 15,000+ homes across India. Send your photo on WhatsApp for custom sizes, frame choices &amp; instant pricing.
             </ScrollHighlight>
           </motion.div>
         </div>
@@ -69,8 +69,8 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
             Explore Gallery
           </Button>
           <Button01
-            text="Get Free WhatsApp Preview"
-            ariaLabel="Get Free WhatsApp Preview"
+            text="Order on WhatsApp"
+            ariaLabel="Order on WhatsApp"
             onClick={onBook}
             className="w-full sm:w-auto"
           />

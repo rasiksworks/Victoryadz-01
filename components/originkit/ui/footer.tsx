@@ -169,13 +169,13 @@ export const Footer: React.FC = () => {
               </h3>
               <Button01
                 variant="light"
-                text="Get Free Frame Mockup"
-                onClick={() => handleSocialClick("WhatsApp", "https://wa.me/919361312684?text=" + encodeURIComponent("Hi VictoryAdz! I'd like to get a free mockup & price quote for my photo."))}
-                ariaLabel="Get Free Frame Mockup on WhatsApp"
+                text="Order on WhatsApp"
+                onClick={() => handleSocialClick("WhatsApp", "https://wa.me/919361312684?text=" + encodeURIComponent("Hi VictoryAdz! I'd like to get frame options & pricing for my photo."))}
+                ariaLabel="Order on WhatsApp"
                 className="w-full max-w-xs"
               />
               <p className="mt-4 font-mono text-[11px] text-white/60 leading-relaxed max-w-xs tracking-wider">
-                Send your photo on WhatsApp for an instant free digital preview, sizing advice, and transparent price quote.
+                Send your photo on WhatsApp for custom sizing advice, frame options, and an instant price quote.
               </p>
             </div>
 

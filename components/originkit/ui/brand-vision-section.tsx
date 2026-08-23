@@ -90,7 +90,7 @@ export const BrandVisionSection: React.FC = () => {
                 Captured once.{"\n"}Built to last generations.
               </MaskTextReveal>
               <ScrollHighlight className="text-xs md:text-sm leading-relaxed font-light block">
-                A digital photo is easily buried in camera rolls. On your wall, it becomes a daily reminder of the people and moments that matter most. We consult with you 1-on-1 on WhatsApp, providing live digital previews with custom frame styles, matte/gloss finishes, and proportional wall sizing before anything is printed. Once approved, our master craftsmen handcraft your piece and ship it in 5-layer shockproof boxing anywhere in India.
+                A digital photo is easily buried in camera rolls. On your wall, it becomes a daily reminder of the people and moments that matter most. We consult with you 1-on-1 on WhatsApp, providing personal guidance on custom frame styles, matte or gloss lamination finishes, and proportional wall sizing before anything is crafted. Once confirmed, our master craftsmen handcraft your piece and ship it in 5-layer shockproof boxing anywhere in India.
               </ScrollHighlight>
             </div>
 

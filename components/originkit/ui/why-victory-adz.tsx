@@ -41,8 +41,8 @@ export const WHY_VICTORY_CARDS: WhyReasonCard[] = [
   {
     id: "card-3",
     number: "03",
-    badge: "FREE MOCKUP",
-    tagline: "1-on-1 WhatsApp Guidance with Live Frame & Wall Visualizers",
+    badge: "1-ON-1 GUIDANCE",
+    tagline: "Direct WhatsApp Advice on Sizes, Lamination Finishes & Placement",
     bgColor: "#307c5f",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=80",
     iconType: "support",
@@ -140,7 +140,7 @@ export const WhyVictoryAdz: React.FC = () => {
   const handleWhatsAppOrder = () => {
     window.open(
       "https://wa.me/919361312684?text=" +
-        encodeURIComponent("Hi VictoryAdz! I'd like to get a free mockup and price quote for my photo frame."),
+        encodeURIComponent("Hi VictoryAdz! I'd like to get frame options and pricing for my photo."),
       "_blank"
     );
   };
@@ -358,13 +358,13 @@ export const WhyVictoryAdz: React.FC = () => {
       {/* ── BOTTOM CALL TO ACTION ── */}
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-white/10 z-10">
         <p className="text-xs sm:text-base text-white/80 font-medium text-center sm:text-left">
-          Have a photo in mind? Send it over for an instant free digital mockup &amp; quote.
+          Have a photo in mind? Send it on WhatsApp for custom sizing advice &amp; an instant quote.
         </p>
 
         <Button01
-          text="Get Free WhatsApp Mockup"
+          text="Order on WhatsApp"
           onClick={handleWhatsAppOrder}
-          ariaLabel="Get Free WhatsApp Mockup"
+          ariaLabel="Order on WhatsApp"
         />
       </div>
     </section>
