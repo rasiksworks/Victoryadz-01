@@ -89,8 +89,8 @@ export const WhyVictoryAdz: React.FC = () => {
           trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${Math.max(1600, numCards * 300)}`,
-          scrub: 0.5,
+          end: () => `+=${Math.max(3600, numCards * 700)}`,
+          scrub: 0.8,
           pinSpacing: true,
           invalidateOnRefresh: true,
           onLeave: () => {
