@@ -228,17 +228,21 @@ export const WhyVictoryAdz: React.FC = () => {
           </div>
 
           <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-            <MaskTextReveal
-              tag="h2"
-              direction="center-horizontal"
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08] max-w-2xl"
-            >
-              Engineered to preserve what matters most.
-            </MaskTextReveal>
+            <h2>
+              <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
+                Engineered to preserve
+              </span>
+              <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
+                what matters most
+              </span>
+            </h2>
 
-            <ScrollHighlight className="text-sm sm:text-base text-white/70 font-light max-w-md leading-relaxed">
+            <p
+              className="text-sm sm:text-base text-[#DCDCDC] font-inter-display font-medium max-w-md leading-relaxed"
+              style={{ letterSpacing: "0.5px" }}
+            >
               Every frame is built from the inside out — from 25-year anti-fade pigment chemistry to 5-layer shockproof transit armor.
-            </ScrollHighlight>
+            </p>
           </div>
         </div>
 
@@ -334,7 +338,10 @@ export const WhyVictoryAdz: React.FC = () => {
 
             {/* Left Bottom WhatsApp Trigger */}
             <div className="flex flex-col gap-3 pt-6 border-t border-white/10">
-              <p className="text-xs text-white/60 font-medium">
+              <p
+                className="text-[13px] text-white/70 font-inter-display font-medium leading-relaxed"
+                style={{ letterSpacing: "0.5px" }}
+              >
                 Have specific size or frame requirements? Talk directly with our team.
               </p>
               <Button01
@@ -439,7 +446,10 @@ export const WhyVictoryAdz: React.FC = () => {
 
         {/* ── MOBILE BOTTOM CALL TO ACTION (Visible on < lg) ── */}
         <div className="lg:hidden mt-8 pt-6 border-t border-white/10 flex flex-col gap-3">
-          <p className="text-xs text-white/70 text-center font-medium">
+          <p
+            className="text-xs xs:text-[13px] text-white/70 text-center font-inter-display font-medium leading-relaxed"
+            style={{ letterSpacing: "0.5px" }}
+          >
             Have specific size or frame requirements? Talk directly with our team on WhatsApp.
           </p>
           <Button01

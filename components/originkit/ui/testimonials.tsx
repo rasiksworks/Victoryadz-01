@@ -98,16 +98,20 @@ export const Testimonials: React.FC = () => {
           <span className="text-xs text-white/50 tracking-[0.2em] font-mono uppercase block">
             [ WHAT CLIENTS SAY ]
           </span>
-          <MaskTextReveal
-            tag="h2"
-            direction="center-horizontal"
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.1]"
+          <h2>
+            <span className="block font-cal-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-normal text-white leading-[1.05]">
+              Trusted by 15,000+ Homes
+            </span>
+            <span className="block font-great-vibes text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
+              from Near and Far
+            </span>
+          </h2>
+          <p
+            className="text-xs md:text-sm text-[#DCDCDC] font-inter-display font-medium mt-1 max-w-lg leading-relaxed"
+            style={{ letterSpacing: "0.5px" }}
           >
-            Trusted from Near and Far
-          </MaskTextReveal>
-          <ScrollHighlight className="text-xs md:text-sm text-white/70 font-light mt-1 max-w-lg">
             Every frame represents a memory entrusted to us. Here is what our customers say about their experience.
-          </ScrollHighlight>
+          </p>
         </div>
 
         {/* Cards — mobile: horizontal scroll carousel, desktop: 4-col grid (no horizontal scroll) */}

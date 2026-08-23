@@ -78,17 +78,21 @@ export const FAQ: React.FC = () => {
             [ FAQ ]
           </span>
           
-          <MaskTextReveal
-            tag="h2"
-            direction="center-horizontal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.1]"
-          >
-            Common Questions
-          </MaskTextReveal>
+          <h2>
+            <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl font-semibold tracking-normal text-white leading-[1.05]">
+              Frequently Asked
+            </span>
+            <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
+              Questions
+            </span>
+          </h2>
 
-          <ScrollHighlight className="text-sm md:text-base text-white/70 font-light leading-relaxed mt-2 block">
+          <p
+            className="text-sm md:text-base text-[#DCDCDC] font-inter-display font-medium leading-relaxed mt-2 block"
+            style={{ letterSpacing: "0.5px" }}
+          >
             Everything you need to know about our remote framing and delivery process.
-          </ScrollHighlight>
+          </p>
         </div>
 
         {/* Full-Width Stepped Gradient Shaded Rows */}

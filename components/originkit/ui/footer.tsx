@@ -174,7 +174,10 @@ export const Footer: React.FC = () => {
                 ariaLabel="Order on WhatsApp"
                 className="w-full max-w-xs"
               />
-              <p className="mt-4 font-mono text-[11px] text-white/60 leading-relaxed max-w-xs tracking-wider">
+              <p
+                className="mt-4 font-inter-display text-[12px] sm:text-[13px] text-white/70 font-medium leading-relaxed max-w-xs"
+                style={{ letterSpacing: "0.5px" }}
+              >
                 Send your photo on WhatsApp for custom sizing advice, frame options, and an instant price quote.
               </p>
             </div>

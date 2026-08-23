@@ -82,16 +82,20 @@ export const BrandVisionSection: React.FC = () => {
 
             {/* Captured Once Copy Section */}
             <div className="flex flex-col items-center text-center max-w-xl mx-auto space-y-4 pt-4">
-              <MaskTextReveal
-                tag="h2"
-                direction="center-horizontal"
-                className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-snug text-center"
+              <h2 className="text-center text-white select-none">
+                <span className="block font-cal-sans text-2xl sm:text-3xl md:text-4xl font-semibold tracking-normal text-white">
+                  Captured once.
+                </span>
+                <span className="block font-great-vibes text-3xl sm:text-4xl md:text-5xl font-normal text-white pt-1 -mt-1">
+                  Built to last generations.
+                </span>
+              </h2>
+              <p
+                className="font-inter-display font-medium text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed text-[#DCDCDC] block text-center"
+                style={{ letterSpacing: "0.5px" }}
               >
-                Captured once.{"\n"}Built to last generations.
-              </MaskTextReveal>
-              <ScrollHighlight className="text-xs md:text-sm leading-relaxed font-light block">
                 A digital photo is easily buried in camera rolls. On your wall, it becomes a daily reminder of the people and moments that matter most. We consult with you 1-on-1 on WhatsApp, providing personal guidance on custom frame styles, matte or gloss lamination finishes, and proportional wall sizing before anything is crafted. Once confirmed, our master craftsmen handcraft your piece and ship it in 5-layer shockproof boxing anywhere in India.
-              </ScrollHighlight>
+              </p>
             </div>
 
             {/* Small Center Teaser Image & Button */}

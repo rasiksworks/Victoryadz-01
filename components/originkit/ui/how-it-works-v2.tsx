@@ -61,6 +61,7 @@ export const HowItWorksV2: React.FC = () => {
   const titleBlockRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mobileCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileHeaderRef = useRef<HTMLDivElement>(null);
 
   const [isMobile, setIsMobile] = useState(false);
   const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
@@ -373,18 +374,18 @@ export const HowItWorksV2: React.FC = () => {
           }}
           className="max-w-[580px] xl:max-w-[640px] pr-8 xl:pr-12 flex flex-col items-end text-right gap-4 xl:gap-[18px] z-20 opacity-100"
         >
-          <h2
-            className="text-[48px] xl:text-[62px] font-semibold text-white tracking-[-0.025em] leading-[1.06] text-right"
-            style={{ fontFamily: "'Inter Display', sans-serif" }}
-          >
-            Four Simple Steps,
-            <br />
-            Zero Confusion
+          <h2 className="text-right select-none">
+            <span className="block font-cal-sans text-[36px] xl:text-[48px] font-semibold text-white tracking-normal leading-[1.04]">
+              Four Simple Steps,
+            </span>
+            <span className="block font-great-vibes text-[42px] xl:text-[56px] font-normal text-white pt-1 -mt-1 leading-[1.05]">
+              Zero Confusion
+            </span>
           </h2>
 
           <p
-            className="text-[18px] xl:text-[22px] font-medium text-[#E8E8E8] leading-snug text-right"
-            style={{ fontFamily: "'Inter Display', sans-serif" }}
+            className="text-[15px] xl:text-[17px] font-inter-display font-medium text-[#E8E8E8] leading-snug text-right"
+            style={{ letterSpacing: "0.5px" }}
           >
             From your phone to your wall in 4 simple steps. No shop visit, no guesswork.
           </p>
@@ -414,34 +415,22 @@ export const HowItWorksV2: React.FC = () => {
                 top: step.cellPosDesktop.top,
                 width: "25%",
                 height: "50%",
-                backgroundColor: "rgba(0, 0, 0, 0.24)",
-                backdropFilter: "blur(4px)",
-                WebkitBackdropFilter: "blur(4px)",
-                visibility: "hidden",
-                opacity: 0,
-                willChange: "transform, opacity",
               }}
-              className="pointer-events-auto border border-white/50 backdrop-blur-[4px] p-6 lg:p-8 xl:p-10 flex flex-col justify-between"
+              className="flex flex-col justify-end p-6 xl:p-8 2xl:p-10 border border-white/5 bg-transparent opacity-0 transform-gpu overflow-hidden pointer-events-auto"
             >
-              {/* 4 Corner 7x7px White Dots */}
-              <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
-              <span className="absolute -top-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
-              <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
-              <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none z-30" />
-
-              <div className="w-full h-full flex flex-col justify-between">
-                <div className="text-[32px] xl:text-[40px] font-semibold text-white tracking-tight leading-none">
+              <div className="flex flex-col gap-2 max-w-[280px]">
+                <span className="font-mono text-sm xl:text-base font-bold text-white/40 tracking-wider">
                   {step.number}
-                </div>
-
-                <div className="w-full flex flex-col gap-3 xl:gap-[18px]">
-                  <h3 className="text-[26px] lg:text-[30px] xl:text-[38px] font-semibold text-white tracking-tight leading-[1.08]">
-                    {step.title}
-                  </h3>
-                  <p className="text-[15px] lg:text-[16px] xl:text-[19px] font-medium text-white/95 leading-[1.3] text-pretty">
-                    {step.body}
-                  </p>
-                </div>
+                </span>
+                <h3 className="text-lg xl:text-xl font-bold text-white tracking-tight leading-tight">
+                  {step.title}
+                </h3>
+                <p
+                  className="font-inter-display text-xs xl:text-sm font-medium text-white/70 leading-relaxed"
+                  style={{ letterSpacing: "0.5px" }}
+                >
+                  {step.body}
+                </p>
               </div>
             </div>
           ))}
@@ -449,33 +438,30 @@ export const HowItWorksV2: React.FC = () => {
       </div>
 
       {/* ==================================================================== */}
-      {/* MOBILE VIEW (< 1024px): Pinned Stepped Vertical Bottom-Up Sequence */}
+      {/* MOBILE VIEW (< 1024px): Card Sequence Stack */}
       {/* ==================================================================== */}
-      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between p-4 xs:p-6 sm:p-8 pointer-events-none overflow-hidden">
-        {/* Mobile Header Block (Positioned below navbar) */}
+      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between pt-16 xs:pt-20 sm:pt-24 pb-4 px-4 xs:px-5 select-none pointer-events-none">
+        {/* Mobile Header Title */}
         <div
+          ref={mobileHeaderRef}
           style={{
-            position: "absolute",
-            left: "50%",
-            top: "84px",
-            transform: "translateX(-50%)",
-            width: "calc(100% - 32px)",
-            textAlign: "center",
-            willChange: "transform, top",
+            transform: "translateY(0px)",
+            opacity: 1,
+            willChange: "transform, opacity",
           }}
-          className="mobile-header-block flex flex-col items-center text-center gap-2 z-20"
+          className="mobile-header-block flex flex-col items-center text-center gap-1.5 z-20"
         >
-          <h2
-            className="text-2xl xs:text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-tight"
-            style={{ fontFamily: "'Inter Display', sans-serif" }}
-          >
-            Four Simple Steps,
-            <br />
-            Zero Confusion
+          <h2 className="text-center select-none">
+            <span className="block font-cal-sans text-2xl xs:text-3xl font-semibold text-white tracking-normal leading-tight">
+              Four Simple Steps,
+            </span>
+            <span className="block font-great-vibes text-3xl xs:text-4xl font-normal text-white pt-0.5 -mt-0.5 leading-tight">
+              Zero Confusion
+            </span>
           </h2>
           <p
-            className="text-xs xs:text-sm font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
-            style={{ fontFamily: "'Inter Display', sans-serif" }}
+            className="text-xs xs:text-[13px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
+            style={{ letterSpacing: "0.5px" }}
           >
             From your phone to your wall in 4 simple steps. No shop visit needed.
           </p>
