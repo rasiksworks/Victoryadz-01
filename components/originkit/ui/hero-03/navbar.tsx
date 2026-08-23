@@ -128,9 +128,11 @@ export const Navbar = () => {
           visible: { y: 0, opacity: 1 },
           hidden: { y: -100, opacity: 0 },
         }}
-        animate={modalOpen || hidden ? "hidden" : "visible"}
+        animate={modalOpen || (hidden && !mobileMenuOpen) ? "hidden" : "visible"}
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-[60px] lg:px-[60px] py-3.5 sm:py-4 bg-transparent"
+        className={`fixed top-0 left-0 right-0 ${
+          mobileMenuOpen ? "z-[100]" : "z-50"
+        } flex items-center justify-between px-4 sm:px-6 md:px-[60px] lg:px-[60px] py-3.5 sm:py-4 bg-transparent`}
       >
         <div className="w-full flex items-center justify-between max-w-[1520px] mx-auto">
           {/* Left Brand Logo */}
@@ -191,7 +193,7 @@ export const Navbar = () => {
               />
             </div>
 
-            {/* Mobile Hamburger Menu Button (visible on small screens < md) */}
+            {/* Mobile Hamburger / Close Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
@@ -199,7 +201,7 @@ export const Navbar = () => {
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               className="flex md:hidden w-11 h-11 min-w-[44px] min-h-[44px] items-center justify-center rounded-none bg-[#1c1c1c]/90 border border-white/15 text-white backdrop-blur-md hover:bg-[#2c2c2c] active:scale-95 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-white"
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={22} className="text-white" /> : <Menu size={20} />}
             </button>
           </div>
         </div>
@@ -217,14 +219,25 @@ export const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[85] flex flex-col bg-[#141414]/98 backdrop-blur-2xl text-white pt-20 pb-8 px-6 overflow-y-auto md:hidden"
+            className="fixed inset-0 z-[85] flex flex-col justify-between bg-[#111111]/98 backdrop-blur-2xl text-white pt-20 pb-8 px-6 overflow-y-auto md:hidden"
           >
-            {/* Navigation List */}
-            <div className="flex flex-col gap-1 my-auto max-w-sm w-full mx-auto">
-              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/40 mb-2">
-                [ NAVIGATION ]
+            {/* Top Close Bar inside drawer */}
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 max-w-sm w-full mx-auto">
+              <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-white/50">
+                [ NAVIGATION MENU ]
               </span>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white font-mono text-xs uppercase tracking-wider transition-all"
+                aria-label="Close navigation menu"
+              >
+                <X size={15} />
+                <span>Close</span>
+              </button>
+            </div>
 
+            {/* Navigation List */}
+            <div className="flex flex-col gap-1 my-auto max-w-sm w-full mx-auto py-4">
               {MOBILE_NAV_LINKS.map((link, idx) => (
                 <motion.a
                   key={link.href}
@@ -232,7 +245,7 @@ export const Navbar = () => {
                   onClick={(e) => handleNavLinkClick(link.href, e)}
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.04 + 0.1, duration: 0.3 }}
+                  transition={{ delay: idx * 0.04 + 0.08, duration: 0.3 }}
                   className="flex items-center justify-between py-3.5 border-b border-white/10 text-lg sm:text-xl font-bold tracking-tight text-white/90 hover:text-white active:text-emerald-400 transition-colors focus-visible:outline-2 focus-visible:outline-white"
                 >
                   <div className="flex items-center gap-3">
@@ -245,7 +258,7 @@ export const Navbar = () => {
             </div>
 
             {/* Bottom Actions */}
-            <div className="mt-8 flex flex-col gap-3 max-w-sm w-full mx-auto">
+            <div className="mt-4 flex flex-col gap-3 max-w-sm w-full mx-auto">
               <Button01
                 text="Order on WhatsApp"
                 onClick={handleWhatsAppOrder}
