@@ -272,28 +272,28 @@ export const HowItWorksV2: React.FC = () => {
         // --- MOBILE: STATIC HEADER & VERTICAL BOTTOM-UP CARDS ENTRANCE ---
         mobileCardRefs.current.forEach((cardEl) => {
           if (cardEl) {
-            gsap.set(cardEl, { y: "150%", autoAlpha: 0 });
+            gsap.set(cardEl, { y: "120%", autoAlpha: 0 });
           }
         });
 
         mobileCardRefs.current.forEach((cardEl, idx) => {
           if (!cardEl) return;
-          const stepStart = 0.3 + idx * 1.1;
+          const stepStart = 0.2 + idx * 1.15;
 
-          // Slide UP from completely outside bottom into view
+          // Slide UP from below screen into view
           tl.fromTo(
             cardEl,
-            { y: "150%", autoAlpha: 0 },
-            { y: "0%", autoAlpha: 1, duration: 0.9, ease: "power2.out" },
+            { y: "120%", autoAlpha: 0 },
+            { y: "0%", autoAlpha: 1, duration: 0.7, ease: "power2.out" },
             stepStart
           );
 
-          // Glide up to make room for next card
+          // Glide up to make room for next card after holding in full view
           if (idx < mobileCardRefs.current.length - 1) {
             tl.to(
               cardEl,
-              { y: "-20%", autoAlpha: 0, duration: 0.5, ease: "power2.in" },
-              stepStart + 0.95
+              { y: "-40%", autoAlpha: 0, duration: 0.45, ease: "power2.in" },
+              stepStart + 1.05
             );
           }
         });
@@ -455,7 +455,7 @@ export const HowItWorksV2: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE VIEW (< 1024px): Card Sequence Stack */}
       {/* ==================================================================== */}
-      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between pt-16 xs:pt-20 sm:pt-24 pb-4 px-4 xs:px-5 select-none pointer-events-none">
+      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between pt-14 xs:pt-16 sm:pt-20 pb-3 xs:pb-4 px-4 xs:px-5 select-none pointer-events-none">
         {/* Mobile Header Title */}
         <div
           ref={mobileHeaderRef}
@@ -464,18 +464,18 @@ export const HowItWorksV2: React.FC = () => {
             opacity: 1,
             willChange: "transform, opacity",
           }}
-          className="mobile-header-block flex flex-col items-center text-center gap-1.5 z-20"
+          className="mobile-header-block flex flex-col items-center text-center gap-1 xs:gap-1.5 z-20"
         >
           <h2 className="text-center select-none">
-            <span className="block font-cal-sans text-2xl xs:text-3xl font-semibold text-white tracking-normal leading-tight">
+            <span className="block font-cal-sans text-xl xs:text-2xl sm:text-3xl font-semibold text-white tracking-normal leading-tight">
               Four Simple Steps,
             </span>
-            <span className="block font-great-vibes text-3xl xs:text-4xl font-normal text-white pt-0.5 -mt-0.5 leading-tight">
+            <span className="block font-great-vibes text-2xl xs:text-3xl sm:text-4xl font-normal text-white pt-0.5 -mt-0.5 leading-tight">
               Zero Confusion
             </span>
           </h2>
           <p
-            className="text-xs xs:text-[13px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
+            className="text-[11px] xs:text-xs sm:text-[13px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
             style={{ letterSpacing: "0.5px" }}
           >
             From your phone to your wall in 4 simple steps. No shop visit needed.
@@ -491,7 +491,7 @@ export const HowItWorksV2: React.FC = () => {
         </div>
 
         {/* Mobile Card Container (Positioned in bottom half of viewport) */}
-        <div className="relative w-full h-[210px] xs:h-[235px] sm:h-[260px] mb-2 xs:mb-3 mt-auto pointer-events-none overflow-hidden">
+        <div className="relative w-full h-[180px] xs:h-[195px] sm:h-[210px] mb-2 xs:mb-3 mt-auto pointer-events-none overflow-hidden">
           {STEPS.map((step, idx) => (
             <div
               key={step.number}
@@ -506,7 +506,7 @@ export const HowItWorksV2: React.FC = () => {
                 opacity: 0,
                 willChange: "transform, opacity",
               }}
-              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[6px] p-5 xs:p-6 sm:p-7 flex flex-col justify-between shadow-2xl"
+              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[6px] p-4 xs:p-5 flex flex-col justify-between shadow-2xl"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
@@ -514,15 +514,23 @@ export const HowItWorksV2: React.FC = () => {
               <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
               <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
 
-              <div className="text-2xl xs:text-3xl font-semibold text-white leading-none">
-                {step.number}
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs xs:text-sm font-bold text-white/70 tracking-wider">
+                  {step.number}
+                </span>
+                <span className="text-[10px] xs:text-[11px] font-mono uppercase tracking-widest text-white/40">
+                  STEP {idx + 1} OF 4
+                </span>
               </div>
 
-              <div className="flex flex-col gap-1.5 xs:gap-2">
-                <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-white tracking-tight leading-tight">
+              <div className="flex flex-col gap-1 xs:gap-1.5 mt-auto">
+                <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
                   {step.title}
                 </h3>
-                <p className="text-[11px] xs:text-xs sm:text-sm font-medium text-white/90 leading-relaxed text-pretty">
+                <p
+                  className="text-xs xs:text-[13px] font-inter-display font-medium text-white/95 leading-relaxed text-pretty"
+                  style={{ letterSpacing: "0.5px" }}
+                >
                   {step.body}
                 </p>
               </div>
