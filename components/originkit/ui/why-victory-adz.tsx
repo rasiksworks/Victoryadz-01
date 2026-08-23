@@ -288,19 +288,19 @@ export const WhyVictoryAdz: React.FC = () => {
 
                     {/* Continuous Track Line Segment with Base Guide + Active Drawing Line */}
                     <div className="relative w-full pr-6 sm:pr-10 lg:pr-12 py-6 mt-auto select-none overflow-visible">
-                      {/* 1. Base Continuous Track Line (Always visible across all cards) */}
-                      <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-[1.5px] bg-white/30" />
+                      {/* 1. Base Continuous Track Line (20% opacity white) */}
+                      <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-[1.5px] bg-white/20" />
 
-                      {/* 2. Active Illuminated Line (Drawn as scroll progresses) */}
+                      {/* 2. Active Revealed Line (50% half-opacity white, No glow) */}
                       <div
                         ref={(el) => {
                           cardLineRefs.current[index] = el;
                         }}
-                        className="absolute top-1/2 -translate-y-1/2 left-0 h-[2px] bg-white will-change-[width] drop-shadow-[0_0_6px_rgba(255,255,255,0.9)] z-10"
+                        className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/50 will-change-[width] z-10"
                         style={{ width: "0%" }}
                       />
 
-                      {/* 3. Spinning Plus Marker (Bounded, Zero Clipping) */}
+                      {/* 3. Spinning Plus Marker (Clean solid white, No glow) */}
                       <div
                         ref={(el) => {
                           cardPlusRefs.current[index] = el;
@@ -308,7 +308,7 @@ export const WhyVictoryAdz: React.FC = () => {
                         className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-20"
                         style={{ left: "12px" }}
                       >
-                        <span className="text-white font-mono text-base font-bold select-none leading-none drop-shadow-[0_0_8px_rgba(255,255,255,1)] flex items-center justify-center">
+                        <span className="text-white font-mono text-base font-bold select-none leading-none flex items-center justify-center">
                           +
                         </span>
                       </div>
