@@ -464,17 +464,17 @@ export const HowItWorksV2: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE VIEW (< 1024px): Card Sequence Stack */}
       {/* ==================================================================== */}
-      <div className="lg:hidden absolute inset-0 z-20 flex flex-col justify-between pointer-events-none p-4 xs:p-5 sm:p-6 overflow-hidden">
-        {/* Mobile Header Title */}
+      <div className="lg:hidden absolute inset-0 z-20 flex flex-col justify-between pointer-events-none pt-[76px] xs:pt-[84px] sm:pt-[96px] pb-20 xs:pb-24 sm:pb-16 px-4 xs:px-5 sm:px-6 overflow-hidden">
+        {/* Mobile Header Title (Pushed safely below fixed top navbar) */}
         <div
           ref={mobileHeaderRef}
           style={{
             willChange: "transform, opacity",
           }}
-          className="mobile-header-block flex flex-col items-center text-center gap-1 xs:gap-1.5 z-20"
+          className="mobile-header-block flex flex-col items-center text-center gap-1 xs:gap-1.5 z-20 max-w-sm mx-auto"
         >
           <h2 className="text-center select-none">
-            <span className="block font-cal-sans text-xl xs:text-2xl sm:text-3xl font-semibold text-white tracking-normal leading-tight">
+            <span className="block font-cal-sans text-lg xs:text-xl sm:text-2xl font-semibold text-white tracking-normal leading-tight">
               From Your Photo to Your Wall,
             </span>
             <span className="block font-great-vibes text-2xl xs:text-3xl sm:text-4xl font-normal text-white pt-0.5 -mt-0.5 leading-tight">
@@ -493,12 +493,13 @@ export const HowItWorksV2: React.FC = () => {
               onClick={handleWhatsAppOrder}
               ariaLabel="Order on WhatsApp"
               className="pointer-events-auto"
+              size="sm"
             />
           </div>
         </div>
 
-        {/* Mobile Card Container (Positioned in bottom half of viewport) */}
-        <div className="relative w-full h-[180px] xs:h-[195px] sm:h-[210px] mb-2 xs:mb-3 mt-auto pointer-events-none overflow-hidden">
+        {/* Mobile Card Container (Elevated safely above Android/iOS browser bottom bar) */}
+        <div className="relative w-full h-[185px] xs:h-[195px] sm:h-[210px] mb-1 xs:mb-2 mt-auto pointer-events-none overflow-hidden max-w-sm mx-auto">
           {STEPS.map((step, idx) => (
             <div
               key={step.number}
@@ -506,14 +507,14 @@ export const HowItWorksV2: React.FC = () => {
                 mobileCardRefs.current[idx] = el;
               }}
               style={{
-                backgroundColor: "rgba(0, 0, 0, 0.45)",
-                backdropFilter: "blur(6px)",
-                WebkitBackdropFilter: "blur(6px)",
+                backgroundColor: "rgba(0, 0, 0, 0.55)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
                 visibility: "hidden",
                 opacity: 0,
                 willChange: "transform, opacity",
               }}
-              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[6px] p-4 xs:p-5 flex flex-col justify-between shadow-2xl"
+              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[8px] p-4 xs:p-5 flex flex-col justify-between shadow-2xl"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
@@ -522,10 +523,10 @@ export const HowItWorksV2: React.FC = () => {
               <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
 
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs xs:text-sm font-bold text-white/70 tracking-wider">
+                <span className="font-mono text-xs xs:text-sm font-bold text-white/80 tracking-wider">
                   {step.number}
                 </span>
-                <span className="text-[10px] xs:text-[11px] font-mono uppercase tracking-widest text-white/40">
+                <span className="text-[10px] xs:text-[11px] font-mono uppercase tracking-widest text-white/50">
                   STEP {idx + 1} OF 4
                 </span>
               </div>
