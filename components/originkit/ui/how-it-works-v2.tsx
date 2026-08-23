@@ -95,11 +95,9 @@ export const HowItWorksV2: React.FC = () => {
 
     currentFrameRef.current = clampedIndex;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const canvasW = canvas.width / dpr;
-    const canvasH = canvas.height / dpr;
+    const canvasW = window.innerWidth;
+    const canvasH = window.innerHeight;
 
-    const isPortrait = canvasH > canvasW;
     const hRatio = canvasW / img.naturalWidth;
     const vRatio = canvasH / img.naturalHeight;
     const ratio = Math.max(hRatio, vRatio);
@@ -107,10 +105,7 @@ export const HowItWorksV2: React.FC = () => {
     const drawW = img.naturalWidth * ratio;
     const drawH = img.naturalHeight * ratio;
     const drawX = (canvasW - drawW) / 2;
-    // On mobile portrait, position with slight top bias so the main subject is clearly visible
-    const drawY = isPortrait
-      ? (canvasH - drawH) * 0.38
-      : (canvasH - drawH) / 2;
+    const drawY = (canvasH - drawH) / 2;
 
     ctx.clearRect(0, 0, canvasW, canvasH);
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
@@ -173,9 +168,11 @@ export const HowItWorksV2: React.FC = () => {
     if (!section || !canvas) return;
 
     const setupCanvas = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 1024 ? 1.5 : 2);
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
       const c = canvas.getContext("2d");
       if (c) {
         c.setTransform(1, 0, 0, 1, 0, 0);
@@ -454,21 +451,22 @@ export const HowItWorksV2: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE VIEW (< 1024px): Pinned Stepped Vertical Bottom-Up Sequence */}
       {/* ==================================================================== */}
-      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between p-6 sm:p-8 pointer-events-none overflow-hidden">
-        {/* Mobile Header Block (Starts centered, glides to top on scroll) */}
+      <div className="lg:hidden relative w-full h-full z-10 flex flex-col justify-between p-4 xs:p-6 sm:p-8 pointer-events-none overflow-hidden">
+        {/* Mobile Header Block (Positioned below navbar) */}
         <div
           style={{
             position: "absolute",
             left: "50%",
+            top: "84px",
             transform: "translateX(-50%)",
-            width: "calc(100% - 48px)",
+            width: "calc(100% - 32px)",
             textAlign: "center",
             willChange: "transform, top",
           }}
-          className="mobile-header-block flex flex-col items-center text-center gap-2.5 z-20"
+          className="mobile-header-block flex flex-col items-center text-center gap-2 z-20"
         >
           <h2
-            className="text-2xl sm:text-3xl font-semibold text-white tracking-tight leading-tight"
+            className="text-2xl xs:text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-tight"
             style={{ fontFamily: "'Inter Display', sans-serif" }}
           >
             Four Simple Steps,
@@ -476,7 +474,7 @@ export const HowItWorksV2: React.FC = () => {
             Zero Confusion
           </h2>
           <p
-            className="text-xs sm:text-sm font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
+            className="text-xs xs:text-sm font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
             style={{ fontFamily: "'Inter Display', sans-serif" }}
           >
             From your photo to your wall. No shop visit needed.
@@ -492,7 +490,7 @@ export const HowItWorksV2: React.FC = () => {
         </div>
 
         {/* Mobile Card Container (Positioned in bottom half of viewport) */}
-        <div className="relative w-full h-[260px] sm:h-[290px] mb-4 mt-auto pointer-events-none overflow-hidden">
+        <div className="relative w-full h-[210px] xs:h-[235px] sm:h-[260px] mb-2 xs:mb-3 mt-auto pointer-events-none overflow-hidden">
           {STEPS.map((step, idx) => (
             <div
               key={step.number}
@@ -500,14 +498,14 @@ export const HowItWorksV2: React.FC = () => {
                 mobileCardRefs.current[idx] = el;
               }}
               style={{
-                backgroundColor: "rgba(0, 0, 0, 0.35)",
-                backdropFilter: "blur(4px)",
-                WebkitBackdropFilter: "blur(4px)",
+                backgroundColor: "rgba(0, 0, 0, 0.45)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
                 visibility: "hidden",
                 opacity: 0,
                 willChange: "transform, opacity",
               }}
-              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/50 backdrop-blur-[4px] p-6 sm:p-7 flex flex-col justify-between shadow-2xl"
+              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[6px] p-5 xs:p-6 sm:p-7 flex flex-col justify-between shadow-2xl"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
@@ -515,15 +513,15 @@ export const HowItWorksV2: React.FC = () => {
               <span className="absolute -bottom-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
               <span className="absolute -bottom-[3.5px] -right-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
 
-              <div className="text-3xl font-semibold text-white leading-none">
+              <div className="text-2xl xs:text-3xl font-semibold text-white leading-none">
                 {step.number}
               </div>
 
-              <div className="flex flex-col gap-2">
-                <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight leading-tight">
+              <div className="flex flex-col gap-1.5 xs:gap-2">
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-white tracking-tight leading-tight">
                   {step.title}
                 </h3>
-                <p className="text-xs sm:text-sm font-medium text-white/90 leading-relaxed text-pretty">
+                <p className="text-[11px] xs:text-xs sm:text-sm font-medium text-white/90 leading-relaxed text-pretty">
                   {step.body}
                 </p>
               </div>
