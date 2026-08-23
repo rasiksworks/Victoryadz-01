@@ -1,122 +1,148 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button01 } from "@/components/ui/nextjsshop-button";
+import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
+import ScrollHighlight from "@/components/originkit/ui/scroll-text-highlight";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export interface WhyReasonCard {
+export interface WhyPillar {
   id: string;
   number: string;
+  shortTitle: string;
+  title: string;
   badge: string;
-  tagline: string;
-  bgColor: string;
+  description: string;
+  highlights: string[];
   image: string;
-  iconType: "materials" | "finishes" | "craft" | "pricing" | "support" | "shipping";
+  accentColor: string;
+  iconType: "inks" | "armor" | "chat" | "joinery" | "ai" | "direct";
 }
 
-export const WHY_VICTORY_CARDS: WhyReasonCard[] = [
+export const WHY_PILLARS: WhyPillar[] = [
   {
-    id: "card-1",
+    id: "pillar-1",
     number: "01",
-    badge: "25-YR ARCHIVAL",
-    tagline: "12-Color Archival Pigment Inks That Never Fade or Discolor",
-    bgColor: "#0a7cc1",
-    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80",
-    iconType: "materials",
+    shortTitle: "25-Yr Archival Inks",
+    title: "12-Color Archival Pigment Printing",
+    badge: "MUSEUM ARCHIVAL",
+    description:
+      "We use genuine 12-color archival pigment inks combined with UV-protective matte or gloss lamination that prevents yellowing, moisture damage, and color fading for over 25 years.",
+    highlights: ["12-Color Pigment Engine", "Zero Discoloration", "UV Blocking Lamination"],
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=1200&q=85",
+    accentColor: "#0A84FF",
+    iconType: "inks",
   },
   {
-    id: "card-2",
+    id: "pillar-2",
     number: "02",
-    badge: "100% SAFE TRANSIT",
-    tagline: "5-Layer Shockproof Boxing. Zero-Risk Free Replacement Guarantee.",
-    bgColor: "#ff431e",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&q=80",
-    iconType: "shipping",
+    shortTitle: "100% Transit Armor",
+    title: "5-Layer Shockproof Transit Packaging",
+    badge: "ZERO RISK GUARANTEE",
+    description:
+      "Every frame is encased in high-density foam corner guards, multi-ply bubble wrap, and rigid corrugated shock boxes. If any damage happens in transit, we send an instant brand-new replacement for free.",
+    highlights: ["High-Density Foam Corners", "Multi-Ply Bubble Shield", "100% Free Replacement"],
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=85",
+    accentColor: "#FF453A",
+    iconType: "armor",
   },
   {
-    id: "card-3",
+    id: "pillar-3",
     number: "03",
-    badge: "1-ON-1 GUIDANCE",
-    tagline: "Direct WhatsApp Advice on Sizes, Lamination Finishes & Placement",
-    bgColor: "#307c5f",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=80",
-    iconType: "support",
+    shortTitle: "1-on-1 WhatsApp Chat",
+    title: "Direct Master Framer Consultation",
+    badge: "PERSONAL GUIDANCE",
+    description:
+      "No confusing forms or app downloads. Chat directly with our framing experts on WhatsApp for personalized advice on frame widths, matting styles, wall proportions, and transparent pricing.",
+    highlights: ["Direct Master Framer Chat", "Wall Proportions Advice", "Instant Clear Quotes"],
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=85",
+    accentColor: "#30D158",
+    iconType: "chat",
   },
   {
-    id: "card-4",
+    id: "pillar-4",
     number: "04",
+    shortTitle: "Seamless Joinery",
+    title: "Reinforced 45° Corner Joinery",
     badge: "MASTER CRAFT",
-    tagline: "Seamless Precision Corner Joinery & Moisture-Resistant Mouldings",
-    bgColor: "#ff431e",
-    image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=900&q=80",
-    iconType: "craft",
+    description:
+      "Crafted from moisture-resistant synthetic and solid hardwood mouldings with V-nail reinforced 45° corner joints that never gap, warp, or split over time in tropical climates.",
+    highlights: ["Reinforced 45° V-Nails", "Moisture-Resistant Core", "Pre-Installed Hanging Kit"],
+    image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=1200&q=85",
+    accentColor: "#BF5AF2",
+    iconType: "joinery",
   },
   {
-    id: "card-5",
+    id: "pillar-5",
     number: "05",
-    badge: "FREE AI RETOUCHING",
-    tagline: "We Upscale Low-Res Snaps & Restore Vintage Photos at No Extra Cost",
-    bgColor: "#0a7cc1",
-    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900&q=80",
-    iconType: "finishes",
+    shortTitle: "Free Photo Retouching",
+    title: "AI Resolution Upscaling & Photo Repair",
+    badge: "COMPLIMENTARY SERVICE",
+    description:
+      "Have a low-light phone snap or vintage family picture? Our technicians perform noise reduction, contrast balancing, and digital scratch repair before printing at zero extra charge.",
+    highlights: ["Low-Res Upscaling", "Torn & Scratch Removal", "Color & Contrast Balancing"],
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1200&q=85",
+    accentColor: "#FF9F0A",
+    iconType: "ai",
   },
   {
-    id: "card-6",
+    id: "pillar-6",
     number: "06",
-    badge: "STUDIO DIRECT",
-    tagline: "Direct Workshop Pricing with No Middleman or Hidden Shipping Costs",
-    bgColor: "#307c5f",
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=900&q=80",
-    iconType: "pricing",
+    shortTitle: "Studio Direct Value",
+    title: "Direct Workshop Rates with No Middlemen",
+    badge: "HONEST VALUE",
+    description:
+      "Get boutique framing quality directly from our studio workshop. Transparent rates, honest craftsmanship, and zero showroom markups or surprise shipping fees.",
+    highlights: ["Direct Workshop Pricing", "Zero Hidden Fees", "Clear Size Tier Pricing"],
+    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=1200&q=85",
+    accentColor: "#64D2FF",
+    iconType: "direct",
   },
 ];
 
-const renderIcon = (type: WhyReasonCard["iconType"]) => {
+const renderPillarIcon = (type: WhyPillar["iconType"]) => {
   switch (type) {
-    case "materials":
+    case "inks":
       return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
         </svg>
       );
-    case "finishes":
+    case "armor":
       return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10" />
-          <circle cx="12" cy="12" r="4" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         </svg>
       );
-    case "craft":
+    case "chat":
       return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
-          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-        </svg>
-      );
-    case "pricing":
-      return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
-          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-      );
-    case "support":
-      return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
           <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
         </svg>
       );
-    case "shipping":
+    case "joinery":
       return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-8 h-8 text-white">
-          <rect x="1" y="3" width="15" height="13" />
-          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-          <circle cx="5.5" cy="18.5" r="2.5" />
-          <circle cx="18.5" cy="18.5" r="2.5" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M3 9h18M9 21V9" />
+        </svg>
+      );
+    case "ai":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+        </svg>
+      );
+    case "direct":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
       );
   }
@@ -124,18 +150,8 @@ const renderIcon = (type: WhyReasonCard["iconType"]) => {
 
 export const WhyVictoryAdz: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 1024);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+  const [activeIdx, setActiveIdx] = useState(0);
 
   const handleWhatsAppOrder = () => {
     window.open(
@@ -145,227 +161,295 @@ export const WhyVictoryAdz: React.FC = () => {
     );
   };
 
+  const scrollToPillar = useCallback((index: number) => {
+    const el = cardRefs.current[index];
+    if (!el) return;
+
+    if (typeof window !== "undefined" && (window as any).lenis) {
+      (window as any).lenis.scrollTo(el, { offset: -100, duration: 1.0 });
+    } else {
+      const top = el.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+    setActiveIdx(index);
+  }, []);
+
+  // GSAP ScrollTrigger Synchronization: detect which card is centered in viewport
   useEffect(() => {
-    if (isMobile || !sectionRef.current || !trackRef.current || !cardsContainerRef.current) return;
-
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    const cardsContainer = cardsContainerRef.current;
-
     const ctx = gsap.context(() => {
-      const getScrollDistance = () => Math.max(0, track.scrollWidth - cardsContainer.clientWidth + 160);
-
       cardRefs.current.forEach((card, idx) => {
         if (!card) return;
-        const isStaggered = idx % 2 === 1;
-        gsap.set(card, {
-          opacity: 0,
-          y: isStaggered ? 120 : 60,
-          scale: 0.94,
+
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top 60%",
+          end: "bottom 40%",
+          onEnter: () => setActiveIdx(idx),
+          onEnterBack: () => setActiveIdx(idx),
         });
       });
+    }, sectionRef);
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          pin: true,
-          pinSpacing: true,
-          start: "top top",
-          end: () => "+=" + Math.max(2800, getScrollDistance() * 1.6),
-          scrub: 0.8,
-          anticipatePin: 1,
-          fastScrollEnd: true,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      cardRefs.current.forEach((card, idx) => {
-        if (!card) return;
-        const startPos = idx * 0.1;
-        const isStaggered = idx % 2 === 1;
-        tl.fromTo(
-          card,
-          { opacity: 0, y: isStaggered ? 120 : 60, scale: 0.94 },
-          { opacity: 1, y: isStaggered ? 55 : 0, scale: 1, duration: 0.6, ease: "power2.out" },
-          startPos
-        );
-      });
-
-      tl.to(
-        track,
-        {
-          x: () => -getScrollDistance(),
-          ease: "none",
-          duration: 4.0,
-        },
-        0.6
-      );
-
-      tl.to({}, { duration: 0.8 });
-    }, section);
-
-    let lastWidth = window.innerWidth;
-    let resizeTimer: NodeJS.Timeout | null = null;
-    const onResize = () => {
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (window.innerWidth !== lastWidth) {
-          lastWidth = window.innerWidth;
-          ScrollTrigger.refresh();
-        }
-      }, 250);
-    };
-    window.addEventListener("resize", onResize);
     const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
 
     return () => {
-      window.removeEventListener("resize", onResize);
-      if (resizeTimer) clearTimeout(resizeTimer);
       clearTimeout(timer);
       ctx.revert();
     };
-  }, [isMobile]);
+  }, []);
 
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-
-  const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (!isMobile) return;
-    const target = e.currentTarget;
-    const scrollLeft = target.scrollLeft;
-    const cardWidth = 320; // approximate mobile card snap width
-    const index = Math.min(
-      WHY_VICTORY_CARDS.length - 1,
-      Math.max(0, Math.round(scrollLeft / cardWidth))
-    );
-    setActiveCardIndex(index);
-  };
+  const activePillar = WHY_PILLARS[activeIdx];
 
   return (
     <section
       id="why-victory-adz"
       ref={sectionRef}
-      className="relative z-20 w-full min-h-screen bg-[#1E1E1E] text-white select-none overflow-hidden py-10 lg:py-16 flex flex-col justify-between"
+      className="relative z-20 w-full bg-[#1A1A1A] text-white font-inter-display select-none py-12 sm:py-16 lg:py-28 overflow-hidden border-t border-white/5"
       style={{ fontFamily: "'Inter Display', system-ui, -apple-system, sans-serif" }}
     >
-      {/* ── TOP HERO TYPOGRAPHY ZONE (FIGMA CONTAINER TRIBE INSPIRATION) ── */}
-      <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-10 lg:px-16 pt-2 pb-4 sm:pb-6 flex flex-col items-center justify-center">
-        
-        {/* Giant Ghost Watermark Typography in Background */}
-        <div className="w-full flex flex-col items-center justify-center pointer-events-none select-none overflow-hidden">
-          <p className="font-extrabold text-[44px] xs:text-[56px] sm:text-[100px] md:text-[130px] xl:text-[160px] leading-[0.92] tracking-[-0.04em] text-[#E8E8E8]/10 sm:text-[#E8E8E8]/[0.12] text-center uppercase whitespace-nowrap">
-            WHY CHOOSE
-          </p>
-          <p className="font-extrabold text-[44px] xs:text-[56px] sm:text-[100px] md:text-[130px] xl:text-[160px] leading-[0.92] tracking-[-0.04em] text-[#E8E8E8]/10 sm:text-[#E8E8E8]/[0.12] text-center uppercase whitespace-nowrap">
-            VICTORY ADZ
-          </p>
-        </div>
-
-        {/* Staggered Floating Editorial Sub-Headlines */}
-        <div className="absolute inset-0 w-full h-full max-w-[1440px] mx-auto pointer-events-none flex flex-col justify-between py-2 px-4 sm:px-8">
-          {/* Top Left Title Block */}
-          <div className="self-start max-w-[280px] xs:max-w-[320px] sm:max-w-[420px] pt-1 sm:pt-3">
-            <h2 className="text-[16px] xs:text-[18px] sm:text-[26px] xl:text-[34px] font-bold text-[#FFFFFF] tracking-[-0.025em] uppercase leading-[1.12]">
-              A place where memories <br />
-              <span className="font-extrabold italic text-[#FFA07A]">find their</span> true form.
-            </h2>
-          </div>
-
-          {/* Bottom Right Title Block */}
-          <div className="self-end max-w-[290px] xs:max-w-[340px] sm:max-w-[460px] text-right pb-1 sm:pb-3">
-            <p className="text-[16px] xs:text-[18px] sm:text-[26px] xl:text-[34px] font-bold text-[#FFFFFF] tracking-[-0.025em] uppercase leading-[1.12]">
-              Crafted with passion &amp; <br />
-              <span className="font-extrabold italic text-[#FFA07A]">built to</span> last forever.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── STAGGERED HORIZONTAL CARDS SHOWCASE ── */}
+      {/* Ambient background glow matching active pillar */}
       <div
-        ref={cardsContainerRef}
-        onScroll={handleMobileScroll}
-        className="w-full overflow-x-auto lg:overflow-hidden scrollbar-none py-4 sm:py-8 select-none snap-x snap-mandatory touch-pan-x"
-      >
-        <div
-          ref={trackRef}
-          className="flex gap-4 sm:gap-8 px-4 sm:px-12 xl:px-16 w-max will-change-transform items-start"
-        >
-          {WHY_VICTORY_CARDS.map((card, index) => {
-            const isStaggered = index % 2 === 1;
+        className="pointer-events-none absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px] opacity-15 transition-colors duration-1000 -translate-x-1/2 -translate-y-1/2"
+        style={{ backgroundColor: activePillar.accentColor }}
+      />
 
+      <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12">
+        
+        {/* ── TOP SECTION HEADER ── */}
+        <div className="w-full flex flex-col items-start gap-3 pb-8 sm:pb-12 border-b border-white/10">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="inline-block w-2.5 h-2.5 rounded-full transition-colors duration-500 animate-pulse"
+              style={{ backgroundColor: activePillar.accentColor }}
+            />
+            <span className="text-xs font-mono font-medium tracking-[0.25em] text-white/60 uppercase">
+              [ WHY CHOOSE VICTORY ADZ ]
+            </span>
+          </div>
+
+          <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+            <MaskTextReveal
+              tag="h2"
+              direction="center-horizontal"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08] max-w-2xl"
+            >
+              Engineered to preserve what matters most.
+            </MaskTextReveal>
+
+            <ScrollHighlight className="text-sm sm:text-base text-white/70 font-light max-w-md leading-relaxed">
+              Every frame is built from the inside out — from 25-year anti-fade pigment chemistry to 5-layer shockproof transit armor.
+            </ScrollHighlight>
+          </div>
+        </div>
+
+        {/* ── MOBILE HORIZONTAL PILL TABS (Visible on < lg) ── */}
+        <div className="lg:hidden sticky top-14 z-30 -mx-4 px-4 py-3 bg-[#1A1A1A]/95 backdrop-blur-xl border-b border-white/10 overflow-x-auto scrollbar-none flex gap-2 snap-x">
+          {WHY_PILLARS.map((p, idx) => {
+            const isActive = activeIdx === idx;
             return (
-              <div
-                key={card.id}
-                ref={(el) => { cardRefs.current[index] = el; }}
-                style={{
-                  backgroundColor: card.bgColor,
-                  marginTop: !isMobile && isStaggered ? "55px" : "0px",
-                }}
-                className="relative w-[280px] xs:w-[320px] sm:w-[380px] md:w-[440px] xl:w-[480px] h-[320px] xs:h-[350px] sm:h-[380px] rounded-[20px] overflow-hidden shrink-0 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-black/70 group snap-center"
+              <button
+                key={p.id}
+                onClick={() => scrollToPillar(idx)}
+                className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 cursor-pointer touch-manipulation snap-start ${
+                  isActive
+                    ? "bg-white text-black shadow-lg shadow-white/10"
+                    : "bg-white/10 text-white/70 hover:bg-white/15"
+                }`}
               >
-                {/* Background Photography with Soft Color Tone */}
-                <div className="absolute inset-0 w-full h-full">
-                  <img
-                    src={card.image}
-                    alt={card.tagline}
-                    loading="lazy"
-                    className="w-full h-full object-cover opacity-50 mix-blend-luminosity group-hover:scale-105 transition-transform duration-700 pointer-events-none"
-                  />
-                  {/* Deep Dark Gradient Overlay for Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                </div>
-
-                {/* Card Top Pill Badge */}
-                <div className="absolute top-4 sm:top-5 left-4 sm:left-5 right-4 sm:right-5 flex justify-between items-center z-10">
-                  <span className="text-[10px] sm:text-[12px] font-bold tracking-wider text-white/90 bg-white/15 backdrop-blur-md px-3 sm:px-3.5 py-0.5 sm:py-1 rounded-full uppercase border border-white/20">
-                    {card.badge}
-                  </span>
-                  <span className="text-white/80 font-mono text-xs sm:text-sm font-bold tracking-tighter">
-                    {card.number}
-                  </span>
-                </div>
-
-                {/* Card Bottom Content & Minimalist Icon */}
-                <div className="absolute bottom-0 left-0 w-full p-5 sm:p-7 flex flex-col gap-2.5 sm:gap-3 z-10">
-                  {/* Clean Icon Container */}
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-lg">
-                    {renderIcon(card.iconType)}
-                  </div>
-
-                  {/* Punchy Editorial Tagline */}
-                  <p className="text-[16px] xs:text-[18px] sm:text-[21px] xl:text-[23px] font-bold text-[#EDEDED] leading-[1.24] tracking-tight">
-                    {card.tagline}
-                  </p>
-                </div>
-              </div>
+                <span className={`font-mono text-[10px] ${isActive ? "text-black/60" : "text-white/40"}`}>
+                  {p.number}
+                </span>
+                <span>{p.shortTitle}</span>
+              </button>
             );
           })}
         </div>
-      </div>
 
-      {/* Mobile Card Dots Indicator */}
-      <div className="lg:hidden flex items-center justify-center gap-1.5 py-2">
-        {WHY_VICTORY_CARDS.map((_, idx) => (
-          <span
-            key={idx}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              activeCardIndex === idx ? "w-6 bg-white" : "w-1.5 bg-white/30"
-            }`}
+        {/* ── MAIN SPLIT-SCREEN LAYOUT (≥ lg) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 pt-8 sm:pt-12">
+          
+          {/* ── LEFT COLUMN: STICKY INTERACTIVE FEATURE NAVIGATOR (5 Columns) ── */}
+          <div className="hidden lg:flex lg:col-span-5 flex-col justify-between sticky top-28 h-[calc(100vh-8.5rem)] pb-4 select-none">
+            <div className="flex flex-col gap-6">
+              
+              {/* Feature Navigator List */}
+              <div className="flex flex-col gap-2 relative">
+                {/* Vertical active tracking indicator rail */}
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/10" />
+                <div
+                  className="absolute left-0 w-[2px] transition-all duration-500 ease-out"
+                  style={{
+                    height: `${100 / WHY_PILLARS.length}%`,
+                    top: `${(activeIdx * 100) / WHY_PILLARS.length}%`,
+                    backgroundColor: activePillar.accentColor,
+                    boxShadow: `0 0 12px ${activePillar.accentColor}`,
+                  }}
+                />
+
+                {WHY_PILLARS.map((pillar, idx) => {
+                  const isActive = activeIdx === idx;
+                  return (
+                    <button
+                      key={pillar.id}
+                      onClick={() => scrollToPillar(idx)}
+                      className={`group relative flex items-start gap-4 text-left pl-6 pr-4 py-3.5 rounded-xl transition-all duration-300 cursor-pointer ${
+                        isActive
+                          ? "bg-white/10 backdrop-blur-md border border-white/15"
+                          : "hover:bg-white/5 opacity-60 hover:opacity-90"
+                      }`}
+                    >
+                      <span
+                        className="font-mono text-sm font-bold tracking-tight shrink-0 transition-colors duration-300 pt-0.5"
+                        style={{ color: isActive ? pillar.accentColor : "rgba(255,255,255,0.4)" }}
+                      >
+                        {pillar.number}
+                      </span>
+
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-base font-bold tracking-tight transition-colors duration-300 ${
+                            isActive ? "text-white" : "text-white/80"
+                          }`}>
+                            {pillar.title}
+                          </span>
+                        </div>
+
+                        {isActive && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="text-xs text-white/70 font-light leading-relaxed pr-2 pt-1"
+                          >
+                            {pillar.description}
+                          </motion.p>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Left Bottom WhatsApp Trigger */}
+            <div className="flex flex-col gap-3 pt-6 border-t border-white/10">
+              <p className="text-xs text-white/60 font-medium">
+                Have specific size or frame requirements? Talk directly with our team.
+              </p>
+              <Button01
+                text="Order on WhatsApp"
+                onClick={handleWhatsAppOrder}
+                ariaLabel="Order on WhatsApp"
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* ── RIGHT COLUMN: CINEMATIC CRAFTSMANSHIP SHOWCASE CARDS (7 Columns) ── */}
+          <div className="lg:col-span-7 flex flex-col gap-8 sm:gap-14 lg:gap-20">
+            {WHY_PILLARS.map((pillar, idx) => {
+              const isActive = activeIdx === idx;
+
+              return (
+                <div
+                  key={pillar.id}
+                  ref={(el) => { cardRefs.current[idx] = el; }}
+                  className={`group relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#242424] border transition-all duration-500 shadow-2xl ${
+                    isActive
+                      ? "border-white/30 ring-1 ring-white/20 shadow-black/80"
+                      : "border-white/10 hover:border-white/20"
+                  }`}
+                >
+                  {/* Card Visual Hero Zone */}
+                  <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] overflow-hidden bg-black">
+                    <img
+                      src={pillar.image}
+                      alt={pillar.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                    />
+
+                    {/* Gradient Depth Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-[#242424]/30 to-black/40" />
+
+                    {/* Top Floating Badge & Icon */}
+                    <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between z-10">
+                      <span
+                        className="text-[11px] sm:text-xs font-mono font-bold tracking-widest px-3.5 py-1.5 rounded-full uppercase backdrop-blur-md border"
+                        style={{
+                          backgroundColor: "rgba(0,0,0,0.6)",
+                          borderColor: pillar.accentColor,
+                          color: pillar.accentColor,
+                        }}
+                      >
+                        {pillar.badge}
+                      </span>
+
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 text-white shadow-lg"
+                        style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+                      >
+                        {renderPillarIcon(pillar.iconType)}
+                      </div>
+                    </div>
+
+                    {/* Giant Ghost Number Watermark */}
+                    <span className="absolute bottom-2 right-4 sm:right-6 text-7xl sm:text-9xl font-extrabold font-mono text-white/5 pointer-events-none select-none leading-none">
+                      {pillar.number}
+                    </span>
+                  </div>
+
+                  {/* Card Content Zone */}
+                  <div className="p-6 sm:p-8 lg:p-10 flex flex-col gap-5">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs font-mono text-white/50 uppercase tracking-widest">
+                        PHASE {pillar.number}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
+                        {pillar.title}
+                      </h3>
+                    </div>
+
+                    <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed">
+                      {pillar.description}
+                    </p>
+
+                    {/* Highlights Feature Pills */}
+                    <div className="flex flex-wrap gap-2 pt-2 border-t border-white/10">
+                      {pillar.highlights.map((h) => (
+                        <span
+                          key={h}
+                          className="text-[11px] sm:text-xs font-medium text-white/90 bg-white/10 border border-white/15 px-3 py-1.5 rounded-lg flex items-center gap-1.5"
+                        >
+                          <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+
+        {/* ── MOBILE BOTTOM CALL TO ACTION (Visible on < lg) ── */}
+        <div className="lg:hidden mt-8 pt-6 border-t border-white/10 flex flex-col gap-3">
+          <p className="text-xs text-white/70 text-center font-medium">
+            Have specific size or frame requirements? Talk directly with our team on WhatsApp.
+          </p>
+          <Button01
+            text="Order on WhatsApp"
+            onClick={handleWhatsAppOrder}
+            ariaLabel="Order on WhatsApp"
+            className="w-full"
           />
-        ))}
-      </div>
+        </div>
 
-      {/* ── BOTTOM CALL TO ACTION ── */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-white/10 z-10">
-        <p className="text-xs sm:text-base text-white/80 font-medium text-center sm:text-left">
-          Have a photo in mind? Send it on WhatsApp for custom sizing advice &amp; an instant quote.
-        </p>
-
-        <Button01
-          text="Order on WhatsApp"
-          onClick={handleWhatsAppOrder}
-          ariaLabel="Order on WhatsApp"
-        />
       </div>
     </section>
   );
