@@ -61,7 +61,8 @@ export const WHY_REASONS: WhyReason[] = [
 ];
 
 export const WhyVictoryAdz: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const trackWrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const cardTextRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -69,10 +70,11 @@ export const WhyVictoryAdz: React.FC = () => {
   const cardPlusRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    const container = containerRef.current;
     const section = sectionRef.current;
     const trackWrapper = trackWrapperRef.current;
     const track = trackRef.current;
-    if (!section || !trackWrapper || !track) return;
+    if (!container || !section || !trackWrapper || !track) return;
 
     const ctx = gsap.context(() => {
       const numCards = WHY_REASONS.length; // 6
@@ -93,32 +95,29 @@ export const WhyVictoryAdz: React.FC = () => {
         return Math.min(maxScroll, shiftCards * cardWidth);
       };
 
-      const isMobile = window.innerWidth < 768;
-
+      // Clean timeline driven by the container scroll (No GSAP pin manipulation)
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: section,
-          pin: true,
+          trigger: container,
           start: "top top",
-          end: () => `+=${numCards * (isMobile ? 480 : 540)}`,
+          end: "bottom bottom",
           scrub: 0.5,
           snap: {
             snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
             duration: { min: 0.2, max: 0.45 },
-            delay: 0.15,
+            delay: 0.1,
             ease: "power2.out",
             inertia: false,
           },
-          pinSpacing: true,
           invalidateOnRefresh: true,
           onLeave: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.15;
+              (window as any).lenis.velocity *= 0.2;
             }
           },
           onLeaveBack: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.15;
+              (window as any).lenis.velocity *= 0.2;
             }
           },
         },
@@ -187,6 +186,7 @@ export const WhyVictoryAdz: React.FC = () => {
             animStart + 0.05
           );
 
+          // Settle straight
           tl.to(
             plusEl,
             {
@@ -199,7 +199,7 @@ export const WhyVictoryAdz: React.FC = () => {
           );
         }
       });
-    }, section);
+    }, container);
 
     const handleResize = () => {
       ScrollTrigger.refresh();
@@ -216,93 +216,100 @@ export const WhyVictoryAdz: React.FC = () => {
   }, []);
 
   return (
-    <section
+    <div
       id="why-victory-adz"
-      ref={sectionRef}
-      className="relative z-20 w-full min-h-screen h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-10 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
+      ref={containerRef}
+      className="relative w-full h-[300vh] lg:h-[350vh] bg-[#141414]"
       style={{ backgroundColor: "#141414" }}
     >
-      <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
-        {/* ── SECTION HEADER ── */}
-        <div className="w-full flex flex-col items-start gap-1 pt-2 sm:pt-4">
-          <h2 className="flex flex-col items-start">
-            <span
-              className="font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-semibold text-white/90 leading-[1.08]"
-              style={{ letterSpacing: "0.5px" }}
+      {/* Native CSS Sticky Viewport: 100% Immune to Pin Clashes & Testimonial Overlaps */}
+      <div
+        ref={sectionRef}
+        className="sticky top-0 w-full h-screen min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-10 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
+        style={{ backgroundColor: "#141414" }}
+      >
+        <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
+          {/* ── SECTION HEADER ── */}
+          <div className="w-full flex flex-col items-start gap-1 pt-2 sm:pt-4">
+            <h2 className="flex flex-col items-start">
+              <span
+                className="font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-semibold text-white/90 leading-[1.08]"
+                style={{ letterSpacing: "0.5px" }}
+              >
+                Why Choose VictoryAdz
+              </span>
+              <span className="font-great-vibes text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
+                8 years of craftsmanship
+              </span>
+            </h2>
+          </div>
+
+          {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
+          <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
+            <div
+              ref={trackRef}
+              className="flex flex-col w-max will-change-transform overflow-visible"
             >
-              Why Choose VictoryAdz
-            </span>
-            <span className="font-great-vibes text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
-              8 years of craftsmanship
-            </span>
-          </h2>
-        </div>
-
-        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
-        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
-          <div
-            ref={trackRef}
-            className="flex flex-col w-max will-change-transform overflow-visible"
-          >
-            {/* The Cards Row */}
-            <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-8 sm:pr-12">
-              {WHY_REASONS.map((reason, index) => (
-                <div
-                  key={reason.id}
-                  className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[460px] lg:w-[400px] xl:w-[420px] h-[260px] xs:h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
-                >
-                  {/* Card Text Content */}
+              {/* The Cards Row */}
+              <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-8 sm:pr-12">
+                {WHY_REASONS.map((reason, index) => (
                   <div
-                    ref={(el) => {
-                      cardTextRefs.current[index] = el;
-                    }}
-                    className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
+                    key={reason.id}
+                    className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[460px] lg:w-[400px] xl:w-[420px] h-[260px] xs:h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
                   >
-                    {/* Eyebrow Label */}
-                    <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-2.5 sm:mb-4">
-                      REASON - {reason.number}
-                    </span>
-
-                    {/* Title */}
-                    <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-2.5 sm:mb-4">
-                      {reason.title}
-                    </h3>
-
-                    {/* Content Description */}
-                    <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
-                      {reason.content}
-                    </p>
-                  </div>
-
-                  {/* Individual Bottom Line Segment with Spinning Plus */}
-                  <div className="relative w-full py-5 mt-auto select-none overflow-visible">
+                    {/* Card Text Content */}
                     <div
                       ref={(el) => {
-                        cardLineRefs.current[index] = el;
+                        cardTextRefs.current[index] = el;
                       }}
-                      className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/45 will-change-[width]"
-                      style={{ width: "0%" }}
-                    />
-                    <div
-                      ref={(el) => {
-                        cardPlusRefs.current[index] = el;
-                      }}
-                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-10 overflow-visible"
-                      style={{ left: "0%" }}
+                      className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
                     >
-                      <span className="text-white font-mono text-base sm:text-lg font-bold select-none leading-none drop-shadow-[0_0_6px_rgba(255,255,255,1)] flex items-center justify-center w-full h-full text-center">
-                        +
+                      {/* Eyebrow Label */}
+                      <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-2.5 sm:mb-4">
+                        REASON - {reason.number}
                       </span>
+
+                      {/* Title */}
+                      <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-2.5 sm:mb-4">
+                        {reason.title}
+                      </h3>
+
+                      {/* Content Description */}
+                      <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
+                        {reason.content}
+                      </p>
+                    </div>
+
+                    {/* Individual Bottom Line Segment with Spinning Plus */}
+                    <div className="relative w-full py-5 mt-auto select-none overflow-visible">
+                      <div
+                        ref={(el) => {
+                          cardLineRefs.current[index] = el;
+                        }}
+                        className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/45 will-change-[width]"
+                        style={{ width: "0%" }}
+                      />
+                      <div
+                        ref={(el) => {
+                          cardPlusRefs.current[index] = el;
+                        }}
+                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-10 overflow-visible"
+                        style={{ left: "0%" }}
+                      >
+                        <span className="text-white font-mono text-base sm:text-lg font-bold select-none leading-none drop-shadow-[0_0_6px_rgba(255,255,255,1)] flex items-center justify-center w-full h-full text-center">
+                          +
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 
