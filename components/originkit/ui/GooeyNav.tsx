@@ -168,7 +168,7 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
             }
           }
         } else {
-          router.push(item.href);
+          window.location.href = item.href;
         }
       } else if (item.href === "/") {
         if (pathname === "/") {
