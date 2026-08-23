@@ -194,10 +194,19 @@ export const HowItWorksV2: React.FC = () => {
           pinSpacing: true,
           start: "top top",
           end: "+=" + totalScroll,
-          scrub: 0.8,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          fastScrollEnd: true,
+          onLeave: () => {
+            if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
+              (window as any).lenis.velocity *= 0.12;
+            }
+          },
+          onLeaveBack: () => {
+            if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
+              (window as any).lenis.velocity *= 0.12;
+            }
+          },
         },
       });
 
@@ -299,8 +308,8 @@ export const HowItWorksV2: React.FC = () => {
         });
       }
 
-      // HOLD (4.7 -> 5.5): Full staircase locked in view before release
-      tl.to({}, { duration: 0.8 });
+      // HOLD (4.7 -> 6.1): Full staircase locked in view before calm release
+      tl.to({}, { duration: 1.4 });
     }, section);
 
     let lastWidth = window.innerWidth;

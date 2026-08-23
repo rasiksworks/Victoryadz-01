@@ -93,6 +93,16 @@ export const WhyVictoryAdz: React.FC = () => {
           scrub: 0.5,
           pinSpacing: true,
           invalidateOnRefresh: true,
+          onLeave: () => {
+            if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
+              (window as any).lenis.velocity *= 0.12;
+            }
+          },
+          onLeaveBack: () => {
+            if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
+              (window as any).lenis.velocity *= 0.12;
+            }
+          },
         },
       });
 
