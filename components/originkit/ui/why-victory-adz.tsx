@@ -199,7 +199,7 @@ export const WhyVictoryAdz: React.FC = () => {
         {/* ── SECTION HEADER ── */}
         <div className="w-full flex flex-col items-start gap-1 pt-2 sm:pt-4">
           <h2 className="flex flex-col items-start">
-            <span className="font-cal-sans text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white/90 leading-[1.08]">
+            <span className="font-cal-sans text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-normal text-white/90 leading-[1.08]">
               Why Choose VictoryAdz
             </span>
             <span className="font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
