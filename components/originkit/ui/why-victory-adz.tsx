@@ -79,13 +79,18 @@ export const WhyVictoryAdz: React.FC = () => {
       const stepDuration = 1.0;
       const snapIncrement = 1 / (numCards - 1); // 0.2
 
-      const getCardStep = (idx: number) => {
+      // Dynamic calculation: on desktop (fits ~3 cards), track shifts only when 4th card arrives;
+      // on mobile (fits 1 card), track shifts for every card
+      const getTrackOffset = (idx: number) => {
         const cards = track.querySelectorAll(".why-card");
         if (!cards || cards.length === 0) return 0;
         const firstCard = cards[0] as HTMLElement;
         const cardWidth = firstCard.offsetWidth;
-        const maxScroll = Math.max(0, track.scrollWidth - trackWrapper.clientWidth);
-        return Math.min(maxScroll, idx * cardWidth);
+        const wrapperWidth = trackWrapper.clientWidth;
+        const visibleCount = Math.max(1, Math.floor(wrapperWidth / cardWidth));
+        const shiftCards = Math.max(0, idx - visibleCount + 1);
+        const maxScroll = Math.max(0, track.scrollWidth - wrapperWidth);
+        return Math.min(maxScroll, shiftCards * cardWidth);
       };
 
       const isMobile = window.innerWidth < 768;
@@ -95,7 +100,7 @@ export const WhyVictoryAdz: React.FC = () => {
           trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${numCards * (isMobile ? 480 : 560)}`,
+          end: () => `+=${numCards * (isMobile ? 480 : 540)}`,
           scrub: 0.5,
           snap: {
             snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
@@ -118,19 +123,19 @@ export const WhyVictoryAdz: React.FC = () => {
         },
       });
 
-      // Sequential Step-by-Step Card Revelations and Discrete Track Glides
+      // Sequential Step-by-Step Card Animations
       WHY_REASONS.forEach((_, idx) => {
         const textEl = cardTextRefs.current[idx];
         const lineEl = cardLineRefs.current[idx];
         const plusEl = cardPlusRefs.current[idx];
         const stepStart = idx * stepDuration;
 
-        // For Card 2 through Card 6: Glide track to bring card `idx` into view
+        // Track shift animation: smoothly glides when card idx needs to enter the visible frame
         if (idx > 0) {
           tl.to(
             track,
             {
-              x: () => -getCardStep(idx),
+              x: () => -getTrackOffset(idx),
               ease: "power2.inOut",
               duration: stepDuration * 0.45,
             },
@@ -181,7 +186,6 @@ export const WhyVictoryAdz: React.FC = () => {
             animStart + 0.05
           );
 
-          // Settle straight
           tl.to(
             plusEl,
             {
@@ -201,7 +205,7 @@ export const WhyVictoryAdz: React.FC = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 250);
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -233,7 +237,7 @@ export const WhyVictoryAdz: React.FC = () => {
           </h2>
         </div>
 
-        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK (1 Card at a time on mobile, multi-card on desktop) ── */}
+        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
         <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
           <div
             ref={trackRef}
