@@ -61,7 +61,7 @@
 }
 
 .gooey-nav-container nav ul li {
-  border-radius: 0px !important;
+  border-radius: 6px;
   position: relative;
   cursor: pointer;
   touch-action: manipulation;
@@ -100,7 +100,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 0px !important;
+  border-radius: 6px;
   background: white;
   opacity: 0;
   transform: scale(0);
@@ -159,7 +159,7 @@
   transform: scale(0);
   opacity: 0;
   z-index: -1;
-  border-radius: 0px !important;
+  border-radius: 6px;
 }
 
 .gooey-nav-container .effect.active::after {
