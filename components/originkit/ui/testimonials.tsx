@@ -26,6 +26,11 @@ export const Testimonials: React.FC = () => {
       .then((data) => {
         if (data?.testimonials && Array.isArray(data.testimonials) && data.testimonials.length > 0) {
           setItems(data.testimonials);
+          setTimeout(() => {
+            if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
+              (window as any).ScrollTrigger.refresh();
+            }
+          }, 80);
         }
       })
       .catch(() => {});

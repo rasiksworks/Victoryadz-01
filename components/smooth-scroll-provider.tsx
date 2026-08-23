@@ -74,6 +74,18 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     };
     window.addEventListener("resize", handleWindowResize);
 
+    // Auto-refresh ScrollTrigger when DOM body height changes (e.g. dynamic API data, lazy images)
+    let roTimer: NodeJS.Timeout | null = null;
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => {
+      if (roTimer) clearTimeout(roTimer);
+      roTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    }) : null;
+    if (ro && typeof document !== "undefined" && document.body) {
+      ro.observe(document.body);
+    }
+
     if (typeof document !== "undefined" && "fonts" in document) {
       document.fonts.ready.then(() => {
         ScrollTrigger.refresh();

@@ -76,9 +76,9 @@ export const WhyVictoryAdz: React.FC = () => {
 
     const ctx = gsap.context(() => {
       const getScrollAmount = () => {
-        const trackWidth = track.scrollWidth;
-        const wrapperWidth = trackWrapper.clientWidth;
-        return Math.max(0, trackWidth - wrapperWidth);
+        const firstCard = track.querySelector(".why-card") as HTMLElement | null;
+        const cardWidth = firstCard ? firstCard.offsetWidth : trackWrapper.clientWidth;
+        return Math.max(0, Math.min(track.scrollWidth - trackWrapper.clientWidth, (numCards - 1) * cardWidth));
       };
 
       const numCards = WHY_REASONS.length; // 6
@@ -89,25 +89,25 @@ export const WhyVictoryAdz: React.FC = () => {
           trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${Math.max(2400, numCards * 500)}`,
-          scrub: 0.6,
+          end: () => `+=${Math.max(2000, numCards * 450)}`,
+          scrub: 0.5,
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onLeave: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.15;
+              (window as any).lenis.velocity *= 0.2;
             }
           },
           onLeaveBack: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.15;
+              (window as any).lenis.velocity *= 0.2;
             }
           },
         },
       });
 
-      // Continuous, linear track glide so each step directly reveals its corresponding card
+      // Synchronized linear track glide so each step directly reveals its corresponding card
       tl.fromTo(
         track,
         { x: 0 },
@@ -116,7 +116,7 @@ export const WhyVictoryAdz: React.FC = () => {
           ease: "none",
           duration: (numCards - 1) * stepDuration,
         },
-        stepDuration * 0.5
+        0
       );
 
       // Card by card sequential reveal animation (Each card is 1 step)
@@ -232,7 +232,7 @@ export const WhyVictoryAdz: React.FC = () => {
               {WHY_REASONS.map((reason, index) => (
                 <div
                   key={reason.id}
-                  className="flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[440px] lg:w-[400px] xl:w-[420px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                  className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[440px] lg:w-[400px] xl:w-[420px] h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
                 >
                   {/* Card Text Content (Fades in smoothly when active) */}
                   <div

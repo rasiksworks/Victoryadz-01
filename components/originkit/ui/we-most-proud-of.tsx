@@ -54,6 +54,11 @@ export const WeMostProudOf: React.FC = () => {
             credits: item.credits || "PHOTOGRAPH BY VICTORYADZ",
           }));
           setItems(mapped);
+          setTimeout(() => {
+            if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
+              (window as any).ScrollTrigger.refresh();
+            }
+          }, 80);
         }
       })
       .catch(() => {
@@ -70,6 +75,11 @@ export const WeMostProudOf: React.FC = () => {
           credits: item.credits,
         }));
         setItems(fallback);
+        setTimeout(() => {
+          if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
+            (window as any).ScrollTrigger.refresh();
+          }
+        }, 80);
       });
   }, []);
 
