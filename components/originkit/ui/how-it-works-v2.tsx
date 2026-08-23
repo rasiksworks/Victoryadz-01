@@ -471,23 +471,23 @@ export const HowItWorksV2: React.FC = () => {
           style={{
             willChange: "transform, opacity",
           }}
-          className="mobile-header-block flex flex-col items-center text-center gap-1 xs:gap-1.5 z-20 max-w-sm mx-auto"
+          className="mobile-header-block flex flex-col items-center text-center gap-1.5 xs:gap-2 z-20 w-full max-w-[96vw] mx-auto px-2"
         >
-          <h2 className="text-center select-none">
-            <span className="block font-cal-sans text-lg xs:text-xl sm:text-2xl font-semibold text-white tracking-normal leading-tight">
+          <h2 className="text-center select-none w-full">
+            <span className="block font-cal-sans text-[22px] xs:text-[26px] sm:text-[32px] font-semibold text-white tracking-normal leading-tight whitespace-nowrap">
               From Your Photo to Your Wall,
             </span>
-            <span className="block font-great-vibes text-2xl xs:text-3xl sm:text-4xl font-normal text-white pt-0.5 -mt-0.5 leading-tight">
+            <span className="block font-great-vibes text-[32px] xs:text-[38px] sm:text-[46px] font-normal text-white pt-0.5 -mt-0.5 leading-tight whitespace-nowrap">
               Wherever You Are
             </span>
           </h2>
           <p
-            className="text-[11px] xs:text-xs sm:text-[13px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
+            className="text-xs xs:text-sm sm:text-[15px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-sm text-center mt-0.5"
             style={{ letterSpacing: "0.5px" }}
           >
             No shop visit needed. Here&apos;s exactly what happens after you message us.
           </p>
-          <div className="pt-1 flex items-center justify-center w-full">
+          <div className="pt-1.5 flex items-center justify-center w-full">
             <Button01
               text="Order on WhatsApp"
               onClick={handleWhatsAppOrder}
