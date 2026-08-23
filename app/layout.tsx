@@ -32,11 +32,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "VictoryAdz — Custom Photo Framing Studio | 8+ Years Experience",
+    default: "VictoryAdz - Custom Photo Framing Studio | 8+ Years Experience",
     template: "%s | VictoryAdz",
   },
   description:
-    "Handcrafted custom photo frames and premium lamination finishes, trusted across Tamil Nadu for 8+ years. Order directly on WhatsApp — no shop visit needed.",
+    "Handcrafted custom photo frames and premium lamination finishes, trusted across Tamil Nadu for 8+ years. Order directly on WhatsApp, with no shop visit needed.",
   applicationName: "VictoryAdz",
   authors: [{ name: "VictoryAdz", url: siteUrl }],
   generator: "Next.js",

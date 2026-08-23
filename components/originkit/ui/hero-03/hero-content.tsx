@@ -54,7 +54,7 @@ export const HeroContent = ({ onExplore, onBook }: HeroContentProps) => {
               className="w-full max-w-[348px] ipad:max-w-[450px] desktop-sm:max-w-[460px] text-center font-inter-display font-medium text-[13px] sm:text-[14px] ipad:text-[14.5px] desktop-sm:text-[15px] leading-relaxed text-[#E0E0E0] px-2 block"
               style={{ letterSpacing: "0.5px" }}
             >
-              Custom photo framing and premium lamination, trusted by families across Tamil Nadu for 8+ years — even if you&apos;re ordering from another state.
+              Custom photo framing and premium lamination, trusted by families across Tamil Nadu for 8+ years, even if you&apos;re ordering from another state.
             </p>
           </motion.div>
         </div>

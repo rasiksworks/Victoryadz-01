@@ -19,23 +19,23 @@ export const WHY_REASONS: WhyReason[] = [
   {
     id: "reason-1",
     number: "01",
-    title: "Quality Materials",
+    title: "Archival Durability",
     content:
-      "We never compromise on frame material — every piece is built to last with moisture-resistant core boards and museum-grade archival durability.",
+      "We never compromise on frame material. Every piece is built to last with moisture-resistant core boards and museum-grade archival durability.",
   },
   {
-    id: "reason-2",
+    id: "r2",
     number: "02",
-    title: "Multiple Finishes",
+    title: "Surface Finish Choices",
     content:
-      "From glare-free matte to crystal glossy and tactile textured finishes — select the exact style that protects and elevates your artwork.",
+      "From glare-free matte to crystal glossy and tactile textured finishes, select the exact style that protects and elevates your artwork.",
   },
   {
-    id: "reason-3",
+    id: "r3",
     number: "03",
-    title: "8+ Years Craft",
+    title: "8+ Years of Craftsmanship",
     content:
-      "We've been perfecting this craft since day one — every frame reflects years of precision, handcrafting, and family-trusted care.",
+      "We've been perfecting this craft since day one. Every frame reflects years of precision, handcrafting, and family-trusted care.",
   },
   {
     id: "reason-4",

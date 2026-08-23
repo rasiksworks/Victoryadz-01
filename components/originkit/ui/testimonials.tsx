@@ -37,7 +37,7 @@ export const Testimonials: React.FC = () => {
             className="text-sm sm:text-base md:text-lg text-[#E0E0E0] font-inter-display font-medium leading-relaxed max-w-2xl text-center"
             style={{ letterSpacing: "0.5px" }}
           >
-            We&apos;re currently collecting reviews from our customers — real stories from real homes will appear here soon. In the meantime, message us on WhatsApp and we&apos;re happy to share examples of past work directly.
+            We&apos;re currently collecting reviews from our customers. Real stories from real homes will appear here soon. In the meantime, message us on WhatsApp and we&apos;re happy to share examples of past work directly.
           </p>
 
           <div className="pt-2">

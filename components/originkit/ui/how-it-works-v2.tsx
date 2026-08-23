@@ -23,7 +23,7 @@ const STEPS: StepData[] = [
   {
     number: "01",
     title: "Send Your Photo",
-    body: "Share your photo with us on WhatsApp — any photo, any condition.",
+    body: "Share your photo with us on WhatsApp. Any photo, any condition.",
     cellPosDesktop: { left: "0%", top: "0%" },
   },
   {

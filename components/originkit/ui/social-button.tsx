@@ -69,7 +69,7 @@ export default function SocialButton({
 
     const item = items[index];
     const url = getTargetUrl();
-    const formattedText = `${shareTitle} — ${shareText}`;
+    const formattedText = `${shareTitle}: ${shareText}`;
 
     if (item.label === "Copy link") {
       try {

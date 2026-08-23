@@ -90,7 +90,7 @@ export const BrandVisionSection: React.FC = () => {
                 className="font-inter-display font-medium text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed text-[#DCDCDC] block text-center"
                 style={{ letterSpacing: "0.5px" }}
               >
-                A photo is a single moment — but it deserves to be seen every day, not stored away in a phone. For 8+ years, VictoryAdz has been turning photographs into lasting pieces, using quality materials and a range of lamination finishes to protect every detail. Every order starts with understanding what you need, and we personally guide you through choosing the right size, finish, and frame for your memory. Send us your photo on WhatsApp, and we&apos;ll walk you through every choice before anything gets printed — you approve it, then we frame and ship it to you, wherever you are.
+                A photo is a single moment, but it deserves to be seen every day, not stored away in a phone. For 8+ years, VictoryAdz has been turning photographs into lasting pieces, using quality materials and a range of lamination finishes to protect every detail. Every order starts with understanding what you need, and we personally guide you through choosing the right size, finish, and frame for your memory. Send us your photo on WhatsApp, and we&apos;ll walk you through every choice before anything gets printed. You approve it, then we frame and ship it to you, wherever you are.
               </p>
             </div>
 
