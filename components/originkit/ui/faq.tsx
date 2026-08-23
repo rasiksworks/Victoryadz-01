@@ -99,12 +99,11 @@ export const FAQ: React.FC = () => {
             return (
               <motion.div
                 key={faq.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "0px 0px -30px 0px" }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.5,
-                  delay: index * 0.05,
+                  duration: 0.4,
+                  delay: index * 0.04,
                   ease: LUXURY_EASE,
                 }}
                 onMouseEnter={() => {

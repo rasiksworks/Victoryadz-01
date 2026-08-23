@@ -78,7 +78,7 @@ export const WhyVictoryAdz: React.FC = () => {
       const getScrollAmount = () => {
         const trackWidth = track.scrollWidth;
         const wrapperWidth = trackWrapper.clientWidth;
-        return Math.max(0, trackWidth - wrapperWidth + 24);
+        return Math.max(0, trackWidth - wrapperWidth);
       };
 
       const numCards = WHY_REASONS.length; // 6
@@ -89,19 +89,19 @@ export const WhyVictoryAdz: React.FC = () => {
           trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${Math.max(3600, numCards * 700)}`,
-          scrub: 0.8,
+          end: () => `+=${Math.max(2400, numCards * 500)}`,
+          scrub: 0.6,
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onLeave: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.12;
+              (window as any).lenis.velocity *= 0.15;
             }
           },
           onLeaveBack: () => {
             if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.12;
+              (window as any).lenis.velocity *= 0.15;
             }
           },
         },
@@ -116,7 +116,7 @@ export const WhyVictoryAdz: React.FC = () => {
           ease: "none",
           duration: (numCards - 1) * stepDuration,
         },
-        stepDuration * 0.8
+        stepDuration * 0.5
       );
 
       // Card by card sequential reveal animation (Each card is 1 step)
@@ -182,8 +182,7 @@ export const WhyVictoryAdz: React.FC = () => {
         }
       });
 
-      // Smooth deceleration buffer so unpinning flows naturally into the FAQ section without rushing
-      tl.to({}, { duration: stepDuration * 0.4 });
+      // Card animations complete cleanly with card 6
     }, section);
 
     const handleResize = () => {
