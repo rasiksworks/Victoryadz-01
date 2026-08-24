@@ -61,7 +61,6 @@ export const WHY_REASONS: WhyReason[] = [
 ];
 
 export const WhyVictoryAdz: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackWrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -70,19 +69,30 @@ export const WhyVictoryAdz: React.FC = () => {
   const cardPlusRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const container = containerRef.current;
     const section = sectionRef.current;
     const trackWrapper = trackWrapperRef.current;
     const track = trackRef.current;
-    if (!container || !section || !trackWrapper || !track) return;
+    if (!section || !trackWrapper || !track) return;
+
+    // Reset initial card state so Card 01 is always visible first
+    gsap.set(track, { x: 0 });
+    cardTextRefs.current.forEach((el, i) => {
+      if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 14 });
+    });
+    cardLineRefs.current.forEach((el) => {
+      if (el) gsap.set(el, { width: "0%" });
+    });
+    cardPlusRefs.current.forEach((el, i) => {
+      if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, left: "0%", rotation: 0 });
+    });
 
     const ctx = gsap.context(() => {
-      const numCards = WHY_REASONS.length; // 6
+      const numCards = WHY_REASONS.length;
       const stepDuration = 1.0;
-      const snapIncrement = 1 / (numCards - 1); // 0.2
+      const snapIncrement = 1 / (numCards - 1);
+      const isMobile = window.innerWidth < 768;
+      const totalScroll = isMobile ? 2200 : 3000;
 
-      // Dynamic calculation: on desktop (fits ~3 cards), track shifts only when 4th card arrives;
-      // on mobile (fits 1 card), track shifts for every card
       const getTrackOffset = (idx: number) => {
         const cards = track.querySelectorAll(".why-card");
         if (!cards || cards.length === 0) return 0;
@@ -95,48 +105,35 @@ export const WhyVictoryAdz: React.FC = () => {
         return Math.min(maxScroll, shiftCards * cardWidth);
       };
 
-      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
-      // Clean timeline driven by the container scroll (No GSAP pin manipulation)
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: container,
+          trigger: section,
+          pin: true,
+          pinSpacing: true,
           start: "top top",
-          end: "bottom bottom",
-          scrub: isMobile ? 0.7 : 0.5,
+          end: "+=" + totalScroll,
+          scrub: isMobile ? 0.6 : 0.45,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
           ...(isMobile
             ? {}
             : {
                 snap: {
                   snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
-                  duration: { min: 0.2, max: 0.45 },
-                  delay: 0.1,
+                  duration: { min: 0.2, max: 0.4 },
+                  delay: 0.08,
                   ease: "power2.out",
-                  inertia: false,
                 },
               }),
-          invalidateOnRefresh: true,
-          onLeave: () => {
-            if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.2;
-            }
-          },
-          onLeaveBack: () => {
-            if (typeof window !== "undefined" && (window as any).lenis?.velocity) {
-              (window as any).lenis.velocity *= 0.2;
-            }
-          },
         },
       });
 
-      // Sequential Step-by-Step Card Animations
       WHY_REASONS.forEach((_, idx) => {
         const textEl = cardTextRefs.current[idx];
         const lineEl = cardLineRefs.current[idx];
         const plusEl = cardPlusRefs.current[idx];
         const stepStart = idx * stepDuration;
 
-        // Track shift animation: smoothly glides when card idx needs to enter the visible frame
         if (idx > 0) {
           tl.to(
             track,
@@ -147,21 +144,19 @@ export const WhyVictoryAdz: React.FC = () => {
             },
             stepStart
           );
+
+          if (textEl) {
+            tl.fromTo(
+              textEl,
+              { opacity: 0, y: 14 },
+              { opacity: 1, y: 0, duration: stepDuration * 0.35, ease: "power1.out" },
+              stepStart + 0.12
+            );
+          }
         }
 
-        // 1. Text reveals with smooth fade-in
-        if (textEl) {
-          tl.fromTo(
-            textEl,
-            { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: stepDuration * 0.35, ease: "power1.out" },
-            idx === 0 ? 0 : stepStart + 0.15
-          );
-        }
-
-        // 2. Plus button spins and moves from left to right, drawing the line behind it
         if (lineEl && plusEl) {
-          const animStart = idx === 0 ? 0.05 : stepStart + 0.2;
+          const animStart = idx === 0 ? 0.02 : stepStart + 0.18;
 
           tl.fromTo(
             plusEl,
@@ -192,7 +187,6 @@ export const WhyVictoryAdz: React.FC = () => {
             animStart + 0.05
           );
 
-          // Settle straight
           tl.to(
             plusEl,
             {
@@ -204,7 +198,6 @@ export const WhyVictoryAdz: React.FC = () => {
             animStart + stepDuration * 0.75
           );
 
-          // If not the final card, fade out this segment's plus so the next segment takes over with zero duplicate icons
           if (idx < numCards - 1) {
             tl.to(
               plusEl,
@@ -218,123 +211,116 @@ export const WhyVictoryAdz: React.FC = () => {
           }
         }
       });
-    }, container);
+    }, section);
 
-    const handleResize = () => {
+    const refreshTrigger = () => {
       ScrollTrigger.refresh();
     };
 
-    window.addEventListener("resize", handleResize);
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 300);
+    window.addEventListener("resize", refreshTrigger);
+    const timer = setTimeout(refreshTrigger, 400);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", refreshTrigger);
       clearTimeout(timer);
       ctx.revert();
     };
   }, []);
 
   return (
-    <div
+    <section
       id="why-victory-adz"
-      ref={containerRef}
-      className="relative w-full h-[300vh] lg:h-[350vh] bg-[#141414]"
+      ref={sectionRef}
+      className="relative z-20 w-full h-screen min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-10 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
       style={{ backgroundColor: "#141414" }}
     >
-      {/* Native CSS Sticky Viewport: 100% Immune to Pin Clashes & Testimonial Overlaps */}
-      <div
-        ref={sectionRef}
-        className="sticky top-0 w-full h-screen min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-10 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
-        style={{ backgroundColor: "#141414" }}
-      >
-        <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
-          {/* ── SECTION HEADER ── */}
-          <div className="w-full flex flex-col items-start gap-1 pt-2 sm:pt-4">
-            <h2 className="flex flex-col items-start">
-              <span
-                className="font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-semibold text-white/90 leading-[1.08]"
-                style={{ letterSpacing: "0.5px" }}
-              >
-                Why Choose VictoryAdz
-              </span>
-              <span className="font-great-vibes text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
-                8 years of craftsmanship
-              </span>
-            </h2>
-          </div>
-
-          {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
-          <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
-            <div
-              ref={trackRef}
-              className="flex flex-col w-max will-change-transform overflow-visible"
+      <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
+        {/* ── SECTION HEADER ── */}
+        <div className="w-full flex flex-col items-start gap-1 pt-2 sm:pt-4">
+          <h2 className="flex flex-col items-start">
+            <span
+              className="font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-semibold text-white/90 leading-[1.08]"
+              style={{ letterSpacing: "0.5px" }}
             >
-              {/* The Cards Row */}
-              <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-8 sm:pr-12">
-                {WHY_REASONS.map((reason, index) => (
+              Why Choose VictoryAdz
+            </span>
+            <span className="font-great-vibes text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.08]">
+              8 years of craftsmanship
+            </span>
+          </h2>
+        </div>
+
+        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
+        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
+          <div
+            ref={trackRef}
+            className="flex flex-col w-max will-change-transform overflow-visible"
+          >
+            {/* The Cards Row */}
+            <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-8 sm:pr-12">
+              {WHY_REASONS.map((reason, index) => (
+                <div
+                  key={reason.id}
+                  className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[460px] lg:w-[400px] xl:w-[420px] h-[260px] xs:h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                >
+                  {/* Card Text Content */}
                   <div
-                    key={reason.id}
-                    className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[460px] lg:w-[400px] xl:w-[420px] h-[260px] xs:h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                    ref={(el) => {
+                      cardTextRefs.current[index] = el;
+                    }}
+                    className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
                   >
-                    {/* Card Text Content */}
+                    {/* Eyebrow Label */}
+                    <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-2.5 sm:mb-4">
+                      REASON - {reason.number}
+                    </span>
+
+                    {/* Title */}
+                    <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-2.5 sm:mb-4">
+                      {reason.title}
+                    </h3>
+
+                    {/* Content Description */}
+                    <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
+                      {reason.content}
+                    </p>
+                  </div>
+
+                  {/* Continuous Unbroken Track Line Segment */}
+                  <div className="relative w-full py-6 mt-auto select-none overflow-visible">
+                    {/* 1. Base Continuous Track Line */}
+                    <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-[1.5px] bg-white/20" />
+
+                    {/* 2. Active Revealed Line */}
                     <div
                       ref={(el) => {
-                        cardTextRefs.current[index] = el;
+                        cardLineRefs.current[index] = el;
                       }}
-                      className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
+                      className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/50 will-change-[width] z-10"
+                      style={{ width: "0%" }}
+                    />
+
+                    {/* 3. Single Seamless Plus Marker */}
+                    <div
+                      ref={(el) => {
+                        cardPlusRefs.current[index] = el;
+                      }}
+                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-20"
+                      style={{ left: "0%" }}
                     >
-                      {/* Eyebrow Label */}
-                      <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-2.5 sm:mb-4">
-                        REASON - {reason.number}
+                      <span className="text-white font-mono text-base font-bold select-none leading-none flex items-center justify-center">
+                        +
                       </span>
-
-                      {/* Title */}
-                      <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-2.5 sm:mb-4">
-                        {reason.title}
-                      </h3>
-
-                      {/* Content Description */}
-                      <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
-                        {reason.content}
-                      </p>
-                    </div>
-
-                    {/* Continuous Unbroken Track Line Segment (Edge-to-Edge, Zero Gaps) */}
-                    <div className="relative w-full py-6 mt-auto select-none overflow-visible">
-                      {/* 1. Base Continuous Track Line (20% opacity white) */}
-                      <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-[1.5px] bg-white/20" />
-
-                      {/* 2. Active Revealed Line (50% half-opacity white) */}
-                      <div
-                        ref={(el) => {
-                          cardLineRefs.current[index] = el;
-                        }}
-                        className="absolute top-1/2 -translate-y-1/2 left-0 h-[1.5px] bg-white/50 will-change-[width] z-10"
-                        style={{ width: "0%" }}
-                      />
-
-                      {/* 3. Single Seamless Plus Marker */}
-                      <div
-                        ref={(el) => {
-                          cardPlusRefs.current[index] = el;
-                        }}
-                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none opacity-0 will-change-[left,transform,opacity] z-20"
-                        style={{ left: "0%" }}
-                      >
-                        <span className="text-white font-mono text-base font-bold select-none leading-none flex items-center justify-center">
-                          +
-                        </span>
-                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
-
         </div>
+
       </div>
-    </div>
+    </section>
   );
 };
 
