@@ -221,20 +221,7 @@ export const Navbar = () => {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[85] flex flex-col justify-between bg-[#111111]/98 backdrop-blur-2xl text-white pt-20 pb-8 px-6 overflow-y-auto md:hidden"
           >
-            {/* Top Close Bar inside drawer */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10 max-w-sm w-full mx-auto">
-              <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-white/50">
-                [ NAVIGATION MENU ]
-              </span>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white font-mono text-xs uppercase tracking-wider transition-all"
-                aria-label="Close navigation menu"
-              >
-                <X size={15} />
-                <span>Close</span>
-              </button>
-            </div>
+
 
             {/* Navigation List */}
             <div className="flex flex-col gap-1 my-auto max-w-sm w-full mx-auto py-4">
