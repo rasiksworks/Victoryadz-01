@@ -1,23 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import MorphSlider from "@/components/ui/MorphSlider";
+import { useReducedMotion } from "motion/react";
+import GalleryTunnel from "@/components/originkit/ui/hero-03/gallery-tunnel";
+import { useTunnelConfig } from "@/components/originkit/ui/hero-03/use-tunnel-size";
 import { TUNNEL_IMAGES } from "@/components/originkit/ui/hero-03/tunnel-images";
 
 /**
- * React Bits MorphSlider WebGL background.
- * GPU displacement morph between curated frame artwork with subtle drift & dark veil.
+ * Animated Three.js gallery tunnel.
+ * Click/hold empty areas to boost; UI stays clickable above.
  */
 export const PerspectiveBackground = () => {
   const [mounted, setMounted] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const { tunnelSize, fade, boost } = useTunnelConfig();
 
   useEffect(() => {
-    setMounted(true);
+    // Micro-delay mounting Three.js canvas by 100ms so hero typography & buttons paint instantly
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
-
-  const sliderItems = TUNNEL_IMAGES.map((img: any) => ({
-    image: typeof img === "string" ? img : img.src || img.url,
-  })).filter((item: any) => Boolean(item.image));
 
   return (
     <div
@@ -25,29 +29,24 @@ export const PerspectiveBackground = () => {
       className="absolute inset-0 overflow-hidden bg-[#2C2C2C]"
       style={{ backgroundColor: "#2C2C2C" }}
     >
-      {mounted && sliderItems.length > 0 && (
-        <div className="absolute inset-0 w-full h-full">
-          <MorphSlider
-            items={sliderItems}
-            transition="melt"
-            intensity={0.45}
-            aberration={0.25}
-            drift={0.35}
-            autoplay={true}
-            autoplayDelay={4.5}
-            loop={true}
-            radius={0}
-            overlayColor="#2C2C2C"
-            showCaptions={false}
-            showControls={false}
-            showIndicators={false}
-            className="w-full h-full"
-          />
-        </div>
+      {mounted && (
+        <GalleryTunnel
+          background="#2C2C2C"
+          lineColor="#555555"
+          lineOpacity={60}
+          grid={4}
+          tunnelSize={tunnelSize}
+          speed={reduceMotion ? 0 : 9}
+          boost={reduceMotion ? 0 : boost}
+          fade={fade}
+          label={false}
+          images={TUNNEL_IMAGES}
+          style={{ width: "100%", height: "100%" }}
+        />
       )}
 
-      {/* Center veil for crisp hero typography & CTA button contrast */}
-      <div className="pointer-events-none absolute inset-0 bg-black/35 bg-[radial-gradient(ellipse_at_center,rgba(44,44,44,0.75)_0%,rgba(44,44,44,0.35)_40%,transparent_64%)] ipad:bg-[radial-gradient(ellipse_at_center,rgba(44,44,44,0.82)_0%,rgba(44,44,44,0.45)_38%,transparent_62%)] desktop-sm:bg-[radial-gradient(ellipse_at_center,rgba(44,44,44,0.88)_0%,rgba(44,44,44,0.52)_36%,transparent_60%)]" />
+      {/* Soft center veil — matching design wash */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(44,44,44,0.75)_0%,rgba(44,44,44,0.35)_40%,transparent_64%)] ipad:bg-[radial-gradient(ellipse_at_center,rgba(44,44,44,0.82)_0%,rgba(44,44,44,0.45)_38%,transparent_62%)] desktop-sm:bg-[radial-gradient(ellipse_at_center,rgba(44,44,44,0.88)_0%,rgba(44,44,44,0.52)_36%,transparent_60%)]" />
     </div>
   );
 };
