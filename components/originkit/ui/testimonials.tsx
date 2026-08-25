@@ -135,7 +135,7 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        {/* ── 1. DESKTOP WEB VIEW (>= lg): Original 3-Column Grid ── */}
+        {/* ── 1. DESKTOP WEB VIEW (>= lg): Original 3-Column Grid with Bottom-Right Profile ── */}
         <div className="hidden lg:grid grid-cols-3 gap-6 w-full">
           {items.map((t) => {
             const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
@@ -169,8 +169,16 @@ export const Testimonials: React.FC = () => {
                     &ldquo;{t.quote}&rdquo;
                   </p>
 
-                  {/* Customer Footer */}
-                  <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
+                  {/* Customer Footer - Positioned Bottom-Right */}
+                  <div className="flex items-center justify-end gap-3.5 pt-4 border-t border-white/10">
+                    <div className="flex flex-col text-right">
+                      <span className="text-base font-semibold text-white tracking-tight leading-tight">
+                        {t.name}
+                      </span>
+                      <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                        {t.role}
+                      </span>
+                    </div>
                     <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
                       {t.avatar ? (
                         <Image
@@ -184,14 +192,6 @@ export const Testimonials: React.FC = () => {
                         <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
                       )}
                     </div>
-                    <div className="flex flex-col text-left">
-                      <span className="text-base font-semibold text-white tracking-tight leading-tight">
-                        {t.name}
-                      </span>
-                      <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
-                        {t.role}
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -199,9 +199,8 @@ export const Testimonials: React.FC = () => {
           })}
         </div>
 
-        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): 100% Full-Width Clean Swipe Card (No Cut/Clip) ── */}
+        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Full-Width Swipe Card with Bottom-Right Profile ── */}
         <div className="block lg:hidden w-full max-w-xl mx-auto">
-          {/* Slider Container: 100% Full Width per card */}
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
@@ -247,8 +246,16 @@ export const Testimonials: React.FC = () => {
                         &ldquo;{t.quote}&rdquo;
                       </p>
 
-                      {/* Customer Footer */}
-                      <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
+                      {/* Customer Footer - Positioned Bottom-Right */}
+                      <div className="flex items-center justify-end gap-3.5 pt-4 border-t border-white/10">
+                        <div className="flex flex-col text-right">
+                          <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
+                            {t.name}
+                          </span>
+                          <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                            {t.role}
+                          </span>
+                        </div>
                         <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
                           {t.avatar ? (
                             <Image
@@ -261,14 +268,6 @@ export const Testimonials: React.FC = () => {
                           ) : (
                             <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
                           )}
-                        </div>
-                        <div className="flex flex-col text-left">
-                          <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
-                            {t.name}
-                          </span>
-                          <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
-                            {t.role}
-                          </span>
                         </div>
                       </div>
                     </div>
