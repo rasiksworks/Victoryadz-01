@@ -135,8 +135,8 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        {/* ── 1. DESKTOP WEB VIEW (>= lg): Original 3-Column Grid with Maximized Vertical Spacing ── */}
-        <div className="hidden lg:grid grid-cols-3 gap-6 w-full">
+        {/* ── 1. DESKTOP WEB VIEW (>= lg): Balanced 3-Column Grid with Harmonious Spacing ── */}
+        <div className="hidden lg:grid grid-cols-3 gap-6 w-full items-stretch">
           {items.map((t) => {
             const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
             return (
@@ -146,53 +146,50 @@ export const Testimonials: React.FC = () => {
                   t.featured
                     ? "col-span-2 bg-[#1b1b1b] border-amber-500/40"
                     : "bg-[#181818] border-white/15"
-                } rounded-2xl border text-white shadow-2xl p-7 lg:p-8 flex flex-col justify-between min-h-[340px] transition-all duration-300 hover:border-white/30`}
+                } rounded-2xl border text-white shadow-2xl p-7 lg:p-8 flex flex-col justify-between gap-6 transition-all duration-300 hover:border-white/30`}
                 style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
               >
-                <div className="flex flex-col justify-between h-full gap-8">
-                  {/* Top Block: Stars + Verified Badge + Review Quote */}
-                  <div className="flex flex-col gap-5">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                      </div>
-                      <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
-                        Verified Order
-                      </span>
-                    </div>
-
-                    <p className="text-base lg:text-lg text-white/95 leading-relaxed font-normal">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
+                {/* 1. Top Bar: Stars + Badge */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
                   </div>
+                  <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
+                    Verified Order
+                  </span>
+                </div>
 
-                  {/* Customer Footer - Anchored to the Bottom Left with Maximum Spacing */}
-                  <div className="flex items-center justify-start gap-3.5 pt-4 border-t border-white/10 mt-auto">
-                    <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
-                      {t.avatar ? (
-                        <Image
-                          src={t.avatar}
-                          alt={t.name || "Customer"}
-                          fill
-                          sizes="44px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
-                      )}
-                    </div>
-                    <div className="flex flex-col text-left">
-                      <span className="text-base font-semibold text-white tracking-tight leading-tight">
-                        {t.name}
-                      </span>
-                      <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
-                        {t.role}
-                      </span>
-                    </div>
+                {/* 2. Review Quote (Evenly spaced in the middle) */}
+                <p className="text-base lg:text-lg text-white/95 leading-relaxed font-normal my-auto py-2">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+
+                {/* 3. Customer Footer */}
+                <div className="flex items-center justify-start gap-3.5 pt-4 border-t border-white/10">
+                  <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
+                    {t.avatar ? (
+                      <Image
+                        src={t.avatar}
+                        alt={t.name || "Customer"}
+                        fill
+                        sizes="44px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
+                    )}
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-base font-semibold text-white tracking-tight leading-tight">
+                      {t.name}
+                    </span>
+                    <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                      {t.role}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -200,7 +197,7 @@ export const Testimonials: React.FC = () => {
           })}
         </div>
 
-        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Full-Width Card with Bottom-Left Profile & Max Spacing ── */}
+        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Evenly Spaced Full-Width Slide ── */}
         <div className="block lg:hidden w-full max-w-xl mx-auto">
           <div
             ref={scrollContainerRef}
@@ -220,57 +217,54 @@ export const Testimonials: React.FC = () => {
                   className="w-full min-w-full snap-center shrink-0 px-0.5"
                 >
                   <div
-                    className={`w-full min-h-[300px] xs:min-h-[320px] sm:min-h-[340px] ${
+                    className={`w-full ${
                       t.featured
                         ? "bg-[#1b1b1b] border-amber-500/40"
                         : "bg-[#181818] border-white/15"
-                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300`}
+                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between gap-5 sm:gap-6 transition-all duration-300`}
                     style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
                   >
-                    <div className="flex flex-col justify-between h-full gap-8">
-                      {/* Top Block: Stars + Badge + Review Quote */}
-                      <div className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
-                            <span>★</span>
-                            <span>★</span>
-                            <span>★</span>
-                            <span>★</span>
-                            <span>★</span>
-                          </div>
-                          <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
-                            Verified Order
-                          </span>
-                        </div>
-
-                        <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal">
-                          &ldquo;{t.quote}&rdquo;
-                        </p>
+                    {/* 1. Top Bar: Stars + Badge */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
+                        <span>★</span>
+                        <span>★</span>
+                        <span>★</span>
+                        <span>★</span>
+                        <span>★</span>
                       </div>
+                      <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
+                        Verified Order
+                      </span>
+                    </div>
 
-                      {/* Customer Footer - Anchored to the Bottom Left with Maximum Spacing */}
-                      <div className="flex items-center justify-start gap-3.5 pt-4 border-t border-white/10 mt-auto">
-                        <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
-                          {t.avatar ? (
-                            <Image
-                              src={t.avatar}
-                              alt={t.name || "Customer"}
-                              fill
-                              sizes="44px"
-                              className="object-cover"
-                            />
-                          ) : (
-                            <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
-                          )}
-                        </div>
-                        <div className="flex flex-col text-left">
-                          <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
-                            {t.name}
-                          </span>
-                          <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
-                            {t.role}
-                          </span>
-                        </div>
+                    {/* 2. Review Quote (Evenly balanced) */}
+                    <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal py-1">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+
+                    {/* 3. Customer Footer */}
+                    <div className="flex items-center justify-start gap-3.5 pt-4 border-t border-white/10">
+                      <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
+                        {t.avatar ? (
+                          <Image
+                            src={t.avatar}
+                            alt={t.name || "Customer"}
+                            fill
+                            sizes="44px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
+                        )}
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
+                          {t.name}
+                        </span>
+                        <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                          {t.role}
+                        </span>
                       </div>
                     </div>
                   </div>
