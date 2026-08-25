@@ -135,7 +135,7 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        {/* ── 1. DESKTOP WEB VIEW (>= lg): Balanced 3-Column Grid with Harmonious Spacing ── */}
+        {/* ── 1. DESKTOP WEB VIEW (>= lg): Same Uniform Height Grid ── */}
         <div className="hidden lg:grid grid-cols-3 gap-6 w-full items-stretch">
           {items.map((t) => {
             const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
@@ -146,7 +146,7 @@ export const Testimonials: React.FC = () => {
                   t.featured
                     ? "col-span-2 bg-[#1b1b1b] border-amber-500/40"
                     : "bg-[#181818] border-white/15"
-                } rounded-2xl border text-white shadow-2xl p-7 lg:p-8 flex flex-col justify-between gap-6 transition-all duration-300 hover:border-white/30`}
+                } rounded-2xl border text-white shadow-2xl p-7 lg:p-8 flex flex-col justify-between h-[320px] transition-all duration-300 hover:border-white/30`}
                 style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
               >
                 {/* 1. Top Bar: Stars + Badge */}
@@ -163,8 +163,8 @@ export const Testimonials: React.FC = () => {
                   </span>
                 </div>
 
-                {/* 2. Review Quote (Evenly spaced in the middle) */}
-                <p className="text-base lg:text-lg text-white/95 leading-relaxed font-normal my-auto py-2">
+                {/* 2. Review Quote (Centered in available height) */}
+                <p className="text-base lg:text-lg text-white/95 leading-relaxed font-normal my-auto py-1 line-clamp-4">
                   &ldquo;{t.quote}&rdquo;
                 </p>
 
@@ -197,7 +197,7 @@ export const Testimonials: React.FC = () => {
           })}
         </div>
 
-        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Evenly Spaced Full-Width Slide ── */}
+        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Exact Same Uniform Height across all slides ── */}
         <div className="block lg:hidden w-full max-w-xl mx-auto">
           <div
             ref={scrollContainerRef}
@@ -217,11 +217,11 @@ export const Testimonials: React.FC = () => {
                   className="w-full min-w-full snap-center shrink-0 px-0.5"
                 >
                   <div
-                    className={`w-full ${
+                    className={`w-full h-[290px] xs:h-[300px] sm:h-[310px] ${
                       t.featured
                         ? "bg-[#1b1b1b] border-amber-500/40"
                         : "bg-[#181818] border-white/15"
-                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between gap-5 sm:gap-6 transition-all duration-300`}
+                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300`}
                     style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
                   >
                     {/* 1. Top Bar: Stars + Badge */}
@@ -238,8 +238,8 @@ export const Testimonials: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* 2. Review Quote (Evenly balanced) */}
-                    <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal py-1">
+                    {/* 2. Review Quote (Balanced height) */}
+                    <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal my-auto py-1 line-clamp-4">
                       &ldquo;{t.quote}&rdquo;
                     </p>
 
