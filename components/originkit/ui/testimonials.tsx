@@ -84,30 +84,36 @@ export const Testimonials: React.FC = () => {
   const handleScroll = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const cardWidth = el.querySelector(".testimonial-card")?.clientWidth || 360;
-    const idx = Math.round(el.scrollLeft / (cardWidth + 24));
+    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    if (!firstCard) return;
+    const cardWidth = firstCard.offsetWidth;
+    const gap = 16;
+    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
     setActiveIdx(Math.max(0, Math.min(items.length - 1, idx)));
   };
 
   const scrollPrev = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const cardWidth = el.querySelector(".testimonial-card")?.clientWidth || 360;
-    el.scrollBy({ left: -(cardWidth + 24), behavior: "smooth" });
+    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
+    el.scrollBy({ left: -(cardWidth + 16), behavior: "smooth" });
   };
 
   const scrollNext = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const cardWidth = el.querySelector(".testimonial-card")?.clientWidth || 360;
-    el.scrollBy({ left: cardWidth + 24, behavior: "smooth" });
+    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
+    el.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
   };
 
   const scrollToIdx = (idx: number) => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const cardWidth = el.querySelector(".testimonial-card")?.clientWidth || 360;
-    el.scrollTo({ left: idx * (cardWidth + 24), behavior: "smooth" });
+    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
+    el.scrollTo({ left: idx * (cardWidth + 16), behavior: "smooth" });
   };
 
   return (
@@ -116,9 +122,9 @@ export const Testimonials: React.FC = () => {
       className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10 overflow-hidden"
       style={{ backgroundColor: "#2C2C2C" }}
     >
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-8 sm:gap-12">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-6 sm:gap-10">
         {/* Header with Navigation Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
           <div className="flex flex-col items-start gap-2">
             <h2>
               <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
@@ -152,12 +158,12 @@ export const Testimonials: React.FC = () => {
           </div>
         </div>
 
-        {/* Horizontal Stack / Scroll Track */}
-        <div className="w-full overflow-hidden -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-12 px-4 sm:px-6 md:px-8 lg:px-12">
+        {/* Horizontal Stack Track with Clear Visible Peek of Next Card */}
+        <div className="w-full -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-12 px-4 sm:px-6 md:px-8 lg:px-12 overflow-visible">
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-5 sm:gap-6 pb-6 pt-2 scrollbar-none"
+            className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-6 pt-2 pr-8 sm:pr-12 scrollbar-none"
             style={{
               WebkitOverflowScrolling: "touch",
               scrollbarWidth: "none",
@@ -169,7 +175,7 @@ export const Testimonials: React.FC = () => {
               return (
                 <div
                   key={t.id}
-                  className={`testimonial-card snap-start shrink-0 w-[86vw] sm:w-[400px] md:w-[440px] lg:w-[480px] min-h-[290px] xs:min-h-[310px] sm:min-h-[330px] ${
+                  className={`testimonial-card snap-start shrink-0 w-[78vw] xs:w-[320px] sm:w-[380px] md:w-[420px] lg:w-[460px] min-h-[290px] xs:min-h-[310px] sm:min-h-[330px] ${
                     t.featured
                       ? "bg-[#1b1b1b] border-amber-500/40"
                       : "bg-[#181818] border-white/15"
@@ -228,7 +234,7 @@ export const Testimonials: React.FC = () => {
         </div>
 
         {/* Carousel Pagination Dots & Mobile Navigation Bar */}
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center justify-between pt-1">
           <div className="flex items-center gap-1.5">
             {items.map((_, idx) => (
               <button
