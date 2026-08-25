@@ -14,10 +14,47 @@ export interface TestimonialItem {
   featured?: boolean;
 }
 
+const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
+  {
+    id: "t1",
+    quote:
+      "VictoryAdz transformed our 30-year-old wedding portrait into a masterpiece. The sparkle lamination finish brings out vivid details without any glare. The WhatsApp consultation made choosing the frame size completely effortless.",
+    name: "Karthik Raja",
+    role: "Chennai, Tamil Nadu",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+    initials: "KR",
+    featured: true,
+  },
+  {
+    id: "t2",
+    quote:
+      "Ordered 4 large teak-finished synthetic frames for our new home. Packed with extreme care, arrived without a single scratch. Truly 8+ years of craftsmanship at work!",
+    name: "Priya Sundaram",
+    role: "Coimbatore, Tamil Nadu",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
+    initials: "PS",
+    featured: false,
+  },
+  {
+    id: "t3",
+    quote:
+      "The team guided me on WhatsApp to choose the perfect frame moulding for my family portrait. Fast delivery and museum-grade quality!",
+    name: "Anand Kumar",
+    role: "Madurai, Tamil Nadu",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+    initials: "AK",
+    featured: false,
+  },
+];
+
 export const Testimonials: React.FC = () => {
-  const [items, setItems] = useState<TestimonialItem[]>(
-    () => ((siteData as any).testimonials as TestimonialItem[]) || []
-  );
+  const [items, setItems] = useState<TestimonialItem[]>(() => {
+    const fromSiteData = (siteData as any).testimonials;
+    if (Array.isArray(fromSiteData) && fromSiteData.length > 0) {
+      return fromSiteData;
+    }
+    return DEFAULT_TESTIMONIALS;
+  });
 
   useEffect(() => {
     fetch("/api/site-data")
@@ -33,7 +70,7 @@ export const Testimonials: React.FC = () => {
   return (
     <section
       id="testimonials"
-      className="relative z-20 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10"
+      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10"
       style={{ backgroundColor: "#2C2C2C" }}
     >
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-8 sm:gap-12">

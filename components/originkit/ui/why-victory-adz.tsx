@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -67,6 +67,7 @@ export const WhyVictoryAdz: React.FC = () => {
   const cardTextRefs = useRef<(HTMLDivElement | null)[]>([]);
   const cardLineRefs = useRef<(HTMLDivElement | null)[]>([]);
   const cardPlusRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeMobileIdx, setActiveMobileIdx] = useState(0);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -74,24 +75,25 @@ export const WhyVictoryAdz: React.FC = () => {
     const track = trackRef.current;
     if (!section || !trackWrapper || !track) return;
 
-    // Reset initial card state so Card 01 is always visible first
-    gsap.set(track, { x: 0 });
-    cardTextRefs.current.forEach((el, i) => {
-      if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 14 });
-    });
-    cardLineRefs.current.forEach((el) => {
-      if (el) gsap.set(el, { width: "0%" });
-    });
-    cardPlusRefs.current.forEach((el, i) => {
-      if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, left: "0%", rotation: 0 });
-    });
+    const mm = gsap.matchMedia();
 
-    const ctx = gsap.context(() => {
+    // ── DESKTOP (>= 768px): Full Cinematic GSAP Pin & Scrub ──
+    mm.add("(min-width: 768px)", () => {
+      // Set initial states
+      gsap.set(track, { x: 0 });
+      cardTextRefs.current.forEach((el, i) => {
+        if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 14 });
+      });
+      cardLineRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { width: "0%" });
+      });
+      cardPlusRefs.current.forEach((el, i) => {
+        if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, left: "0%", rotation: 0 });
+      });
+
       const numCards = WHY_REASONS.length;
       const stepDuration = 1.0;
       const snapIncrement = 1 / (numCards - 1);
-      const isMobile = window.innerWidth < 768;
-      const totalScroll = isMobile ? 2200 : 3000;
 
       const getTrackOffset = (idx: number) => {
         const cards = track.querySelectorAll(".why-card");
@@ -111,20 +113,16 @@ export const WhyVictoryAdz: React.FC = () => {
           pin: true,
           pinSpacing: true,
           start: "top top",
-          end: "+=" + totalScroll,
-          scrub: isMobile ? 0.6 : 0.45,
+          end: "+=2800",
+          scrub: 0.45,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          ...(isMobile
-            ? {}
-            : {
-                snap: {
-                  snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
-                  duration: { min: 0.2, max: 0.4 },
-                  delay: 0.08,
-                  ease: "power2.out",
-                },
-              }),
+          snap: {
+            snapTo: (progress) => Math.round(progress / snapIncrement) * snapIncrement,
+            duration: { min: 0.2, max: 0.4 },
+            delay: 0.08,
+            ease: "power2.out",
+          },
         },
       });
 
@@ -211,7 +209,21 @@ export const WhyVictoryAdz: React.FC = () => {
           }
         }
       });
-    }, section);
+    });
+
+    // ── MOBILE (< 768px): Natural flow, NO scroll locking/pinning, full testimonial visibility ──
+    mm.add("(max-width: 767px)", () => {
+      gsap.set(track, { clearProps: "all" });
+      cardTextRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { opacity: 1, y: 0 });
+      });
+      cardLineRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { width: "100%" });
+      });
+      cardPlusRefs.current.forEach((el) => {
+        if (el) gsap.set(el, { opacity: 1, left: "100%", rotation: 0 });
+      });
+    });
 
     const refreshTrigger = () => {
       ScrollTrigger.refresh();
@@ -223,15 +235,23 @@ export const WhyVictoryAdz: React.FC = () => {
     return () => {
       window.removeEventListener("resize", refreshTrigger);
       clearTimeout(timer);
-      ctx.revert();
+      mm.revert();
     };
   }, []);
+
+  const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const scrollLeft = el.scrollLeft;
+    const cardWidth = el.offsetWidth * 0.85;
+    const idx = Math.round(scrollLeft / cardWidth);
+    setActiveMobileIdx(Math.max(0, Math.min(WHY_REASONS.length - 1, idx)));
+  };
 
   return (
     <section
       id="why-victory-adz"
       ref={sectionRef}
-      className="relative z-20 w-full h-screen min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-10 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
+      className="relative z-10 w-full md:h-screen md:min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-12 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
       style={{ backgroundColor: "#141414" }}
     >
       <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
@@ -250,48 +270,43 @@ export const WhyVictoryAdz: React.FC = () => {
           </h2>
         </div>
 
-        {/* ── SEQUENTIAL CARD-BY-CARD REVEAL TRACK ── */}
-        <div ref={trackWrapperRef} className="w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12">
+        {/* ── DESKTOP STEPPING TRACK (>= md) ── */}
+        <div
+          ref={trackWrapperRef}
+          className="hidden md:block w-full overflow-x-hidden overflow-y-visible pb-6 sm:pb-10 pt-4 -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12"
+        >
           <div
             ref={trackRef}
             className="flex flex-col w-max will-change-transform overflow-visible"
           >
-            {/* The Cards Row */}
             <div className="flex flex-row flex-nowrap items-stretch overflow-visible pr-8 sm:pr-12">
               {WHY_REASONS.map((reason, index) => (
                 <div
                   key={reason.id}
-                  className="why-card flex flex-col justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-64px)] md:w-[460px] lg:w-[400px] xl:w-[420px] h-[260px] xs:h-[280px] sm:h-[300px] shrink-0 select-none overflow-visible"
+                  className="why-card flex flex-col justify-between md:w-[460px] lg:w-[400px] xl:w-[420px] md:h-[280px] lg:h-[300px] shrink-0 select-none overflow-visible pr-6 sm:pr-10 lg:pr-12"
                 >
-                  {/* Card Text Content */}
                   <div
                     ref={(el) => {
                       cardTextRefs.current[index] = el;
                     }}
-                    className="flex flex-col opacity-0 will-change-[opacity,transform] pr-6 sm:pr-10 lg:pr-12"
+                    className="flex flex-col opacity-0 will-change-[opacity,transform]"
                   >
-                    {/* Eyebrow Label */}
                     <span className="font-mono text-xs text-white/50 tracking-[0.2em] uppercase font-medium mb-2.5 sm:mb-4">
                       REASON - {reason.number}
                     </span>
 
-                    {/* Title */}
                     <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white tracking-tight leading-snug mb-2.5 sm:mb-4">
                       {reason.title}
                     </h3>
 
-                    {/* Content Description */}
                     <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
                       {reason.content}
                     </p>
                   </div>
 
-                  {/* Continuous Unbroken Track Line Segment */}
                   <div className="relative w-full py-6 mt-auto select-none overflow-visible">
-                    {/* 1. Base Continuous Track Line */}
                     <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-[1.5px] bg-white/20" />
 
-                    {/* 2. Active Revealed Line */}
                     <div
                       ref={(el) => {
                         cardLineRefs.current[index] = el;
@@ -300,7 +315,6 @@ export const WhyVictoryAdz: React.FC = () => {
                       style={{ width: "0%" }}
                     />
 
-                    {/* 3. Single Seamless Plus Marker */}
                     <div
                       ref={(el) => {
                         cardPlusRefs.current[index] = el;
@@ -316,6 +330,55 @@ export const WhyVictoryAdz: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* ── MOBILE TOUCH SWIPEABLE CAROUSEL (< md) ── */}
+        <div className="block md:hidden w-full pt-6 pb-2">
+          <div
+            onScroll={handleMobileScroll}
+            className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-none"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            {WHY_REASONS.map((reason) => (
+              <div
+                key={reason.id}
+                className="snap-center shrink-0 w-[84vw] max-w-[340px] bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-xl"
+              >
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-[11px] text-amber-400 font-bold tracking-[0.2em] uppercase">
+                    REASON - {reason.number}
+                  </span>
+                  <h3 className="text-xl font-bold text-white tracking-tight leading-snug">
+                    {reason.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-white/75 font-light leading-relaxed mt-1">
+                    {reason.content}
+                  </p>
+                </div>
+
+                <div className="relative w-full pt-5 mt-4 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">
+                    Craftsmanship Standard
+                  </span>
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white font-mono text-xs flex items-center justify-center font-bold">
+                    +
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile Carousel Dot Indicators */}
+          <div className="flex items-center justify-center gap-1.5 pt-3">
+            {WHY_REASONS.map((_, idx) => (
+              <div
+                key={idx}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  activeMobileIdx === idx ? "w-6 bg-white" : "w-1.5 bg-white/20"
+                }`}
+              />
+            ))}
           </div>
         </div>
 
