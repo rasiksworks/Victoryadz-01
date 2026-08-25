@@ -84,42 +84,39 @@ export const Testimonials: React.FC = () => {
   const handleScroll = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    if (!firstCard) return;
-    const cardWidth = firstCard.offsetWidth;
-    const gap = 16;
-    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
+    const width = el.clientWidth;
+    if (!width) return;
+    const idx = Math.round(el.scrollLeft / width);
     setActiveIdx(Math.max(0, Math.min(items.length - 1, idx)));
   };
 
   const scrollPrev = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
-    el.scrollBy({ left: -(cardWidth + 16), behavior: "smooth" });
+    const newIdx = Math.max(0, activeIdx - 1);
+    el.scrollTo({ left: newIdx * el.clientWidth, behavior: "smooth" });
+    setActiveIdx(newIdx);
   };
 
   const scrollNext = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
-    el.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
+    const newIdx = Math.min(items.length - 1, activeIdx + 1);
+    el.scrollTo({ left: newIdx * el.clientWidth, behavior: "smooth" });
+    setActiveIdx(newIdx);
   };
 
   const scrollToIdx = (idx: number) => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    const cardWidth = firstCard ? firstCard.offsetWidth : 320;
-    el.scrollTo({ left: idx * (cardWidth + 16), behavior: "smooth" });
+    el.scrollTo({ left: idx * el.clientWidth, behavior: "smooth" });
+    setActiveIdx(idx);
   };
 
   return (
     <section
       id="testimonials"
-      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10 overflow-hidden"
+      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10"
       style={{ backgroundColor: "#2C2C2C" }}
     >
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-6 sm:gap-10 lg:gap-14">
@@ -138,7 +135,7 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        {/* ── 1. DESKTOP WEB VIEW (>= lg): Original Grid Design ── */}
+        {/* ── 1. DESKTOP WEB VIEW (>= lg): Original 3-Column Grid ── */}
         <div className="hidden lg:grid grid-cols-3 gap-6 w-full">
           {items.map((t) => {
             const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
@@ -202,29 +199,32 @@ export const Testimonials: React.FC = () => {
           })}
         </div>
 
-        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Horizontal Stack Track with No Clipping ── */}
-        <div className="block lg:hidden w-full">
-          <div className="w-full -mx-4 sm:-mx-6 px-4 sm:px-6 overflow-visible">
-            <div
-              ref={scrollContainerRef}
-              onScroll={handleScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-4 pt-1 pr-8 sm:pr-12 scrollbar-none"
-              style={{
-                WebkitOverflowScrolling: "touch",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-              }}
-            >
-              {items.map((t) => {
-                const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
-                return (
+        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): 100% Full-Width Clean Swipe Card (No Cut/Clip) ── */}
+        <div className="block lg:hidden w-full max-w-xl mx-auto">
+          {/* Slider Container: 100% Full Width per card */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="w-full flex flex-row overflow-x-auto snap-x snap-mandatory scrollbar-none"
+            style={{
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {items.map((t) => {
+              const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
+              return (
+                <div
+                  key={t.id}
+                  className="w-full min-w-full snap-center shrink-0 px-0.5"
+                >
                   <div
-                    key={t.id}
-                    className={`mobile-testimonial-card snap-start shrink-0 w-[78vw] xs:w-[320px] sm:w-[380px] md:w-[420px] min-h-[290px] xs:min-h-[310px] sm:min-h-[330px] ${
+                    className={`w-full min-h-[290px] xs:min-h-[310px] sm:min-h-[330px] ${
                       t.featured
                         ? "bg-[#1b1b1b] border-amber-500/40"
                         : "bg-[#181818] border-white/15"
-                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-white/30`}
+                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300`}
                     style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
                   >
                     <div className="flex flex-col justify-between h-full gap-5">
@@ -273,13 +273,13 @@ export const Testimonials: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Mobile & Tablet Pagination Dots & Arrows */}
-          <div className="flex items-center justify-between pt-3">
+          <div className="flex items-center justify-between pt-4 px-1">
             <div className="flex items-center gap-1.5">
               {items.map((_, idx) => (
                 <button
@@ -296,15 +296,17 @@ export const Testimonials: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={scrollPrev}
+                disabled={activeIdx === 0}
                 aria-label="Previous testimonial"
-                className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 flex items-center justify-center text-white cursor-pointer"
+                className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-white cursor-pointer"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={scrollNext}
+                disabled={activeIdx === items.length - 1}
                 aria-label="Next testimonial"
-                className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 flex items-center justify-center text-white cursor-pointer"
+                className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-white cursor-pointer"
               >
                 <ChevronRight size={16} />
               </button>
