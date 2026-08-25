@@ -84,7 +84,7 @@ export const Testimonials: React.FC = () => {
   const handleScroll = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
     if (!firstCard) return;
     const cardWidth = firstCard.offsetWidth;
     const gap = 16;
@@ -95,7 +95,7 @@ export const Testimonials: React.FC = () => {
   const scrollPrev = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
     const cardWidth = firstCard ? firstCard.offsetWidth : 320;
     el.scrollBy({ left: -(cardWidth + 16), behavior: "smooth" });
   };
@@ -103,7 +103,7 @@ export const Testimonials: React.FC = () => {
   const scrollNext = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
     const cardWidth = firstCard ? firstCard.offsetWidth : 320;
     el.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
   };
@@ -111,7 +111,7 @@ export const Testimonials: React.FC = () => {
   const scrollToIdx = (idx: number) => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const firstCard = el.querySelector(".testimonial-card") as HTMLElement;
+    const firstCard = el.querySelector(".mobile-testimonial-card") as HTMLElement;
     const cardWidth = firstCard ? firstCard.offsetWidth : 320;
     el.scrollTo({ left: idx * (cardWidth + 16), behavior: "smooth" });
   };
@@ -122,150 +122,196 @@ export const Testimonials: React.FC = () => {
       className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10 overflow-hidden"
       style={{ backgroundColor: "#2C2C2C" }}
     >
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-6 sm:gap-10">
-        {/* Header with Navigation Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
-          <div className="flex flex-col items-start gap-2">
-            <h2>
-              <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
-                Trusted from
-              </span>
-              <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
-                Near and Far
-              </span>
-            </h2>
-            <p className="text-sm sm:text-base text-white/70 font-light max-w-xl mt-1">
-              Real stories from families across Tamil Nadu and India who trust VictoryAdz for custom handcrafted framing.
-            </p>
-          </div>
-
-          {/* Desktop Arrow Controls */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={scrollPrev}
-              aria-label="Previous testimonial"
-              className="w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 active:scale-95 flex items-center justify-center text-white transition-all cursor-pointer"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={scrollNext}
-              aria-label="Next testimonial"
-              className="w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 active:scale-95 flex items-center justify-center text-white transition-all cursor-pointer"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-6 sm:gap-10 lg:gap-14">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center gap-2">
+          <h2>
+            <span className="block font-cal-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal text-white leading-[1.05]">
+              Trusted from
+            </span>
+            <span className="block font-great-vibes text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white pt-1 -mt-1 leading-[1.05]">
+              Near and Far
+            </span>
+          </h2>
+          <p className="text-sm sm:text-base text-white/70 font-light max-w-xl mx-auto mt-2">
+            Real stories from families across Tamil Nadu and India who trust VictoryAdz for custom handcrafted framing.
+          </p>
         </div>
 
-        {/* Horizontal Stack Track with Clear Visible Peek of Next Card */}
-        <div className="w-full -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-12 px-4 sm:px-6 md:px-8 lg:px-12 overflow-visible">
-          <div
-            ref={scrollContainerRef}
-            onScroll={handleScroll}
-            className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-6 pt-2 pr-8 sm:pr-12 scrollbar-none"
-            style={{
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            {items.map((t) => {
-              const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
-              return (
-                <div
-                  key={t.id}
-                  className={`testimonial-card snap-start shrink-0 w-[78vw] xs:w-[320px] sm:w-[380px] md:w-[420px] lg:w-[460px] min-h-[290px] xs:min-h-[310px] sm:min-h-[330px] ${
-                    t.featured
-                      ? "bg-[#1b1b1b] border-amber-500/40"
-                      : "bg-[#181818] border-white/15"
-                  } rounded-2xl border text-white shadow-2xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:border-white/30`}
-                  style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
-                >
-                  <div className="flex flex-col justify-between h-full gap-5">
-                    {/* Top Bar: Stars + Badge */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                      </div>
-                      <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
-                        Verified Order
-                      </span>
+        {/* ── 1. DESKTOP WEB VIEW (>= lg): Original Grid Design ── */}
+        <div className="hidden lg:grid grid-cols-3 gap-6 w-full">
+          {items.map((t) => {
+            const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
+            return (
+              <div
+                key={t.id}
+                className={`${
+                  t.featured
+                    ? "col-span-2 bg-[#1b1b1b] border-amber-500/40"
+                    : "bg-[#181818] border-white/15"
+                } rounded-2xl border text-white shadow-2xl p-7 lg:p-8 flex flex-col justify-between transition-all duration-300 hover:border-white/30`}
+                style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
+              >
+                <div className="flex flex-col justify-between h-full gap-5">
+                  {/* Top Bar: Stars + Badge */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
                     </div>
+                    <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
+                      Verified Order
+                    </span>
+                  </div>
 
-                    {/* Review Quote */}
-                    <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal flex-1">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
+                  {/* Review Quote */}
+                  <p className="text-base lg:text-lg text-white/95 leading-relaxed font-normal flex-1">
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
 
-                    {/* Customer Footer */}
-                    <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
-                      <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
-                        {t.avatar ? (
-                          <Image
-                            src={t.avatar}
-                            alt={t.name || "Customer"}
-                            fill
-                            sizes="44px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
-                        )}
-                      </div>
-                      <div className="flex flex-col text-left">
-                        <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
-                          {t.name}
-                        </span>
-                        <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
-                          {t.role}
-                        </span>
-                      </div>
+                  {/* Customer Footer */}
+                  <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
+                    <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
+                      {t.avatar ? (
+                        <Image
+                          src={t.avatar}
+                          alt={t.name || "Customer"}
+                          fill
+                          sizes="44px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
+                      )}
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-base font-semibold text-white tracking-tight leading-tight">
+                        {t.name}
+                      </span>
+                      <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                        {t.role}
+                      </span>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Carousel Pagination Dots & Mobile Navigation Bar */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5">
-            {items.map((_, idx) => (
+        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Horizontal Stack Track with No Clipping ── */}
+        <div className="block lg:hidden w-full">
+          <div className="w-full -mx-4 sm:-mx-6 px-4 sm:px-6 overflow-visible">
+            <div
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-4 pt-1 pr-8 sm:pr-12 scrollbar-none"
+              style={{
+                WebkitOverflowScrolling: "touch",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
+              {items.map((t) => {
+                const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
+                return (
+                  <div
+                    key={t.id}
+                    className={`mobile-testimonial-card snap-start shrink-0 w-[78vw] xs:w-[320px] sm:w-[380px] md:w-[420px] min-h-[290px] xs:min-h-[310px] sm:min-h-[330px] ${
+                      t.featured
+                        ? "bg-[#1b1b1b] border-amber-500/40"
+                        : "bg-[#181818] border-white/15"
+                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-white/30`}
+                    style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
+                  >
+                    <div className="flex flex-col justify-between h-full gap-5">
+                      {/* Top Bar: Stars + Badge */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
+                          <span>★</span>
+                          <span>★</span>
+                          <span>★</span>
+                          <span>★</span>
+                          <span>★</span>
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
+                          Verified Order
+                        </span>
+                      </div>
+
+                      {/* Review Quote */}
+                      <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal flex-1">
+                        &ldquo;{t.quote}&rdquo;
+                      </p>
+
+                      {/* Customer Footer */}
+                      <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
+                        <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
+                          {t.avatar ? (
+                            <Image
+                              src={t.avatar}
+                              alt={t.name || "Customer"}
+                              fill
+                              sizes="44px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
+                          )}
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
+                            {t.name}
+                          </span>
+                          <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                            {t.role}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Mobile & Tablet Pagination Dots & Arrows */}
+          <div className="flex items-center justify-between pt-3">
+            <div className="flex items-center gap-1.5">
+              {items.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToIdx(idx)}
+                  aria-label={`Go to review ${idx + 1}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    activeIdx === idx ? "w-7 bg-amber-400" : "w-1.5 bg-white/20 hover:bg-white/40"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2">
               <button
-                key={idx}
-                onClick={() => scrollToIdx(idx)}
-                aria-label={`Go to review ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  activeIdx === idx ? "w-7 bg-amber-400" : "w-1.5 bg-white/20 hover:bg-white/40"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Mobile Arrows */}
-          <div className="flex sm:hidden items-center gap-2">
-            <button
-              onClick={scrollPrev}
-              aria-label="Previous testimonial"
-              className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 flex items-center justify-center text-white"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              onClick={scrollNext}
-              aria-label="Next testimonial"
-              className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 flex items-center justify-center text-white"
-            >
-              <ChevronRight size={16} />
-            </button>
+                onClick={scrollPrev}
+                aria-label="Previous testimonial"
+                className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 flex items-center justify-center text-white cursor-pointer"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={scrollNext}
+                aria-label="Next testimonial"
+                className="w-9 h-9 rounded-full border border-white/20 bg-white/5 active:scale-95 flex items-center justify-center text-white cursor-pointer"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
           </div>
         </div>
+
       </div>
     </section>
   );
