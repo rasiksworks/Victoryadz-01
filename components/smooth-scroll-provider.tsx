@@ -38,7 +38,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     };
 
     gsap.ticker.add(updateLenis);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     // Handle hash scroll helper
     const scrollToHash = (hash: string, delay = 0) => {

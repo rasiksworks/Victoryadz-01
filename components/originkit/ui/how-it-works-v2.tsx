@@ -66,9 +66,13 @@ export const HowItWorksV2: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
   const currentFrameRef = useRef(0);
+  const dimsRef = useRef({ w: typeof window !== "undefined" ? window.innerWidth : 1200, h: typeof window !== "undefined" ? window.innerHeight : 800 });
+  const isVisibleRef = useRef(true);
+  const rafDrawId = useRef<number | null>(null);
 
   // Draw frame on canvas with aspect ratio cover & mobile smart centering
   const drawFrame = useCallback((index: number) => {
+    if (!isVisibleRef.current) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -96,8 +100,8 @@ export const HowItWorksV2: React.FC = () => {
 
     currentFrameRef.current = clampedIndex;
 
-    const canvasW = window.innerWidth;
-    const canvasH = window.innerHeight;
+    const canvasW = dimsRef.current.w;
+    const canvasH = dimsRef.current.h;
 
     const hRatio = canvasW / img.naturalWidth;
     const vRatio = canvasH / img.naturalHeight;
@@ -172,6 +176,7 @@ export const HowItWorksV2: React.FC = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const w = window.innerWidth;
       const h = window.innerHeight;
+      dimsRef.current = { w, h };
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       const c = canvas.getContext("2d");
@@ -183,6 +188,14 @@ export const HowItWorksV2: React.FC = () => {
     };
 
     setupCanvas();
+
+    const io = new IntersectionObserver(([entry]) => {
+      isVisibleRef.current = entry.isIntersecting;
+      if (entry.isIntersecting) {
+        drawFrame(currentFrameRef.current);
+      }
+    });
+    io.observe(section);
 
     const ctx = gsap.context(() => {
       const totalScroll = isMobile ? 2600 : 3600;
@@ -355,6 +368,7 @@ export const HowItWorksV2: React.FC = () => {
     }, 300);
 
     return () => {
+      io.disconnect();
       window.removeEventListener("resize", onResize);
       if (resizeTimer) clearTimeout(resizeTimer);
       clearTimeout(timer);
@@ -409,7 +423,10 @@ export const HowItWorksV2: React.FC = () => {
         >
           <h2 className="text-right select-none">
             <span className="block font-cal-sans text-[36px] xl:text-[48px] font-semibold text-white tracking-normal leading-[1.04]">
-              From Your Photo to Your Wall,
+              From Your Photo
+            </span>
+            <span className="block font-cal-sans text-[36px] xl:text-[48px] font-semibold text-white tracking-normal leading-[1.04]">
+              to Your Wall,
             </span>
             <span className="block font-great-vibes text-[42px] xl:text-[56px] font-normal text-white pt-1 -mt-1 leading-[1.05]">
               Wherever You Are

@@ -26,12 +26,12 @@ export const WeMostProudOf: React.FC = () => {
   const [items, setItems] = useState<WorkItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [tiltState, setTiltState] = useState<{ [key: string]: { rotateX: number; rotateY: number } }>({});
   const [smoothScrollProgress, setSmoothScrollProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
   const targetScrollProgressRef = useRef(0);
   const currentScrollProgressRef = useRef(0);
 
@@ -171,7 +171,22 @@ export const WeMostProudOf: React.FC = () => {
 
   // FlyingPosters momentum lerp scroll progress loop (throttled to avoid idle re-renders)
   useEffect(() => {
-    let animId: number;
+    let animId: number | null = null;
+    let isLoopRunning = false;
+
+    const loop = () => {
+      const diff = targetScrollProgressRef.current - currentScrollProgressRef.current;
+      if (Math.abs(diff) > 0.0002) {
+        currentScrollProgressRef.current += diff * 0.08;
+        setSmoothScrollProgress(currentScrollProgressRef.current);
+        animId = requestAnimationFrame(loop);
+      } else {
+        currentScrollProgressRef.current = targetScrollProgressRef.current;
+        setSmoothScrollProgress(currentScrollProgressRef.current);
+        isLoopRunning = false;
+        animId = null;
+      }
+    };
 
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -181,34 +196,34 @@ export const WeMostProudOf: React.FC = () => {
       const current = windowHeight - rect.top;
       const rawProgress = Math.max(0, Math.min(1, current / total));
       targetScrollProgressRef.current = rawProgress;
+
+      if (!isLoopRunning) {
+        isLoopRunning = true;
+        animId = requestAnimationFrame(loop);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    const loop = () => {
-      const diff = targetScrollProgressRef.current - currentScrollProgressRef.current;
-      if (Math.abs(diff) > 0.0001) {
-        currentScrollProgressRef.current += diff * 0.08;
-        setSmoothScrollProgress(currentScrollProgressRef.current);
-      }
-      animId = requestAnimationFrame(loop);
-    };
-
-    animId = requestAnimationFrame(loop);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
-  // Global mouse position tracking for floating VIEW cursor badge
+  // Global mouse position tracking for floating VIEW cursor badge (direct DOM update, zero React re-renders)
   useEffect(() => {
+    let lastX = 0;
+    let lastY = 0;
     const handleGlobalMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      lastX = e.clientX;
+      lastY = e.clientY;
+      if (badgeRef.current) {
+        badgeRef.current.style.transform = `translate3d(${lastX}px, ${lastY}px, 0) translate(-50%, -50%)`;
+      }
     };
-    window.addEventListener("mousemove", handleGlobalMouseMove);
+    window.addEventListener("mousemove", handleGlobalMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
   }, []);
 
@@ -247,17 +262,18 @@ export const WeMostProudOf: React.FC = () => {
       <AnimatePresence>
         {hoveredId !== null && !selectedItem && (
           <motion.div
+            ref={badgeRef}
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             style={{
               position: "fixed",
-              left: mousePos.x,
-              top: mousePos.y,
-              transform: "translate(-50%, -50%)",
+              left: 0,
+              top: 0,
               pointerEvents: "none",
               zIndex: 9999,
+              willChange: "transform",
             }}
             className="hidden lg:flex items-center shadow-2xl drop-shadow-2xl"
           >

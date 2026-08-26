@@ -1,31 +1,31 @@
 {
   "brandVision": {
     "image1": "/uploads/1787132398409-3x4.webp",
-    "image2": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80",
-    "image3": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80",
-    "image4": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=700&q=80",
-    "image5": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=80",
-    "image6": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900&q=80"
+    "image2": "/uploads/1787758995970-wall_Photo_two.webp",
+    "image3": "/uploads/1787759039362-Section_one_photo.webp",
+    "image4": "/uploads/1787759045110-section_one_Photo_two.webp",
+    "image5": "/uploads/1787759053115-Wall_photo_one.webp",
+    "image6": "/uploads/1787759491368-6th_image.webp"
   },
   "heroTunnel": [
     {
       "id": "1",
-      "src": "/uploads/1786444474619-997977201-your_order_plaing.png",
+      "src": "/uploads/1787759231755-section_one_Photo_two.webp",
       "alt": "Editorial portrait 1"
     },
     {
       "id": "2",
-      "src": "/uploads/1786444475262-774394654-ChatGPT_Image_Aug_10__2026__03_47_55_PM.png",
+      "src": "/uploads/1787759235585-Section_one_photo.webp",
       "alt": "Studio portrait 2"
     },
     {
       "id": "3",
-      "src": "/originkit/hero-03/portraits-portrait-06.png",
+      "src": "/uploads/1787759240129-wall_Photo_two.webp",
       "alt": "Fashion portrait 3"
     },
     {
       "id": "4",
-      "src": "/originkit/hero-03/portraits-portrait-08.png",
+      "src": "/uploads/1787759246158-Wall_photo_one.webp",
       "alt": "Action portrait 4"
     },
     {

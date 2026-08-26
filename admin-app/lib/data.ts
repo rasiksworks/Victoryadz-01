@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import os from "os";
+import defaultSiteData from "../../data/site-images.json";
 
 const rootDir = process.cwd().endsWith("admin-app") ? path.join(process.cwd(), "..") : process.cwd();
 const DATA_FILE = path.join(rootDir, "data", "site-images.json");
@@ -14,7 +15,7 @@ export function readData() {
   if (fs.existsSync(TMP_DATA_FILE)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(TMP_DATA_FILE, "utf8"));
-      if (!parsed.testimonials) parsed.testimonials = [];
+      if (!parsed.testimonials) parsed.testimonials = (defaultSiteData as any).testimonials || [];
       return parsed;
     } catch (e) {
       console.warn("Error reading from temp storage:", e);
@@ -25,14 +26,14 @@ export function readData() {
   if (fs.existsSync(DATA_FILE)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
-      if (!parsed.testimonials) parsed.testimonials = [];
+      if (!parsed.testimonials) parsed.testimonials = (defaultSiteData as any).testimonials || [];
       return parsed;
     } catch (e) {
       console.warn("Error reading from bundled file:", e);
     }
   }
 
-  return { brandVision: {}, heroTunnel: [], exploreGallery: [], testimonials: [] };
+  return defaultSiteData;
 }
 
 export function writeData(data: unknown) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import os from "os";
+import defaultSiteData from "@/data/site-images.json";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -14,7 +15,7 @@ function readSiteData() {
   if (fs.existsSync(TMP_DATA_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(TMP_DATA_FILE, "utf8"));
-      if (!data.testimonials) data.testimonials = [];
+      if (!data.testimonials) data.testimonials = (defaultSiteData as any).testimonials || [];
       return data;
     } catch (e) {
       console.warn("Error reading from temp storage:", e);
@@ -23,12 +24,16 @@ function readSiteData() {
 
   // 2. Fall back to bundled data file
   if (fs.existsSync(DATA_FILE)) {
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
-    if (!data.testimonials) data.testimonials = [];
-    return data;
+    try {
+      const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+      if (!data.testimonials) data.testimonials = (defaultSiteData as any).testimonials || [];
+      return data;
+    } catch (e) {
+      console.warn("Error reading from DATA_FILE:", e);
+    }
   }
 
-  return { brandVision: {}, heroTunnel: [], exploreGallery: [], testimonials: [] };
+  return defaultSiteData;
 }
 
 function writeSiteData(data: unknown) {

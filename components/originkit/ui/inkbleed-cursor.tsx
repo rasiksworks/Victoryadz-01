@@ -291,12 +291,23 @@ export default function PixelatedCursor(props: Props) {
             inside = false;
             hideNativeCursor(false);
         };
-        window.addEventListener("pointermove", onMove, { passive: true });
-        document.documentElement.addEventListener("pointerleave", onWindowLeave);
-
         let activity = 0;
         let raf = 0;
         let last = performance.now();
+        let isRunning = false;
+
+        const startLoop = () => {
+            if (!isRunning) {
+                isRunning = true;
+                last = performance.now();
+                raf = requestAnimationFrame(frame);
+            }
+        };
+
+        const onMoveWithWakeup = (e: PointerEvent) => {
+            onMove(e);
+            startLoop();
+        };
 
         const frame = (now: number) => {
             const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
@@ -313,6 +324,19 @@ export default function PixelatedCursor(props: Props) {
                 ? Math.min(1, activity + dt / 0.2)
                 : Math.max(0, activity - dt / IDLE_FADE_SECONDS);
             const fadeMul = 1 - idleEase(1 - activity);
+
+            // If completely faded out and not moving, pause the loop to conserve CPU/GPU
+            if (!moving && activity <= 0.001) {
+                for (let i = 0; i < pool.length; i++) {
+                    const px = pool[i];
+                    if (!px.hidden) {
+                        px.node.style.display = "none";
+                        px.hidden = true;
+                    }
+                }
+                isRunning = false;
+                return;
+            }
 
             const k = STIFFNESS * 72 * (FOLLOW_SPEED / 10);
             const retain = Math.max(0.05, 1 - DAMPING / 20);
@@ -374,7 +398,7 @@ export default function PixelatedCursor(props: Props) {
                 }
                 if (hide) continue;
 
-                s.transform = `translate(${px.x + offX}px, ${px.y + offY}px) translate(-50%, -50%) scale(${scale})`;
+                s.transform = `translate3d(${px.x + offX}px, ${px.y + offY}px, 0) translate(-50%, -50%) scale(${scale})`;
                 s.opacity = String(opacity);
                 if (color !== px.color) {
                     s.backgroundColor = color;
@@ -384,12 +408,15 @@ export default function PixelatedCursor(props: Props) {
 
             raf = requestAnimationFrame(frame);
         };
-        raf = requestAnimationFrame(frame);
+
+        window.addEventListener("pointermove", onMoveWithWakeup, { passive: true });
+        document.documentElement.addEventListener("pointerleave", onWindowLeave);
+        startLoop();
 
         return () => {
             cancelAnimationFrame(raf);
             hideNativeCursor(false);
-            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointermove", onMoveWithWakeup);
             document.documentElement.removeEventListener(
                 "pointerleave",
                 onWindowLeave
