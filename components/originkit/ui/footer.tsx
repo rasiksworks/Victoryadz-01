@@ -222,8 +222,14 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Massive VICTORYADZ Logo - Viewport-width */}
-        <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] relative mt-4 sm:mt-8 pointer-events-auto select-none">
-          <div className="absolute top-0 left-0 right-0 h-full">
+        <div className="w-full h-[120px] xs:h-[160px] sm:h-[220px] md:h-[280px] lg:h-[320px] relative mt-4 sm:mt-8 pointer-events-auto select-none overflow-hidden flex items-center justify-center">
+          {/* Mobile & Tablet Brand Name Display (Guaranteed 100% visible on all phones) */}
+          <span className="block md:hidden font-sans font-black text-[clamp(2.4rem,13vw,6.5rem)] tracking-[-0.04em] text-white text-center leading-none select-none uppercase pointer-events-none px-2">
+            VICTORYADZ
+          </span>
+
+          {/* Desktop WebGL WarpText */}
+          <div className="hidden md:block absolute top-0 left-0 right-0 h-full">
             <WarpText
               text="VICTORYADZ"
               color="#ffffff"
