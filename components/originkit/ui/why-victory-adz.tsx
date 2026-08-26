@@ -417,7 +417,7 @@ export const WhyVictoryAdz: React.FC = () => {
             <div
               ref={mobileScrollRef}
               onScroll={handleMobileScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 px-4 sm:px-8 scrollbar-none"
+              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 pl-0 pr-6 sm:pr-8 scrollbar-none"
               style={{
                 WebkitOverflowScrolling: "touch",
                 scrollbarWidth: "none",
