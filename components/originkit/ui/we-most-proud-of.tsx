@@ -316,6 +316,7 @@ export const WeMostProudOf: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            data-cursor-label="Handcrafted by VictoryAdz"
             className="fixed inset-0 z-50 flex flex-row p-0 m-0 w-full h-full overflow-hidden bg-[#2C2C2C] pointer-events-auto"
             style={{ backgroundColor: "#2C2C2C", perspective: "1500px" }}
           >
@@ -329,7 +330,7 @@ export const WeMostProudOf: React.FC = () => {
               className="absolute inset-0 z-0 bg-[#2C2C2C]" style={{ backgroundColor: "#2C2C2C" }}
             />
 
-            {/* --- DESKTOP LEFT PANEL (Clean 3:4 Options, No Background, No Border) --- */}
+            {/* --- DESKTOP LEFT PANEL (Reduced by 25%, Clean 3:4 Options, No Background, No Border) --- */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -340,7 +341,7 @@ export const WeMostProudOf: React.FC = () => {
                 overscrollBehavior: "contain",
                 touchAction: "pan-y",
               }}
-              className="hidden lg:flex relative flex-col w-20 lg:w-24 p-0 gap-0 overflow-y-auto no-scrollbar shrink-0 h-full z-20 transform-gpu will-change-transform pointer-events-auto bg-transparent border-0"
+              className="hidden lg:flex relative flex-col w-14 lg:w-[68px] p-0 gap-0 overflow-y-auto no-scrollbar shrink-0 h-full z-20 transform-gpu will-change-transform pointer-events-auto bg-transparent border-0"
             >
               {WORK_ITEMS.map((item) => (
                 <button
@@ -357,27 +358,30 @@ export const WeMostProudOf: React.FC = () => {
                     src={item.image}
                     alt={item.lastName || "Work item"}
                     fill
-                    sizes="96px"
+                    sizes="72px"
                     className="object-cover object-center"
                   />
                 </button>
               ))}
             </motion.div>
 
-            {/* --- DESKTOP / MOBILE CENTER CONTAINER (TiltedCard) --- */}
-            <div className="relative flex-1 h-full overflow-hidden flex items-center justify-center p-0 lg:p-2 z-10 pointer-events-auto bg-transparent">
+            {/* --- DESKTOP / MOBILE CENTER CONTAINER (TiltedCard - Perfectly Fitted on Mobile & Desktop) --- */}
+            <div
+              className="relative flex-1 h-full w-full overflow-hidden flex items-center justify-center pt-24 pb-20 px-3.5 lg:p-4 z-10 pointer-events-auto bg-transparent"
+              data-cursor-label="Handcrafted by VictoryAdz"
+            >
               <TiltedCard
                 imageSrc={selectedItem.image}
                 altText={selectedItem.title || selectedItem.lastName || "Work detail image"}
-                captionText={selectedItem.credits || (selectedItem.label ? `${selectedItem.label} · ${selectedItem.title}` : selectedItem.lastName)}
+                captionText=""
                 containerHeight="100%"
                 containerWidth="100%"
-                imageHeight="92vh"
-                imageWidth="min(calc(92vh * 0.75), 680px)"
-                rotateAmplitude={10}
-                scaleOnHover={1.03}
+                imageHeight="min(calc(100dvh - 170px), 90vh)"
+                imageWidth="min(calc((100dvh - 170px) * 0.75), calc(100vw - 28px), 640px)"
+                rotateAmplitude={8}
+                scaleOnHover={1.02}
                 showMobileWarning={false}
-                showTooltip={true}
+                showTooltip={false}
                 displayOverlayContent={false}
               />
             </div>
