@@ -128,39 +128,40 @@ export const Testimonials: React.FC = () => {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  const handleScroll = () => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    if (!card) return;
-    const cardWidth = card.offsetWidth;
-    const gap = 16;
-    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
-    setActiveIdx(Math.max(0, Math.min(items.length - 1, idx)));
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (touchStart === null || touchEnd === null) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 45;
+    const isRightSwipe = distance < -45;
+    if (isLeftSwipe && activeIdx < items.length - 1) {
+      setActiveIdx((prev) => prev + 1);
+    }
+    if (isRightSwipe && activeIdx > 0) {
+      setActiveIdx((prev) => prev - 1);
+    }
   };
 
   const scrollPrev = () => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    const cardWidth = card ? card.offsetWidth : 300;
-    el.scrollBy({ left: -(cardWidth + 16), behavior: "smooth" });
+    setActiveIdx((prev) => Math.max(0, prev - 1));
   };
 
   const scrollNext = () => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    const cardWidth = card ? card.offsetWidth : 300;
-    el.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
+    setActiveIdx((prev) => Math.min(items.length - 1, prev + 1));
   };
 
   const scrollToIdx = (idx: number) => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
-    const cardWidth = card ? card.offsetWidth : 300;
-    el.scrollTo({ left: idx * (cardWidth + 16), behavior: "smooth" });
     setActiveIdx(idx);
   };
 
@@ -248,17 +249,19 @@ export const Testimonials: React.FC = () => {
           })}
         </div>
 
-        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Exact Same Uniform Height & Unclipped Peek ── */}
-        <div className="block lg:hidden w-full pt-2 pb-2 -mx-4 sm:-mx-6 md:-mx-8">
-          <div className="w-full overflow-visible">
+        {/* ── 2. MOBILE & TABLET: 80% ACTIVE CARD + 20% NEXT PEEK TRACK (< lg) ── */}
+        <div className="block lg:hidden w-full pt-6 pb-2">
+          <div
+            className="w-[calc(100%+1rem)] -mr-4 sm:w-[calc(100%+1.5rem)] sm:-mr-6 md:w-[calc(100%+2rem)] md:-mr-8 overflow-hidden"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <div
-              ref={scrollContainerRef}
-              onScroll={handleScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 pl-4 sm:pl-6 md:pl-8 pr-0 scrollbar-none"
+              className="flex flex-row transition-transform duration-500 ease-out will-change-transform"
               style={{
-                WebkitOverflowScrolling: "touch",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
+                transform: `translateX(calc(-${activeIdx} * (80% + 14px)))`,
+                gap: "14px",
               }}
             >
               {items.map((t, idx) => {
@@ -266,7 +269,7 @@ export const Testimonials: React.FC = () => {
                 return (
                   <div
                     key={t.id ? `m-${t.id}-${idx}` : `m-test-${idx}`}
-                    className="mobile-testimonial-card snap-start shrink-0 w-[78vw] xs:w-[300px] sm:w-[340px] md:w-[360px]"
+                    className="mobile-testimonial-card shrink-0 w-[80%]"
                   >
                     <div
                       className={`w-full h-[290px] xs:h-[300px] sm:h-[310px] ${
