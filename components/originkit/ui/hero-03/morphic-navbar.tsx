@@ -15,8 +15,8 @@ interface MorphicNavbarProps {
 
 const DEFAULT_NAV_ITEMS = [
   { label: "Home", href: "/" },
-  { label: "Works", href: "/#recent-works" },
   { label: "About", href: "/#about" },
+  { label: "Works", href: "/#recent-works" },
   { label: "Why Us", href: "/#why-victory-adz" },
 ];
 

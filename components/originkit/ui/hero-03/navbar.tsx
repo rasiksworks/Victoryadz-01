@@ -16,8 +16,8 @@ function asset(file: string) {
 
 const MOBILE_NAV_LINKS = [
   { number: "01", label: "Home", href: "/" },
-  { number: "02", label: "Works", href: "/#recent-works" },
-  { number: "03", label: "About", href: "/#about" },
+  { number: "02", label: "About", href: "/#about" },
+  { number: "03", label: "Works", href: "/#recent-works" },
   { number: "04", label: "Why Us", href: "/#why-victory-adz" },
   { number: "05", label: "How It Works", href: "/#how-it-works" },
   { number: "06", label: "FAQ", href: "/#faq" },

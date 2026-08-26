@@ -38,34 +38,83 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
   const textRef = useRef<HTMLSpanElement>(null);
   const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
 
-  // Sync activeIndex with current pathname and hash
+  // Sync activeIndex with current pathname, hash, and live scroll position
   useEffect(() => {
-    const syncActive = () => {
-      const hash = typeof window !== "undefined" ? window.location.hash : "";
-      
-      let matchedIndex = -1;
+    if (pathname !== "/") {
       if (pathname === "/works") {
-        matchedIndex = items.findIndex((item) => item.href === "/works");
-      } else if (pathname === "/") {
-        if (hash) {
-          matchedIndex = items.findIndex(
-            (item) => item.href === `/${hash}` || item.href === hash
-          );
-        }
-        if (matchedIndex === -1) {
-          matchedIndex = items.findIndex((item) => item.href === "/");
-        }
+        const idx = items.findIndex((item) => item.href === "/works");
+        if (idx !== -1) setActiveIndex(idx);
       }
+      return;
+    }
 
-      if (matchedIndex !== -1 && matchedIndex !== activeIndex) {
-        setActiveIndex(matchedIndex);
+    let ticking = false;
+    let isClickScrolling = false;
+    let clickTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      if (isClickScrolling) return;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset;
+          const viewportHeight = window.innerHeight;
+          const checkLine = viewportHeight * 0.38; // 38% down from top
+
+          // If at the top of the page, activate Home
+          if (scrollY < 200) {
+            setActiveIndex(0);
+            ticking = false;
+            return;
+          }
+
+          // If near the bottom of the page, activate the last nav section
+          if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 100) {
+            setActiveIndex(items.length - 1);
+            ticking = false;
+            return;
+          }
+
+          // Map section IDs
+          const sectionMappings: { id: string; index: number }[] = [];
+          items.forEach((item, idx) => {
+            if (item.href.startsWith("/#") || item.href.startsWith("#")) {
+              const targetId = item.href.replace("/#", "").replace("#", "");
+              sectionMappings.push({ id: targetId, index: idx });
+            }
+          });
+
+          let currentIdx = 0; // Default to Home
+          for (let i = 0; i < sectionMappings.length; i++) {
+            const { id, index } = sectionMappings[i];
+            const el = document.getElementById(id);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= checkLine && rect.bottom > 80) {
+                currentIdx = index;
+              }
+            }
+          }
+
+          setActiveIndex((prev) => (prev !== currentIdx ? currentIdx : prev));
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    syncActive();
-    window.addEventListener("hashchange", syncActive);
-    return () => window.removeEventListener("hashchange", syncActive);
-  }, [pathname, items, activeIndex]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("hashchange", handleScroll);
+
+    // Initial check
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("hashchange", handleScroll);
+      clearTimeout(clickTimeout);
+    };
+  }, [pathname, items]);
 
   const noise = (n = 1) => n / 2 - Math.random() * n;
 
