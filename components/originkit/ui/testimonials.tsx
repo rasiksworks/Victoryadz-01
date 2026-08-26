@@ -131,39 +131,43 @@ export const Testimonials: React.FC = () => {
   const handleScroll = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const width = el.clientWidth;
-    if (!width) return;
-    const idx = Math.round(el.scrollLeft / width);
+    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
+    if (!card) return;
+    const cardWidth = card.offsetWidth;
+    const gap = 16;
+    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
     setActiveIdx(Math.max(0, Math.min(items.length - 1, idx)));
   };
 
   const scrollPrev = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const newIdx = Math.max(0, activeIdx - 1);
-    el.scrollTo({ left: newIdx * el.clientWidth, behavior: "smooth" });
-    setActiveIdx(newIdx);
+    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
+    const cardWidth = card ? card.offsetWidth : 300;
+    el.scrollBy({ left: -(cardWidth + 16), behavior: "smooth" });
   };
 
   const scrollNext = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const newIdx = Math.min(items.length - 1, activeIdx + 1);
-    el.scrollTo({ left: newIdx * el.clientWidth, behavior: "smooth" });
-    setActiveIdx(newIdx);
+    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
+    const cardWidth = card ? card.offsetWidth : 300;
+    el.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
   };
 
   const scrollToIdx = (idx: number) => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    el.scrollTo({ left: idx * el.clientWidth, behavior: "smooth" });
+    const card = el.querySelector(".mobile-testimonial-card") as HTMLElement;
+    const cardWidth = card ? card.offsetWidth : 300;
+    el.scrollTo({ left: idx * (cardWidth + 16), behavior: "smooth" });
     setActiveIdx(idx);
   };
 
   return (
     <section
       id="testimonials"
-      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10"
+      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10 overflow-hidden"
       style={{ backgroundColor: "#2C2C2C" }}
     >
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-6 sm:gap-10 lg:gap-14">
@@ -244,80 +248,82 @@ export const Testimonials: React.FC = () => {
           })}
         </div>
 
-        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Exact Same Uniform Height across all slides ── */}
-        <div className="block lg:hidden w-full max-w-xl mx-auto">
-          <div
-            ref={scrollContainerRef}
-            onScroll={handleScroll}
-            className="w-full flex flex-row overflow-x-auto snap-x snap-mandatory scrollbar-none"
-            style={{
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            {items.map((t, idx) => {
-              const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
-              return (
-                <div
-                  key={t.id ? `m-${t.id}-${idx}` : `m-test-${idx}`}
-                  className="w-full min-w-full snap-center shrink-0 px-0.5"
-                >
+        {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Exact Same Uniform Height & Unclipped Peek ── */}
+        <div className="block lg:hidden w-full pt-2 pb-2">
+          <div className="w-full -mx-4 sm:-mx-6 md:-mx-8 px-4 sm:px-6 md:px-8 overflow-visible">
+            <div
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-3.5 xs:gap-4 sm:gap-6 pb-4 pt-1 pr-12 xs:pr-16 sm:pr-20 scrollbar-none"
+              style={{
+                WebkitOverflowScrolling: "touch",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
+              {items.map((t, idx) => {
+                const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
+                return (
                   <div
-                    className={`w-full h-[290px] xs:h-[300px] sm:h-[310px] ${
-                      t.featured
-                        ? "bg-[#1b1b1b] border-amber-500/40"
-                        : "bg-[#181818] border-white/15"
-                    } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300`}
-                    style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
+                    key={t.id ? `m-${t.id}-${idx}` : `m-test-${idx}`}
+                    className="mobile-testimonial-card snap-start shrink-0 w-[78vw] xs:w-[300px] sm:w-[340px] md:w-[360px]"
                   >
-                    {/* 1. Top Bar: Stars + Badge */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                        <span>★</span>
-                      </div>
-                      <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
-                        Verified Order
-                      </span>
-                    </div>
-
-                    {/* 2. Review Quote (Balanced height) */}
-                    <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal my-auto py-1 line-clamp-4">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
-
-                    {/* 3. Customer Footer */}
-                    <div className="flex items-center justify-start gap-3.5 pt-4 border-t border-white/10">
-                      <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
-                        {t.avatar ? (
-                          <Image
-                            src={t.avatar}
-                            alt={t.name || "Customer"}
-                            fill
-                            sizes="44px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
-                        )}
-                      </div>
-                      <div className="flex flex-col text-left">
-                        <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
-                          {t.name}
+                    <div
+                      className={`w-full h-[290px] xs:h-[300px] sm:h-[310px] ${
+                        t.featured
+                          ? "bg-[#1b1b1b] border-amber-500/40"
+                          : "bg-[#181818] border-white/15"
+                      } rounded-2xl border text-white shadow-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300`}
+                      style={{ backgroundColor: t.featured ? "#1b1b1b" : "#181818" }}
+                    >
+                      {/* 1. Top Bar: Stars + Badge */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-1 text-amber-400 text-sm tracking-wider">
+                          <span>★</span>
+                          <span>★</span>
+                          <span>★</span>
+                          <span>★</span>
+                          <span>★</span>
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-mono text-white/50 uppercase tracking-widest px-2.5 py-0.5 rounded bg-white/10 border border-white/15">
+                          Verified Order
                         </span>
-                        <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
-                          {t.role}
-                        </span>
+                      </div>
+
+                      {/* 2. Review Quote (Balanced height) */}
+                      <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed font-normal my-auto py-1 line-clamp-4">
+                        &ldquo;{t.quote}&rdquo;
+                      </p>
+
+                      {/* 3. Customer Footer */}
+                      <div className="flex items-center justify-start gap-3.5 pt-4 border-t border-white/10">
+                        <div className="relative w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shrink-0 flex items-center justify-center">
+                          {t.avatar ? (
+                            <Image
+                              src={t.avatar}
+                              alt={t.name || "Customer"}
+                              fill
+                              sizes="44px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <span className="font-mono text-xs font-bold text-white/80">{initials}</span>
+                          )}
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <span className="text-sm sm:text-base font-semibold text-white tracking-tight leading-tight">
+                            {t.name}
+                          </span>
+                          <span className="text-xs text-white/50 tracking-wider font-mono mt-0.5">
+                            {t.role}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
           {/* Mobile & Tablet Pagination Dots & Arrows */}
