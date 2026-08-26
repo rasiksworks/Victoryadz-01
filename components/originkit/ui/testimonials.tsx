@@ -250,11 +250,11 @@ export const Testimonials: React.FC = () => {
 
         {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Exact Same Uniform Height & Unclipped Peek ── */}
         <div className="block lg:hidden w-full pt-2 pb-2">
-          <div className="w-full -mx-4 sm:-mx-8 overflow-visible">
+          <div className="w-full overflow-visible">
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 pl-0 pr-6 sm:pr-8 scrollbar-none"
+              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 pl-4 sm:pl-8 pr-0 scrollbar-none"
               style={{
                 WebkitOverflowScrolling: "touch",
                 scrollbarWidth: "none",
