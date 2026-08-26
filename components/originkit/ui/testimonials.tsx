@@ -184,11 +184,11 @@ export const Testimonials: React.FC = () => {
 
         {/* ── 1. DESKTOP WEB VIEW (>= lg): Same Uniform Height Grid ── */}
         <div className="hidden lg:grid grid-cols-3 gap-6 w-full items-stretch">
-          {items.map((t) => {
+          {items.map((t, idx) => {
             const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
             return (
               <div
-                key={t.id}
+                key={t.id ? `${t.id}-${idx}` : `test-${idx}`}
                 className={`${
                   t.featured
                     ? "col-span-2 bg-[#1b1b1b] border-amber-500/40"
@@ -256,11 +256,11 @@ export const Testimonials: React.FC = () => {
               msOverflowStyle: "none",
             }}
           >
-            {items.map((t) => {
+            {items.map((t, idx) => {
               const initials = t.initials || (t.name ? t.name.slice(0, 2).toUpperCase() : "VA");
               return (
                 <div
-                  key={t.id}
+                  key={t.id ? `m-${t.id}-${idx}` : `m-test-${idx}`}
                   className="w-full min-w-full snap-center shrink-0 px-0.5"
                 >
                   <div

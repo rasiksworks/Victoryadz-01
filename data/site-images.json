@@ -713,6 +713,15 @@
   ],
   "testimonials": [
     {
+      "id": "1787509200000",
+      "quote": "VictoryAdz provided outstanding handcrafted frame quality and safe delivery. Highly recommended!",
+      "name": "5th card",
+      "role": "Chennai, Tamil Nadu",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+      "initials": "5C",
+      "featured": false
+    },
+    {
       "id": "1787509182187",
       "quote": "VictoryAdz provided outstanding handcrafted frame quality and safe delivery. Highly recommended!",
       "name": "Customer Name",
