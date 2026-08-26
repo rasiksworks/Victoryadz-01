@@ -167,7 +167,7 @@ export const Testimonials: React.FC = () => {
   return (
     <section
       id="testimonials"
-      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10 overflow-hidden"
+      className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none py-14 sm:py-20 md:py-24 lg:py-32 border-t border-white/10"
       style={{ backgroundColor: "#2C2C2C" }}
     >
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1520px] mx-auto flex flex-col gap-6 sm:gap-10 lg:gap-14">
@@ -249,12 +249,12 @@ export const Testimonials: React.FC = () => {
         </div>
 
         {/* ── 2. MOBILE & TABLET BREAKPOINTS (< lg): Exact Same Uniform Height & Unclipped Peek ── */}
-        <div className="block lg:hidden w-full pt-2 pb-2">
+        <div className="block lg:hidden w-full pt-2 pb-2 -mx-4 sm:-mx-6 md:-mx-8">
           <div className="w-full overflow-visible">
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 pl-4 sm:pl-8 pr-0 scrollbar-none"
+              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 pt-1 pl-4 sm:pl-6 md:pl-8 pr-0 scrollbar-none"
               style={{
                 WebkitOverflowScrolling: "touch",
                 scrollbarWidth: "none",

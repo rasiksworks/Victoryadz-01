@@ -309,7 +309,7 @@ export const WhyVictoryAdz: React.FC = () => {
     <section
       id="why-victory-adz"
       ref={sectionRef}
-      className="relative z-10 w-full lg:h-screen lg:min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-12 sm:py-14 md:py-16 lg:py-20 overflow-hidden border-t border-white/5"
+      className="relative z-10 w-full lg:h-screen lg:min-h-screen bg-[#141414] text-white font-inter-display select-none flex flex-col justify-between py-12 sm:py-14 md:py-16 lg:py-20 border-t border-white/5"
       style={{ backgroundColor: "#141414" }}
     >
       <div className="relative w-full max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between h-full flex-1">
@@ -412,7 +412,7 @@ export const WhyVictoryAdz: React.FC = () => {
         </div>
 
         {/* ── 2. MOBILE & TABLET HORIZONTAL FEATURES-3 CARD STACK (< lg) ── */}
-        <div className="block lg:hidden w-full pt-6 pb-2">
+        <div className="block lg:hidden w-full pt-6 pb-2 -mx-4 sm:-mx-8">
           <div className="w-full overflow-visible">
             <div
               ref={mobileScrollRef}
