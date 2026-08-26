@@ -278,38 +278,62 @@ export const HowItWorksV2: React.FC = () => {
           );
         }
       } else {
-        // --- MOBILE: STATIC HEADER & VERTICAL BOTTOM-UP CARDS ENTRANCE ---
-        mobileCardRefs.current.forEach((cardEl) => {
-          if (cardEl) {
-            gsap.set(cardEl, { y: "120%", autoAlpha: 0 });
-          }
-        });
-
+        // --- MOBILE: SEQUENTIAL STEP-BY-STEP HANDOVER (NO OVERLAPS, NEVER EMPTY) ---
         mobileCardRefs.current.forEach((cardEl, idx) => {
-          if (!cardEl) return;
-          const stepStart = 0.2 + idx * 1.15;
-
-          // Slide UP from below screen into view
-          tl.fromTo(
-            cardEl,
-            { y: "120%", autoAlpha: 0 },
-            { y: "0%", autoAlpha: 1, duration: 0.7, ease: "power2.out" },
-            stepStart
-          );
-
-          // Glide up to make room for next card after holding in full view
-          if (idx < mobileCardRefs.current.length - 1) {
-            tl.to(
-              cardEl,
-              { y: "-40%", autoAlpha: 0, duration: 0.45, ease: "power2.in" },
-              stepStart + 1.05
-            );
+          if (cardEl) {
+            if (idx === 0) {
+              gsap.set(cardEl, { y: "0%", autoAlpha: 1 });
+            } else {
+              gsap.set(cardEl, { y: "50px", autoAlpha: 0 });
+            }
           }
         });
+
+        // Step 0 -> Step 1 Handover (Card 0 exits cleanly before Card 1 enters)
+        if (mobileCardRefs.current[0] && mobileCardRefs.current[1]) {
+          tl.to(
+            mobileCardRefs.current[0],
+            { y: "-40px", autoAlpha: 0, duration: 0.35, ease: "power2.in" },
+            1.05
+          ).fromTo(
+            mobileCardRefs.current[1],
+            { y: "40px", autoAlpha: 0 },
+            { y: "0%", autoAlpha: 1, duration: 0.45, ease: "power2.out" },
+            1.35
+          );
+        }
+
+        // Step 1 -> Step 2 Handover (Card 1 exits cleanly before Card 2 enters)
+        if (mobileCardRefs.current[1] && mobileCardRefs.current[2]) {
+          tl.to(
+            mobileCardRefs.current[1],
+            { y: "-40px", autoAlpha: 0, duration: 0.35, ease: "power2.in" },
+            2.25
+          ).fromTo(
+            mobileCardRefs.current[2],
+            { y: "40px", autoAlpha: 0 },
+            { y: "0%", autoAlpha: 1, duration: 0.45, ease: "power2.out" },
+            2.55
+          );
+        }
+
+        // Step 2 -> Step 3 Handover (Card 2 exits cleanly before Card 3 enters)
+        if (mobileCardRefs.current[2] && mobileCardRefs.current[3]) {
+          tl.to(
+            mobileCardRefs.current[2],
+            { y: "-40px", autoAlpha: 0, duration: 0.35, ease: "power2.in" },
+            3.45
+          ).fromTo(
+            mobileCardRefs.current[3],
+            { y: "40px", autoAlpha: 0 },
+            { y: "0%", autoAlpha: 1, duration: 0.45, ease: "power2.out" },
+            3.75
+          );
+        }
       }
 
-      // HOLD (4.7 -> 6.1): Full staircase locked in view before calm release
-      tl.to({}, { duration: 1.4 });
+      // HOLD (4.7 -> 5.8): Full sequence locked in view before section exit
+      tl.to({}, { duration: 1.1 });
     }, section);
 
     let lastWidth = window.innerWidth;
@@ -464,30 +488,30 @@ export const HowItWorksV2: React.FC = () => {
       {/* ==================================================================== */}
       {/* MOBILE VIEW (< 1024px): Card Sequence Stack */}
       {/* ==================================================================== */}
-      <div className="lg:hidden absolute inset-0 z-20 flex flex-col justify-between pointer-events-none pt-[76px] xs:pt-[84px] sm:pt-[96px] pb-20 xs:pb-24 sm:pb-16 px-4 xs:px-5 sm:px-6 overflow-hidden">
+      <div className="lg:hidden absolute inset-0 z-20 flex flex-col justify-between pointer-events-none pt-[70px] xs:pt-[76px] sm:pt-[84px] pb-[90px] xs:pb-[100px] sm:pb-16 px-4 xs:px-5 sm:px-6 overflow-hidden">
         {/* Mobile Header Title (Pushed safely below fixed top navbar) */}
         <div
           ref={mobileHeaderRef}
           style={{
             willChange: "transform, opacity",
           }}
-          className="mobile-header-block flex flex-col items-center text-center gap-1.5 xs:gap-2 z-20 w-full max-w-[96vw] mx-auto px-2"
+          className="mobile-header-block flex flex-col items-center text-center gap-1 xs:gap-1.5 z-20 w-full max-w-[96vw] mx-auto px-2"
         >
           <h2 className="text-center select-none w-full">
-            <span className="block font-cal-sans text-[22px] xs:text-[26px] sm:text-[32px] font-semibold text-white tracking-normal leading-tight whitespace-nowrap">
+            <span className="block font-cal-sans text-[20px] xs:text-[24px] sm:text-[28px] font-semibold text-white tracking-normal leading-tight whitespace-nowrap">
               From Your Photo to Your Wall,
             </span>
-            <span className="block font-great-vibes text-[32px] xs:text-[38px] sm:text-[46px] font-normal text-white pt-0.5 -mt-0.5 leading-tight whitespace-nowrap">
+            <span className="block font-great-vibes text-[28px] xs:text-[34px] sm:text-[40px] font-normal text-white pt-0.5 -mt-0.5 leading-tight whitespace-nowrap">
               Wherever You Are
             </span>
           </h2>
           <p
-            className="text-xs xs:text-sm sm:text-[15px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-sm text-center mt-0.5"
+            className="text-[11px] xs:text-xs sm:text-[13px] font-inter-display font-medium text-[#E8E8E8]/90 leading-snug max-w-xs text-center"
             style={{ letterSpacing: "0.5px" }}
           >
             No shop visit needed. Here&apos;s exactly what happens after you message us.
           </p>
-          <div className="pt-1.5 flex items-center justify-center w-full">
+          <div className="pt-1 flex items-center justify-center w-full">
             <Button01
               text="Order on WhatsApp"
               onClick={handleWhatsAppOrder}
@@ -498,8 +522,8 @@ export const HowItWorksV2: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Card Container (Elevated safely above Android/iOS browser bottom bar) */}
-        <div className="relative w-full h-[185px] xs:h-[195px] sm:h-[210px] mb-1 xs:mb-2 mt-auto pointer-events-none overflow-hidden max-w-sm mx-auto">
+        {/* Mobile Card Container (Elevated safely above Android/iOS browser bottom bar with safe padding) */}
+        <div className="relative w-full h-[155px] xs:h-[165px] sm:h-[180px] mb-1 xs:mb-2 mt-auto pointer-events-none overflow-hidden max-w-sm mx-auto">
           {STEPS.map((step, idx) => (
             <div
               key={step.number}
@@ -507,14 +531,14 @@ export const HowItWorksV2: React.FC = () => {
                 mobileCardRefs.current[idx] = el;
               }}
               style={{
-                backgroundColor: "rgba(0, 0, 0, 0.55)",
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-                visibility: "hidden",
-                opacity: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.65)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                visibility: idx === 0 ? "visible" : "hidden",
+                opacity: idx === 0 ? 1 : 0,
                 willChange: "transform, opacity",
               }}
-              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[8px] p-4 xs:p-5 flex flex-col justify-between shadow-2xl"
+              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[10px] p-3.5 xs:p-4 flex flex-col justify-between shadow-2xl"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
@@ -531,12 +555,12 @@ export const HowItWorksV2: React.FC = () => {
                 </span>
               </div>
 
-              <div className="flex flex-col gap-1 xs:gap-1.5 mt-auto">
-                <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+              <div className="flex flex-col gap-0.5 xs:gap-1 mt-auto">
+                <h3 className="text-sm xs:text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
                   {step.title}
                 </h3>
                 <p
-                  className="text-xs xs:text-[13px] font-inter-display font-medium text-white/95 leading-relaxed text-pretty"
+                  className="text-[11px] xs:text-xs sm:text-[13px] font-inter-display font-medium text-white/95 leading-relaxed text-pretty"
                   style={{ letterSpacing: "0.5px" }}
                 >
                   {step.body}
