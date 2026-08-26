@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Great_Vibes } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
-import PixelatedCursor from "@/components/originkit/ui/inkbleed-cursor";
+import UserCursor from "@/components/originkit/ui/usercursor";
 import { Preloader } from "@/components/preloader";
 import { Navbar } from "@/components/originkit/ui/hero-03/navbar";
 
@@ -329,22 +329,7 @@ export default function RootLayout({
         </a>
         <Preloader />
         <Navbar />
-        <div className="hidden lg:block">
-          <PixelatedCursor
-            label={false}
-            pixelCount={24}
-            pixelSize={12}
-            pixelShape="circle"
-            trailColor="#FFFFFF"
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 9999,
-              pointerEvents: "none",
-              mixBlendMode: "difference",
-            }}
-          />
-        </div>
+        <UserCursor name="VictoryAdz" color="#FFFFFF" textColor="#000000" />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>

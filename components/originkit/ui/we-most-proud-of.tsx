@@ -31,7 +31,6 @@ export const WeMostProudOf: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
   const targetScrollProgressRef = useRef(0);
   const currentScrollProgressRef = useRef(0);
 
@@ -212,21 +211,6 @@ export const WeMostProudOf: React.FC = () => {
     };
   }, []);
 
-  // Global mouse position tracking for floating VIEW cursor badge (direct DOM update, zero React re-renders)
-  useEffect(() => {
-    let lastX = 0;
-    let lastY = 0;
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      lastX = e.clientX;
-      lastY = e.clientY;
-      if (badgeRef.current) {
-        badgeRef.current.style.transform = `translate3d(${lastX}px, ${lastY}px, 0) translate(-50%, -50%)`;
-      }
-    };
-    window.addEventListener("mousemove", handleGlobalMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
-  }, []);
-
   // Card 3D tilt calculation on hover
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -258,36 +242,6 @@ export const WeMostProudOf: React.FC = () => {
       className="relative w-full bg-[#2C2C2C] text-white font-inter-display select-none py-6 sm:py-10 md:py-16 overflow-hidden"
     >
       <span id="works" className="sr-only" aria-hidden="true" />
-      {/* Floating Cursor Badge: [ ↗ ] [ VIEW ] */}
-      <AnimatePresence>
-        {hoveredId !== null && !selectedItem && (
-          <motion.div
-            ref={badgeRef}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              position: "fixed",
-              left: 0,
-              top: 0,
-              pointerEvents: "none",
-              zIndex: 9999,
-              willChange: "transform",
-            }}
-            className="hidden lg:flex items-center shadow-2xl drop-shadow-2xl"
-          >
-            {/* Arrow Square Box */}
-            <div className="w-7 h-7 bg-black text-white flex items-center justify-center text-xs font-mono font-bold">
-              ↗
-            </div>
-            {/* VIEW Text Box */}
-            <div className="h-7 px-3 bg-white text-black flex items-center justify-center text-xs font-mono font-bold tracking-widest uppercase">
-              VIEW
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px]">
         {/* Top Header Row */}
@@ -635,6 +589,7 @@ const GridItemWithParallax: React.FC<GridItemWithParallaxProps> = memo(({
         }}
         role="button"
         tabIndex={0}
+        data-cursor-label="View Frame"
         aria-label={`View details for ${item.label || item.firstName} ${item.title || item.lastName}`}
         animate={{
           opacity: dimmed ? 0.4 : 1,
