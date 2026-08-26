@@ -354,10 +354,14 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
         setToast({ msg: "✓ Saved! Live website updated instantly.", type: "success" });
         setDirty(false);
       } else {
-        setToast({ msg: "Save failed. Check server logs.", type: "error" });
+        const errData = await res.json().catch(() => null);
+        setToast({
+          msg: errData?.error ? `Save failed: ${errData.error}` : "Save failed. Check server logs.",
+          type: "error",
+        });
       }
-    } catch {
-      setToast({ msg: "Network error.", type: "error" });
+    } catch (e: any) {
+      setToast({ msg: `Network error: ${e.message || "Unable to reach server"}`, type: "error" });
     }
     setSaving(false);
   };
