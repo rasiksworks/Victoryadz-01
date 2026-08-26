@@ -345,18 +345,48 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     if (!data) return;
     setSaving(true);
     try {
-      const res = await fetch("/api/images", {
+      // 1. Instantly sync to localStorage for zero-latency client reflection
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("victoryadz_custom_site_data", JSON.stringify(data));
+          window.dispatchEvent(new Event("storage"));
+        } catch {}
+      }
+
+      // 2. Persist to API
+      let ok = false;
+      let errMsg = "";
+
+      const resImages = await fetch("/api/images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
-      if (res.ok) {
+      }).catch(() => null);
+
+      if (resImages?.ok) {
+        ok = true;
+      } else if (resImages) {
+        const err = await resImages.json().catch(() => null);
+        if (err?.error) errMsg = err.error;
+      }
+
+      // Also ensure /api/site-data receives the payload
+      const resSite = await fetch("/api/site-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }).catch(() => null);
+
+      if (resSite?.ok) {
+        ok = true;
+      }
+
+      if (ok) {
         setToast({ msg: "✓ Saved! Live website updated instantly.", type: "success" });
         setDirty(false);
       } else {
-        const errData = await res.json().catch(() => null);
         setToast({
-          msg: errData?.error ? `Save failed: ${errData.error}` : "Save failed. Check server logs.",
+          msg: errMsg ? `Save failed: ${errMsg}` : "Save failed. Check server logs.",
           type: "error",
         });
       }

@@ -60,6 +60,17 @@ const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
 
 export const Testimonials: React.FC = () => {
   const [items, setItems] = useState<TestimonialItem[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const local = localStorage.getItem("victoryadz_custom_site_data");
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (Array.isArray(parsed.testimonials) && parsed.testimonials.length > 0) {
+            return parsed.testimonials;
+          }
+        }
+      } catch {}
+    }
     const fromSiteData = (siteData as any).testimonials;
     if (Array.isArray(fromSiteData) && fromSiteData.length > 0) {
       return fromSiteData;
@@ -70,15 +81,51 @@ export const Testimonials: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetch("/api/site-data")
+  const loadLatestData = () => {
+    // 1. Sync from local storage if available
+    if (typeof window !== "undefined") {
+      try {
+        const local = localStorage.getItem("victoryadz_custom_site_data");
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (Array.isArray(parsed.testimonials) && parsed.testimonials.length > 0) {
+            setItems(parsed.testimonials);
+          }
+        }
+      } catch {}
+    }
+
+    // 2. Fetch live data with no-store cache busting
+    fetch(`/api/site-data?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.testimonials && Array.isArray(data.testimonials) && data.testimonials.length > 0) {
           setItems(data.testimonials);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        // Fallback try /api/images
+        fetch(`/api/images?t=${Date.now()}`, { cache: "no-store" })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.testimonials && Array.isArray(data.testimonials) && data.testimonials.length > 0) {
+              setItems(data.testimonials);
+            }
+          })
+          .catch(() => {});
+      });
+  };
+
+  useEffect(() => {
+    loadLatestData();
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "victoryadz_custom_site_data") {
+        loadLatestData();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const handleScroll = () => {
