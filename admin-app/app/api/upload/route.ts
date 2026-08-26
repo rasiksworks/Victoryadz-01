@@ -12,7 +12,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    mkdirSync(UPLOADS_DIR, { recursive: true });
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -20,20 +19,36 @@ export async function POST(req: Request) {
     const rawName = file.name.substring(0, file.name.lastIndexOf(".")) || file.name;
     const cleanBaseName = rawName.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 30);
     const filename = `${Date.now()}-${cleanBaseName}.webp`;
-    const outputPath = path.join(UPLOADS_DIR, filename);
 
-    // Automatically convert any image format (PNG, JPG, HEIC, TIFF, etc.) to optimized WebP
-    await sharp(buffer)
+    // Process and convert image to WebP buffer
+    const webpBuffer = await sharp(buffer)
       .webp({ quality: 85, effort: 4 })
-      .toFile(outputPath);
+      .toBuffer();
 
-    return NextResponse.json({
-      url: `/uploads/${filename}`,
-      format: "webp",
-      originalName: file.name,
-    });
+    // Try saving to UPLOADS_DIR (works in local dev)
+    try {
+      mkdirSync(UPLOADS_DIR, { recursive: true });
+      const outputPath = path.join(UPLOADS_DIR, filename);
+      await sharp(buffer).webp({ quality: 85, effort: 4 }).toFile(outputPath);
+      return NextResponse.json({
+        url: `/uploads/${filename}`,
+        format: "webp",
+        originalName: file.name,
+      });
+    } catch (fsErr: any) {
+      // In serverless / read-only filesystem environments (Vercel EROFS), return base64 WebP data URL
+      const base64Url = `data:image/webp;base64,${webpBuffer.toString("base64")}`;
+      return NextResponse.json({
+        url: base64Url,
+        format: "webp",
+        originalName: file.name,
+      });
+    }
   } catch (e: any) {
     console.error("Upload error:", e);
-    return NextResponse.json({ error: e.message || "Failed to process and convert image to WebP" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to process and convert image to WebP" },
+      { status: 500 }
+    );
   }
 }
