@@ -417,7 +417,7 @@ export const WhyVictoryAdz: React.FC = () => {
             <div
               ref={mobileScrollRef}
               onScroll={handleMobileScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-4 pt-1 pr-6 sm:pr-8 scrollbar-none"
+              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-3.5 xs:gap-4 sm:gap-6 pb-4 pt-1 pr-12 xs:pr-16 sm:pr-20 scrollbar-none"
               style={{
                 WebkitOverflowScrolling: "touch",
                 scrollbarWidth: "none",
@@ -429,24 +429,24 @@ export const WhyVictoryAdz: React.FC = () => {
                 return (
                   <Card
                     key={reason.id}
-                    className="mobile-feature-card snap-start shrink-0 w-[82vw] xs:w-[320px] sm:w-[360px] md:w-[380px] bg-[#181818]/95 border-white/15 text-white shadow-2xl rounded-2xl flex flex-col justify-between text-center overflow-hidden p-0"
+                    className="mobile-feature-card snap-start shrink-0 w-[78vw] xs:w-[300px] sm:w-[340px] md:w-[360px] bg-[#181818]/95 border-white/15 text-white shadow-2xl rounded-2xl flex flex-col justify-between text-center overflow-hidden p-0 transition-transform duration-300"
                   >
-                    <CardHeader className="pb-3 text-center px-6 pt-6">
+                    <CardHeader className="pb-3 text-center px-5 xs:px-6 pt-5 xs:pt-6">
                       <CardDecorator>
-                        <IconComponent className="size-6 text-amber-400" />
+                        <IconComponent className="size-5 xs:size-6 text-amber-400" />
                       </CardDecorator>
 
                       <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/50 mt-3 block">
                         REASON - {reason.number}
                       </span>
 
-                      <h3 className="mt-1.5 text-xl font-bold text-white tracking-tight leading-snug">
+                      <h3 className="mt-1.5 text-lg xs:text-xl font-bold text-white tracking-tight leading-snug">
                         {reason.title}
                       </h3>
                     </CardHeader>
 
-                    <CardContent className="text-center px-6 pb-6 pt-0">
-                      <p className="text-xs sm:text-sm text-white/75 font-light leading-relaxed">
+                    <CardContent className="text-center px-5 xs:px-6 pb-5 xs:pb-6 pt-0">
+                      <p className="text-xs xs:text-[13px] sm:text-sm text-white/75 font-light leading-relaxed">
                         {reason.content}
                       </p>
                     </CardContent>
