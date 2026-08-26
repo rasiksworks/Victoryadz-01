@@ -4,8 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:admin": "npm --prefix admin-app run dev",
+    "dev:all": "npx concurrently \"next dev --port 3000\" \"npm --prefix admin-app run dev\" --names \"website,admin\" --prefix-colors \"blue,green\"",
     "build": "next build",
+    "build:admin": "npm --prefix admin-app run build",
+    "build:all": "next build && npm --prefix admin-app run build",
     "start": "next start",
+    "start:admin": "npm --prefix admin-app run start",
     "lint": "next lint"
   },
   "dependencies": {
