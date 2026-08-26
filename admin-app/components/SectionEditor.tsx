@@ -14,12 +14,21 @@ interface ImageItem {
   galleryData?: GalleryItem;
 }
 
+const BRAND_VISION_LABELS: Record<string, string> = {
+  image1: "Left Sticky Frame (3:4 Main)",
+  image2: "Right Column · Top Left Frame",
+  image3: "Right Column · Top Right Frame",
+  image4: "Center Teaser Frame (Above Button)",
+  image5: "Right Column · Bottom Left Frame",
+  image6: "Right Column · Bottom Right Frame",
+};
+
 function extractItems(data: SiteImages, section: SectionKey): ImageItem[] {
   if (section === "brandVision") {
     return Object.entries(data.brandVision).map(([k, v], idx) => ({
       originalIndex: idx,
       url: String(v),
-      label: k,
+      label: BRAND_VISION_LABELS[k] || k,
     }));
   }
   if (section === "heroTunnel") {
@@ -129,9 +138,9 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
       const res = await fetch("/api/upload", { method: "POST", body: form });
       const result = await res.json();
       if (result.url && data) {
-        setData(applyImageUrlChange(data, sectionKey, originalIndex, result.url));
-        setDirty(true);
-        setToast({ msg: "Image uploaded as WebP! Hit Save to apply live.", type: "success" });
+        const updated = applyImageUrlChange(data, sectionKey, originalIndex, result.url);
+        setData(updated);
+        await persistData(updated, "✓ Image uploaded & live website updated instantly!");
       } else {
         setToast({ msg: "Upload failed: " + (result.error || "Unknown"), type: "error" });
       }

@@ -35,31 +35,47 @@ export const WeMostProudOf: React.FC = () => {
   const targetScrollProgressRef = useRef(0);
   const currentScrollProgressRef = useRef(0);
 
-  // Fetch dynamic items from /api/site-data
+  // Fetch dynamic items from /api/site-data and localStorage
   useEffect(() => {
+    const processData = (data: any) => {
+      if (data?.exploreGallery && Array.isArray(data.exploreGallery)) {
+        const mapped: WorkItem[] = data.exploreGallery.map((item: any, idx: number) => ({
+          id: item.id || `work-${idx}`,
+          image: item.image || item.src,
+          number: item.number || "[ 00 ]",
+          firstName: item.label || item.firstName || "",
+          lastName: item.title || item.lastName || "",
+          label: item.label || item.firstName || "",
+          title: item.title || item.lastName || "",
+          date: item.date || "November 2019",
+          credits: item.credits || "PHOTOGRAPH BY VICTORYADZ",
+        }));
+        setItems(mapped);
+        setIsLoading(false);
+        setTimeout(() => {
+          if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
+            (window as any).ScrollTrigger.refresh();
+          }
+        }, 80);
+      }
+    };
+
+    // 1. Check localStorage for instant preview
+    if (typeof window !== "undefined") {
+      try {
+        const local = localStorage.getItem("victoryadz_custom_site_data");
+        if (local) {
+          processData(JSON.parse(local));
+        }
+      } catch {}
+    }
+
+    // 2. Fetch fresh data from API
     fetch("/api/site-data")
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        if (data?.exploreGallery && Array.isArray(data.exploreGallery)) {
-          const mapped: WorkItem[] = data.exploreGallery.map((item: any, idx: number) => ({
-            id: item.id || `work-${idx}`,
-            image: item.image || item.src,
-            number: item.number || "[ 00 ]",
-            firstName: item.label || item.firstName || "",
-            lastName: item.title || item.lastName || "",
-            label: item.label || item.firstName || "",
-            title: item.title || item.lastName || "",
-            date: item.date || "November 2019",
-            credits: item.credits || "PHOTOGRAPH BY VICTORYADZ",
-          }));
-          setItems(mapped);
-          setTimeout(() => {
-            if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
-              (window as any).ScrollTrigger.refresh();
-            }
-          }, 80);
-        }
+        processData(data);
       })
       .catch(() => {
         setIsLoading(false);
@@ -81,6 +97,21 @@ export const WeMostProudOf: React.FC = () => {
           }
         }, 80);
       });
+
+    // 3. Real-time storage listener for instant live admin reflections
+    const handleStorage = (e?: StorageEvent) => {
+      if (!e || e.key === "victoryadz_custom_site_data" || !e.key) {
+        try {
+          const local = localStorage.getItem("victoryadz_custom_site_data");
+          if (local) {
+            processData(JSON.parse(local));
+          }
+        } catch {}
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const WORK_ITEMS = items.length > 0 ? items : (siteData.exploreGallery || []).map((item: any) => ({

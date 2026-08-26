@@ -10,6 +10,58 @@ import MaskTextReveal from "@/components/originkit/ui/mask-text-reveal";
 import siteData from "@/data/site-images.json";
 
 export const BrandVisionSection: React.FC = () => {
+  const [images, setImages] = React.useState(siteData.brandVision);
+
+  React.useEffect(() => {
+    // 1. Check localStorage for instant preview
+    if (typeof window !== "undefined") {
+      try {
+        const local = localStorage.getItem("victoryadz_custom_site_data");
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (parsed?.brandVision) {
+            setImages((prev) => ({ ...prev, ...parsed.brandVision }));
+          }
+        }
+      } catch {}
+    }
+
+    // 2. Fetch from /api/site-data
+    fetch("/api/site-data")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.brandVision) {
+          setImages((prev) => ({ ...prev, ...data.brandVision }));
+        }
+      })
+      .catch(() => {});
+
+    // 3. Real-time storage listener for instant live admin reflections
+    const handleStorage = (e?: StorageEvent) => {
+      if (!e || e.key === "victoryadz_custom_site_data" || !e.key) {
+        try {
+          const local = localStorage.getItem("victoryadz_custom_site_data");
+          if (local) {
+            const parsed = JSON.parse(local);
+            if (parsed?.brandVision) {
+              setImages((prev) => ({ ...prev, ...parsed.brandVision }));
+            }
+          }
+        } catch {}
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  const img1 = images.image1 || siteData.brandVision.image1;
+  const img2 = images.image2 || siteData.brandVision.image2;
+  const img3 = images.image3 || siteData.brandVision.image3;
+  const img4 = images.image4 || siteData.brandVision.image4;
+  const img5 = images.image5 || siteData.brandVision.image5;
+  const img6 = images.image6 || siteData.brandVision.image6;
+
   return (
     <section id="about" className="relative z-10 w-full bg-[#2C2C2C] text-white font-inter-display select-none" style={{ backgroundColor: "#2C2C2C" }}>
       <div className="w-full px-4 sm:px-6 md:px-[60px] lg:px-[60px]">
@@ -41,7 +93,7 @@ export const BrandVisionSection: React.FC = () => {
           <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex items-start justify-start pt-3 sm:pt-6 pb-4 sm:pb-6 shrink-0">
             <ImageReveal className="relative w-full aspect-[4/3] sm:aspect-[3/4] max-h-[50vh] sm:max-h-[85vh] overflow-hidden bg-[#222] rounded-sm border border-white/5 shadow-2xl" duration={1.4}>
               <Image
-                src={siteData.brandVision.image1}
+                src={img1}
                 alt="Sculptural artwork"
                 fill
                 priority
@@ -58,7 +110,7 @@ export const BrandVisionSection: React.FC = () => {
             <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full">
               <ImageReveal className="relative aspect-[3/4] w-full overflow-hidden bg-[#222] border border-white/5" delay={0.1} duration={1.2}>
                 <Image
-                  src={siteData.brandVision.image2}
+                  src={img2}
                   alt="Studio frame craft 1"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
@@ -67,7 +119,7 @@ export const BrandVisionSection: React.FC = () => {
               </ImageReveal>
               <ImageReveal className="relative aspect-[3/4] w-full overflow-hidden bg-[#222] border border-white/5" delay={0.25} duration={1.2}>
                 <Image
-                  src={siteData.brandVision.image3}
+                  src={img3}
                   alt="Studio frame craft 2"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
@@ -98,7 +150,7 @@ export const BrandVisionSection: React.FC = () => {
             <div className="flex flex-col items-center gap-6 pt-2">
               <ImageReveal className="relative w-28 md:w-36 aspect-[3/4] overflow-hidden bg-[#222] border border-white/10 shadow-lg" duration={1.0}>
                 <Image
-                  src={siteData.brandVision.image4}
+                  src={img4}
                   alt="Frame finish detail"
                   fill
                   sizes="144px"
@@ -116,7 +168,7 @@ export const BrandVisionSection: React.FC = () => {
             <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full pt-4">
               <ImageReveal className="relative aspect-[3/4] w-full overflow-hidden bg-[#222] border border-white/5" delay={0.1} duration={1.2}>
                 <Image
-                  src={siteData.brandVision.image5}
+                  src={img5}
                   alt="Studio frame craft 3"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
@@ -125,7 +177,7 @@ export const BrandVisionSection: React.FC = () => {
               </ImageReveal>
               <ImageReveal className="relative aspect-[3/4] w-full overflow-hidden bg-[#222] border border-white/5" delay={0.25} duration={1.2}>
                 <Image
-                  src={siteData.brandVision.image6}
+                  src={img6}
                   alt="Studio frame craft 4"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
