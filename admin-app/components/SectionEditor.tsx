@@ -236,6 +236,65 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
   };
 
   // -------------------------------------------------------------
+  // PERSISTENCE HELPER (Saves immediately to localStorage & APIs)
+  // -------------------------------------------------------------
+  const persistData = async (updatedData: SiteImages, successMessage = "✓ Saved! Live website updated instantly.") => {
+    setData(updatedData);
+    setSaving(true);
+
+    // 1. Instantly sync to localStorage for zero-latency reflection in active browser
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("victoryadz_custom_site_data", JSON.stringify(updatedData));
+        window.dispatchEvent(new Event("storage"));
+      } catch {}
+    }
+
+    // 2. Persist to API endpoints
+    let ok = false;
+    let errMsg = "";
+
+    try {
+      const resImages = await fetch("/api/images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      }).catch(() => null);
+
+      if (resImages?.ok) {
+        ok = true;
+      } else if (resImages) {
+        const err = await resImages.json().catch(() => null);
+        if (err?.error) errMsg = err.error;
+      }
+
+      const resSite = await fetch("/api/site-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      }).catch(() => null);
+
+      if (resSite?.ok) {
+        ok = true;
+      }
+
+      if (ok) {
+        setToast({ msg: successMessage, type: "success" });
+        setDirty(false);
+      } else {
+        setToast({
+          msg: errMsg ? `Save failed: ${errMsg}` : "Save failed. Check server logs.",
+          type: "error",
+        });
+      }
+    } catch (e: any) {
+      setToast({ msg: `Network error: ${e.message || "Unable to reach server"}`, type: "error" });
+    }
+
+    setSaving(false);
+  };
+
+  // -------------------------------------------------------------
   // TESTIMONIAL HANDLERS
   // -------------------------------------------------------------
   const handleAddNewTestimonial = () => {
@@ -258,7 +317,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setDirty(true);
     setEditingTestimonialIndex(0);
     setEditingTestimonialData(JSON.parse(JSON.stringify(newTestimonial)));
-    setToast({ msg: "New review added! Edit details below and save.", type: "success" });
+    setToast({ msg: "New review added! Edit details in modal and click Save Review.", type: "success" });
   };
 
   const handleOpenEditTestimonial = (index: number) => {
@@ -267,7 +326,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setEditingTestimonialData(JSON.parse(JSON.stringify(data.testimonials[index])));
   };
 
-  const handleSaveTestimonialModal = () => {
+  const handleSaveTestimonialModal = async () => {
     if (editingTestimonialIndex === null || !editingTestimonialData || !data) return;
     const d = JSON.parse(JSON.stringify(data)) as SiteImages;
     if (!Array.isArray(d.testimonials)) d.testimonials = [];
@@ -280,23 +339,19 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     }
 
     d.testimonials[editingTestimonialIndex] = editingTestimonialData;
-    setData(d);
-    setDirty(true);
     setEditingTestimonialIndex(null);
     setEditingTestimonialData(null);
-    setToast({ msg: "Review updated! Hit SAVE CHANGES to apply live.", type: "success" });
+    await persistData(d, "✓ Review updated and saved to live website!");
   };
 
-  const handleDeleteTestimonial = (index: number) => {
+  const handleDeleteTestimonial = async (index: number) => {
     if (!data || !data.testimonials) return;
     if (!window.confirm("Are you sure you want to delete this customer review?")) return;
     const d = JSON.parse(JSON.stringify(data)) as SiteImages;
     if (d.testimonials) {
       d.testimonials.splice(index, 1);
     }
-    setData(d);
-    setDirty(true);
-    setToast({ msg: "Review deleted. Hit SAVE CHANGES to apply.", type: "success" });
+    await persistData(d, "✓ Review deleted and saved to live website!");
   };
 
   const handleTestimonialAvatarUpload = async (file: File) => {
@@ -319,7 +374,7 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
     setModalUploading(false);
   };
 
-  const handleToggleFeaturedTestimonial = (index: number) => {
+  const handleToggleFeaturedTestimonial = async (index: number) => {
     if (!data || !data.testimonials) return;
     const d = JSON.parse(JSON.stringify(data)) as SiteImages;
     if (!d.testimonials) return;
@@ -330,70 +385,18 @@ export function SectionEditor({ sectionKey }: { sectionKey: SectionKey }) {
       t.featured = i === index ? isNowFeatured : false;
     });
 
-    setData(d);
-    setDirty(true);
-    setToast({
-      msg: isNowFeatured ? "Set as main spotlight review." : "Unset from spotlight.",
-      type: "success",
-    });
+    await persistData(
+      d,
+      isNowFeatured ? "✓ Set as Spotlight and saved to live website!" : "✓ Spotlight updated and saved live!"
+    );
   };
 
   // -------------------------------------------------------------
-  // SAVE CHANGES TO /api/images
+  // SAVE CHANGES BUTTON HANDLER
   // -------------------------------------------------------------
   const handleSave = async () => {
     if (!data) return;
-    setSaving(true);
-    try {
-      // 1. Instantly sync to localStorage for zero-latency client reflection
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem("victoryadz_custom_site_data", JSON.stringify(data));
-          window.dispatchEvent(new Event("storage"));
-        } catch {}
-      }
-
-      // 2. Persist to API
-      let ok = false;
-      let errMsg = "";
-
-      const resImages = await fetch("/api/images", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }).catch(() => null);
-
-      if (resImages?.ok) {
-        ok = true;
-      } else if (resImages) {
-        const err = await resImages.json().catch(() => null);
-        if (err?.error) errMsg = err.error;
-      }
-
-      // Also ensure /api/site-data receives the payload
-      const resSite = await fetch("/api/site-data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }).catch(() => null);
-
-      if (resSite?.ok) {
-        ok = true;
-      }
-
-      if (ok) {
-        setToast({ msg: "✓ Saved! Live website updated instantly.", type: "success" });
-        setDirty(false);
-      } else {
-        setToast({
-          msg: errMsg ? `Save failed: ${errMsg}` : "Save failed. Check server logs.",
-          type: "error",
-        });
-      }
-    } catch (e: any) {
-      setToast({ msg: `Network error: ${e.message || "Unable to reach server"}`, type: "error" });
-    }
-    setSaving(false);
+    await persistData(data, "✓ Saved! Live website updated instantly.");
   };
 
   const allItems = useMemo(() => (data ? extractItems(data, sectionKey) : []), [data, sectionKey]);
