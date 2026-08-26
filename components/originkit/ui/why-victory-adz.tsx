@@ -415,7 +415,7 @@ export const WhyVictoryAdz: React.FC = () => {
         {/* ── 2. MOBILE & TABLET: 80% ACTIVE CARD + 20% NEXT PEEK TRACK (< lg) ── */}
         <div className="block lg:hidden w-full pt-6 pb-2">
           <div
-            className="w-full overflow-hidden"
+            className="w-[calc(100%+1rem)] -mr-4 sm:w-[calc(100%+2rem)] sm:-mr-8 overflow-hidden"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
