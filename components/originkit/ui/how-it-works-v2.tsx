@@ -522,8 +522,8 @@ export const HowItWorksV2: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Card Container (Elevated safely above Android/iOS browser bottom bar with safe padding) */}
-        <div className="relative w-full h-[155px] xs:h-[165px] sm:h-[180px] mb-1 xs:mb-2 mt-auto pointer-events-none overflow-hidden max-w-sm mx-auto">
+        {/* Mobile Card Container (Fills full viewport width on mobile & tablet) */}
+        <div className="relative w-full h-[155px] xs:h-[165px] sm:h-[180px] mb-1 xs:mb-2 mt-auto pointer-events-none overflow-hidden max-w-none">
           {STEPS.map((step, idx) => (
             <div
               key={step.number}
@@ -538,7 +538,7 @@ export const HowItWorksV2: React.FC = () => {
                 opacity: idx === 0 ? 1 : 0,
                 willChange: "transform, opacity",
               }}
-              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[10px] p-3.5 xs:p-4 flex flex-col justify-between shadow-2xl"
+              className="absolute inset-0 w-full h-full pointer-events-auto border border-white/40 backdrop-blur-[10px] p-4 xs:p-5 sm:p-6 flex flex-col justify-between shadow-2xl"
             >
               {/* 4 Corner 7x7px White Dots */}
               <span className="absolute -top-[3.5px] -left-[3.5px] w-[7px] h-[7px] bg-white rounded-none pointer-events-none" />
@@ -555,12 +555,12 @@ export const HowItWorksV2: React.FC = () => {
                 </span>
               </div>
 
-              <div className="flex flex-col gap-0.5 xs:gap-1 mt-auto">
-                <h3 className="text-sm xs:text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+              <div className="flex flex-col gap-1 xs:gap-1.5 mt-auto">
+                <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
                   {step.title}
                 </h3>
                 <p
-                  className="text-[11px] xs:text-xs sm:text-[13px] font-inter-display font-medium text-white/95 leading-relaxed text-pretty"
+                  className="text-xs xs:text-[13px] sm:text-sm font-inter-display font-medium text-white/95 leading-relaxed text-pretty"
                   style={{ letterSpacing: "0.5px" }}
                 >
                   {step.body}
