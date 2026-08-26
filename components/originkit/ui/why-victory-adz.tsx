@@ -269,39 +269,40 @@ export const WhyVictoryAdz: React.FC = () => {
     };
   }, []);
 
-  const handleMobileScroll = () => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-feature-card") as HTMLElement;
-    if (!card) return;
-    const cardWidth = card.offsetWidth;
-    const gap = 16;
-    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
-    setActiveMobileIdx(Math.max(0, Math.min(WHY_REASONS.length - 1, idx)));
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (touchStart === null || touchEnd === null) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 45;
+    const isRightSwipe = distance < -45;
+    if (isLeftSwipe && activeMobileIdx < WHY_REASONS.length - 1) {
+      setActiveMobileIdx((prev) => prev + 1);
+    }
+    if (isRightSwipe && activeMobileIdx > 0) {
+      setActiveMobileIdx((prev) => prev - 1);
+    }
   };
 
   const scrollMobilePrev = () => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-feature-card") as HTMLElement;
-    const cardWidth = card ? card.offsetWidth : 300;
-    el.scrollBy({ left: -(cardWidth + 16), behavior: "smooth" });
+    setActiveMobileIdx((prev) => Math.max(0, prev - 1));
   };
 
   const scrollMobileNext = () => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-feature-card") as HTMLElement;
-    const cardWidth = card ? card.offsetWidth : 300;
-    el.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
+    setActiveMobileIdx((prev) => Math.min(WHY_REASONS.length - 1, prev + 1));
   };
 
   const scrollToMobileIdx = (idx: number) => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const card = el.querySelector(".mobile-feature-card") as HTMLElement;
-    const cardWidth = card ? card.offsetWidth : 300;
-    el.scrollTo({ left: idx * (cardWidth + 16), behavior: "smooth" });
     setActiveMobileIdx(idx);
   };
 
@@ -411,17 +412,19 @@ export const WhyVictoryAdz: React.FC = () => {
           </div>
         </div>
 
-        {/* ── 2. MOBILE & TABLET HORIZONTAL FEATURES-3 CARD STACK (< lg) ── */}
+        {/* ── 2. MOBILE & TABLET: 80% ACTIVE CARD + 20% NEXT PEEK TRACK (< lg) ── */}
         <div className="block lg:hidden w-full pt-6 pb-2">
-          <div className="w-full overflow-visible">
+          <div
+            className="w-full overflow-hidden"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <div
-              ref={mobileScrollRef}
-              onScroll={handleMobileScroll}
-              className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-3.5 sm:gap-4 pb-4 pt-1 w-full scrollbar-none"
+              className="flex flex-row transition-transform duration-500 ease-out will-change-transform"
               style={{
-                WebkitOverflowScrolling: "touch",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
+                transform: `translateX(calc(-${activeMobileIdx} * (80% + 14px)))`,
+                gap: "14px",
               }}
             >
               {WHY_REASONS.map((reason) => {
@@ -429,24 +432,24 @@ export const WhyVictoryAdz: React.FC = () => {
                 return (
                   <Card
                     key={reason.id}
-                    className="mobile-feature-card snap-start shrink-0 w-[calc(50%-7px)] sm:w-[calc(50%-8px)] bg-[#181818]/95 border-white/15 text-white shadow-2xl rounded-2xl flex flex-col justify-between text-center overflow-hidden p-0 transition-transform duration-300 min-h-[290px] xs:min-h-[300px] sm:min-h-[310px]"
+                    className="mobile-feature-card shrink-0 w-[80%] bg-[#181818]/95 border-white/15 text-white shadow-2xl rounded-2xl flex flex-col justify-between text-center overflow-hidden p-0 min-h-[300px] xs:min-h-[310px] sm:min-h-[320px]"
                   >
-                    <CardHeader className="pb-2.5 text-center px-3.5 xs:px-4 sm:px-6 pt-4 xs:pt-5 sm:pt-6">
+                    <CardHeader className="pb-3 text-center px-5 xs:px-6 pt-5 xs:pt-6">
                       <CardDecorator>
                         <IconComponent className="size-5 xs:size-6 text-amber-400" />
                       </CardDecorator>
 
-                      <span className="text-[9px] xs:text-[10px] font-mono uppercase tracking-[0.15em] text-white/50 mt-2 block">
+                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/50 mt-3 block">
                         REASON - {reason.number}
                       </span>
 
-                      <h3 className="mt-1 text-sm xs:text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+                      <h3 className="mt-1.5 text-lg xs:text-xl font-bold text-white tracking-tight leading-snug">
                         {reason.title}
                       </h3>
                     </CardHeader>
 
-                    <CardContent className="text-center px-3.5 xs:px-4 sm:px-6 pb-4 xs:pb-5 sm:pb-6 pt-0">
-                      <p className="text-[11px] xs:text-xs sm:text-sm text-white/75 font-light leading-relaxed">
+                    <CardContent className="text-center px-5 xs:px-6 pb-5 xs:pb-6 pt-0">
+                      <p className="text-xs xs:text-[13px] sm:text-sm text-white/75 font-light leading-relaxed">
                         {reason.content}
                       </p>
                     </CardContent>
@@ -457,7 +460,7 @@ export const WhyVictoryAdz: React.FC = () => {
           </div>
 
           {/* Mobile & Tablet Pagination Indicators */}
-          <div className="flex items-center justify-between pt-3 px-1">
+          <div className="flex items-center justify-between pt-4 px-1">
             <div className="flex items-center gap-1.5">
               {WHY_REASONS.map((_, idx) => (
                 <button
