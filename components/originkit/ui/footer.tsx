@@ -219,11 +219,32 @@ export const Footer: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
 
+        {/* Massive VICTORYADZ Logo - Viewport-width */}
+        <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] relative mt-4 sm:mt-8 pointer-events-auto select-none">
+          <div className="absolute top-0 left-0 right-0 h-full">
+            <WarpText
+              text="VICTORYADZ"
+              color="#ffffff"
+              warpStrength={0.09}
+              warpScale={1.2}
+              speed={0.45}
+              pointerInfluence={0.3}
+              pointerStrength={0.4}
+              refraction={0.015}
+              ripple={true}
+              fontSize="clamp(4.5rem, 18vw, 18rem)"
+              fontWeight={900}
+              fontFamily="var(--font-inter-display), system-ui, sans-serif"
+              style={{ height: '100%' }}
+            />
+          </div>
+        </div>
 
-
-          {/* Bottom Sub-footer */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-6 font-mono text-[11px] text-white/50 tracking-wider gap-4">
+        {/* Bottom Sub-footer (Positioned below the VICTORYADZ name) */}
+        <div className="w-full max-w-[1320px] mx-auto px-4 sm:px-6 md:px-[60px] lg:px-[60px] border-t border-white/10 pt-4 sm:pt-6 z-10 relative">
+          <div className="flex flex-col sm:flex-row items-center justify-between font-mono text-[11px] text-white/50 tracking-wider gap-4">
             <div className="flex items-center gap-6">
               <button
                 onClick={() => setActiveModal("privacy")}
@@ -256,27 +277,6 @@ export const Footer: React.FC = () => {
                 <span>&uarr;</span>
               </motion.button>
             </div>
-          </div>
-        </div>
-
-        {/* Massive VICTORYADZ Logo - Viewport-width and bottom-cropped */}
-        <div className="w-full h-[300px] sm:h-[340px] md:h-[380px] relative mt-8 sm:mt-12 pointer-events-auto select-none">
-          <div className="absolute top-0 left-0 right-0 h-[220px] sm:h-[280px] md:h-[340px]">
-            <WarpText
-              text="VICTORYADZ"
-              color="#ffffff"
-              warpStrength={0.09}
-              warpScale={1.2}
-              speed={0.45}
-              pointerInfluence={0.3}
-              pointerStrength={0.4}
-              refraction={0.015}
-              ripple={true}
-              fontSize="clamp(4.5rem, 18vw, 18rem)"
-              fontWeight={900}
-              fontFamily="var(--font-inter-display), system-ui, sans-serif"
-              style={{ height: '100%' }}
-            />
           </div>
         </div>
 
