@@ -128,15 +128,15 @@ export const Footer: React.FC = () => {
         className="relative w-full max-w-[1320px] bg-[#0a0a0a] text-white font-inter-display select-none overflow-hidden border border-white/10 pt-8 sm:pt-12 md:pt-16 pb-6 sm:pb-8 transform-gpu"
       >
         <div className="w-full max-w-[1320px] mx-auto px-4 sm:px-6 md:px-[60px] lg:px-[60px]">
-          {/* Top 3-Column Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 pb-8 sm:pb-12">
+          {/* Top 3-Column Section (Menu & Socials horizontally aligned on mobile) */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 pb-8 sm:pb-12">
             {/* Column 1: MENU */}
-            <div className="flex flex-col">
-              <h3 className="text-xs font-mono font-medium tracking-[0.25em] text-white/50 mb-4 sm:mb-6 uppercase flex items-center gap-2">
+            <div className="flex flex-col col-span-1">
+              <h3 className="text-xs font-mono font-medium tracking-[0.25em] text-white/50 mb-3 sm:mb-6 uppercase flex items-center gap-2">
                 <span>MENU</span>
                 <span className="text-white/20">/</span>
               </h3>
-              <ul className="space-y-3 font-mono text-xs text-white/90">
+              <ul className="space-y-2.5 sm:space-y-3 font-mono text-xs text-white/90">
                 {[
                   { label: "Home", target: "hero" },
                   { label: "How It Works", target: "how-it-works" },
@@ -161,30 +161,9 @@ export const Footer: React.FC = () => {
               </ul>
             </div>
 
-            {/* Column 2: ORDER */}
-            <div className="flex flex-col">
-              <h3 className="text-xs font-mono font-medium tracking-[0.25em] text-white/50 mb-4 sm:mb-6 uppercase flex items-center gap-2">
-                <span>ORDER</span>
-                <span className="text-white/20">/</span>
-              </h3>
-              <Button01
-                variant="light"
-                text="Order on WhatsApp"
-                onClick={() => handleSocialClick("WhatsApp", "https://wa.me/919361312684?text=" + encodeURIComponent("Hi VictoryAdz! I'd like to get frame options & pricing for my photo."))}
-                ariaLabel="Order on WhatsApp"
-                className="w-full max-w-xs"
-              />
-              <p
-                className="mt-4 font-inter-display text-[12px] sm:text-[13px] text-white/70 font-medium leading-relaxed max-w-xs"
-                style={{ letterSpacing: "0.5px" }}
-              >
-                Message us to discuss sizing, frames, and delivery details.
-              </p>
-            </div>
-
-            {/* Column 3: SOCIALS */}
-            <div className="flex flex-col">
-              <h3 className="text-xs font-mono font-medium tracking-[0.25em] text-white/50 mb-4 sm:mb-6 uppercase flex items-center gap-2">
+            {/* Column 2: SOCIALS (Horizontally aligned with Menu on mobile) */}
+            <div className="flex flex-col col-span-1 lg:order-last">
+              <h3 className="text-xs font-mono font-medium tracking-[0.25em] text-white/50 mb-3 sm:mb-6 uppercase flex items-center gap-2">
                 <span>SOCIALS</span>
                 <span className="text-white/20">/</span>
               </h3>
@@ -217,6 +196,27 @@ export const Footer: React.FC = () => {
                   </svg>
                 </motion.button>
               </div>
+            </div>
+
+            {/* Column 3: ORDER */}
+            <div className="flex flex-col col-span-2 lg:col-span-1 mt-3 lg:mt-0">
+              <h3 className="text-xs font-mono font-medium tracking-[0.25em] text-white/50 mb-3 sm:mb-6 uppercase flex items-center gap-2">
+                <span>ORDER</span>
+                <span className="text-white/20">/</span>
+              </h3>
+              <Button01
+                variant="light"
+                text="Order on WhatsApp"
+                onClick={() => handleSocialClick("WhatsApp", "https://wa.me/919361312684?text=" + encodeURIComponent("Hi VictoryAdz! I'd like to get frame options & pricing for my photo."))}
+                ariaLabel="Order on WhatsApp"
+                className="w-full max-w-xs"
+              />
+              <p
+                className="mt-3.5 font-inter-display text-[12px] sm:text-[13px] text-white/70 font-medium leading-relaxed max-w-xs"
+                style={{ letterSpacing: "0.5px" }}
+              >
+                Message us to discuss sizing, frames, and delivery details.
+              </p>
             </div>
           </div>
         </div>
