@@ -316,7 +316,7 @@ export const WeMostProudOf: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            data-cursor-label="Handcrafted by VictoryAdz"
+            data-cursor-label="HANDCRAFTED BY VICTORYADZ"
             className="fixed inset-0 z-50 flex flex-row p-0 m-0 w-full h-full overflow-hidden bg-[#2C2C2C] pointer-events-auto"
             style={{ backgroundColor: "#2C2C2C", perspective: "1500px" }}
           >
@@ -365,10 +365,10 @@ export const WeMostProudOf: React.FC = () => {
               ))}
             </motion.div>
 
-            {/* --- DESKTOP / MOBILE CENTER CONTAINER (TiltedCard - Perfectly Fitted on Mobile & Desktop) --- */}
+            {/* --- DESKTOP / MOBILE CENTER CONTAINER (TiltedCard - Fills Viewport Height 92vh) --- */}
             <div
-              className="relative flex-1 h-full w-full overflow-hidden flex items-center justify-center pt-24 pb-20 px-3.5 lg:p-4 z-10 pointer-events-auto bg-transparent"
-              data-cursor-label="Handcrafted by VictoryAdz"
+              className="relative flex-1 h-full w-full overflow-hidden flex items-center justify-center p-0 lg:p-2 z-10 pointer-events-auto bg-transparent"
+              data-cursor-label="HANDCRAFTED BY VICTORYADZ"
             >
               <TiltedCard
                 imageSrc={selectedItem.image}
@@ -376,10 +376,10 @@ export const WeMostProudOf: React.FC = () => {
                 captionText=""
                 containerHeight="100%"
                 containerWidth="100%"
-                imageHeight="min(calc(100dvh - 170px), 90vh)"
-                imageWidth="min(calc((100dvh - 170px) * 0.75), calc(100vw - 28px), 640px)"
-                rotateAmplitude={8}
-                scaleOnHover={1.02}
+                imageHeight="92vh"
+                imageWidth="min(calc(92vh * 0.75), 94vw, 680px)"
+                rotateAmplitude={10}
+                scaleOnHover={1.03}
                 showMobileWarning={false}
                 showTooltip={false}
                 displayOverlayContent={false}

@@ -37,7 +37,7 @@ export default function TiltedCard({
   scaleOnHover = 1.06,
   rotateAmplitude = 14,
   showMobileWarning = false,
-  showTooltip = true,
+  showTooltip = false,
   overlayContent = null,
   displayOverlayContent = false,
 }: TiltedCardProps) {
@@ -124,8 +124,11 @@ export default function TiltedCard({
           alt={altText}
           className="tilted-card-img"
           style={{
-            width: imageWidth,
-            height: imageHeight,
+            width: "100%",
+            height: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            objectFit: "contain",
           }}
         />
 
